@@ -455,12 +455,12 @@
             <div class="login-box">
                 <div class="login-title">Big Davos Footy Picks</div>
                 <div class="input-group">
-                    <label for="loginName">Your Name</label>
-                    <input type="text" id="loginName" placeholder="Enter your tipster name">
+                    <label for="loginName">Your Tipster Name</label>
+                    <input type="text" id="loginName" placeholder="Enter your exact tipster name">
                 </div>
                 <button class="login-btn" onclick="handleLogin()">Login</button>
-                <button class="login-btn" onclick="skipLogin()" style="background-color: #95a5a6; margin-top: 10px;">Skip Login (Demo)</button>
-                <div class="subtitle">Enter your name as it appears in the competition</div>
+                <button class="login-btn" onclick="skipLogin()" style="background-color: #95a5a6; margin-top: 10px;">Browse Without Login</button>
+                <div class="subtitle">Enter your name exactly as it appears in the competition</div>
             </div>
         </div>
 
@@ -694,15 +694,30 @@
         ];
 
         document.addEventListener('DOMContentLoaded', function() {
+            // Load embedded data immediately when page loads
+            loadEmbeddedData();
+            
+            // Then check for existing login
             checkExistingLogin();
         });
 
         function checkExistingLogin() {
             var savedUser = localStorage.getItem('footballPicksUser');
             if (savedUser) {
-                currentUser = savedUser;
-                showMainApp();
+                // Only auto-login if we can find the user in the loaded data
+                var foundMember = members.find(function(member) {
+                    return member.name && member.name.toLowerCase() === savedUser.toLowerCase();
+                });
+                
+                if (foundMember) {
+                    currentUser = savedUser;
+                    showMainApp();
+                } else {
+                    // Clear invalid saved user and show login
+                    localStorage.removeItem('footballPicksUser');
+                }
             }
+            // If no saved user or invalid user, login screen stays visible (default)
         }
 
         function skipLogin() {
