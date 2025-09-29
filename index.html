@@ -221,11 +221,11 @@
         }
 
         /* Column widths for ladder screens */
-        .col-pos { flex: 0 0 40px; }
-        .col-logo { flex: 0 0 35px; }
-        .col-team-name { flex: 1; min-width: 120px; text-align: left; padding-left: 8px; }
-        .col-played { flex: 0 0 35px; }
-        .col-won { flex: 0 0 35px; }
+        .col-pos { flex: 0 0 35px; }
+        .col-logo { flex: 0 0 30px; }
+        .col-team-name { flex: 1; min-width: 100px; text-align: left; padding-left: 5px; }
+        .col-played { flex: 0 0 30px; }
+        .col-won { flex: 0 0 30px; }
 
         .team-logo {
             font-size: 16px;
@@ -476,33 +476,6 @@
             <div id="homeScreen" class="container">
                 <div class="title">Big Davos Footy Picks</div>
                 
-                <!-- Data Load Section -->
-                <div id="dataLoadSection">
-                    <div class="data-status success">
-                        Sample data loaded (40 members) - Click to load your complete data
-                    </div>
-                    <button class="load-data-btn" onclick="showDataImport()" style="background: #27ae60; margin: 10px auto; display: block;">
-                        Load All Members
-                    </button>
-                </div>
-
-                <!-- Loading Status -->
-                <div id="loadingStatus" class="data-status loading" style="display: none;">
-                    Loading your competition data from Google Sheets...
-                </div>
-
-                <!-- Success Message (single instance) -->
-                <div id="successMessage" class="data-status success hidden">
-                    Your complete competition data is loaded! All members available.
-                </div>
-
-                <!-- Fallback Manual Option (hidden initially) -->
-                <div id="manualFallback" class="data-status demo" style="display: none;">
-                    <button class="load-data-btn" onclick="showDataImport()" style="margin-top: 10px;">
-                        Manual Load (2 min)
-                    </button>
-                </div>
-                
                 <!-- User Status Box -->
                 <div id="userStatus" class="user-status" onclick="goToMyPosition()" style="cursor: pointer;">
                     <div class="status-title">Where You Sit (click to scroll to position)</div>
@@ -569,11 +542,48 @@
                 <div id="userPicksContent">
                     <div class="picks-section">
                         <h3>My NRL Teams (5)</h3>
-                        <div class="loading">Your NRL picks will appear here when available</div>
+                        <div id="nrlPicks" class="loading">Loading your NRL picks...</div>
                     </div>
                     <div class="picks-section">
                         <h3>My AFL Teams (5)</h3>
-                        <div class="loading">Your AFL picks will appear here when available</div>
+                        <div id="aflPicks" class="loading">Loading your AFL picks...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Admin Screen -->
+            <div id="adminScreen" class="container hidden">
+                <div class="title">Admin Panel</div>
+                
+                <!-- Password Protection -->
+                <div id="adminPasswordPrompt" class="picks-section">
+                    <h3>Enter Admin Password</h3>
+                    <div class="input-group">
+                        <input type="password" id="adminPassword" placeholder="Enter password">
+                    </div>
+                    <button class="login-btn" onclick="checkAdminPassword()">Access Admin</button>
+                </div>
+
+                <!-- Admin Content (hidden until password correct) -->
+                <div id="adminContent" class="hidden">
+                    <div class="data-status" style="background: #e74c3c;">
+                        Admin Mode - Load Competition Data
+                    </div>
+                    
+                    <div class="picks-section">
+                        <h3>Load Updated Competition Data</h3>
+                        <p style="margin-bottom: 15px;">Copy all data from your Excel spreadsheet (including headers) and paste below.</p>
+                        
+                        <textarea id="adminDataInput" class="import-textarea" placeholder="Paste Excel data here (Rank, LW, +/-, Tipster, Total Score, PRT, Rd score)"></textarea>
+                        
+                        <button class="login-btn" onclick="loadAdminData()">Load Data</button>
+                        <button class="login-btn" onclick="clearAdminData()" style="background-color: #95a5a6; margin-top: 10px;">Clear Current Data</button>
+                    </div>
+
+                    <div class="picks-section">
+                        <h3>Current Status</h3>
+                        <p><strong>Members loaded:</strong> <span id="adminMemberCount">0</span></p>
+                        <p><strong>Data source:</strong> <span id="adminDataSource">embedded</span></p>
                     </div>
                 </div>
             </div>
@@ -584,6 +594,7 @@
                 <div class="nav-button" onclick="showScreen('nrl')">NRL</div>
                 <div class="nav-button" onclick="showScreen('afl')">AFL</div>
                 <div class="nav-button" onclick="showScreen('picks')">My Picks</div>
+                <div class="nav-button" onclick="showScreen('admin')">Admin</div>
             </div>
         </div>
 
@@ -694,8 +705,21 @@
         ];
 
         document.addEventListener('DOMContentLoaded', function() {
-            // Load embedded data immediately when page loads
-            loadEmbeddedData();
+            // Try to load saved competition data first
+            var savedData = localStorage.getItem('competitionData');
+            if (savedData) {
+                try {
+                    members = JSON.parse(savedData);
+                    dataSource = 'saved';
+                    console.log('Loaded', members.length, 'members from saved data');
+                } catch (error) {
+                    console.error('Error loading saved data:', error);
+                    loadEmbeddedData();
+                }
+            } else {
+                // Load embedded data if no saved data
+                loadEmbeddedData();
+            }
             
             // Then check for existing login
             checkExistingLogin();
@@ -932,6 +956,45 @@
             renderPicksLeaderboard();
             renderNRLLadder();
             renderAFLLadder();
+            renderUserPicks();
+        }
+
+        function renderUserPicks() {
+            if (!currentUser) return;
+            
+            var userMember = members.find(function(member) {
+                return member.name === currentUser;
+            });
+            
+            var nrlPicksDiv = document.getElementById('nrlPicks');
+            var aflPicksDiv = document.getElementById('aflPicks');
+            
+            if (userMember && userMember.nrlTeams && userMember.aflTeams) {
+                // Render NRL picks
+                var nrlHtml = '<ul style="list-style: none; padding: 0;">';
+                for (var i = 0; i < userMember.nrlTeams.length; i++) {
+                    if (userMember.nrlTeams[i]) {
+                        nrlHtml += '<li style="padding: 8px; margin: 5px 0; background: #f8f9fa; border-radius: 5px;">' + 
+                                   '<strong>' + (i + 1) + '.</strong> ' + userMember.nrlTeams[i] + '</li>';
+                    }
+                }
+                nrlHtml += '</ul>';
+                nrlPicksDiv.innerHTML = nrlHtml;
+                
+                // Render AFL picks
+                var aflHtml = '<ul style="list-style: none; padding: 0;">';
+                for (var i = 0; i < userMember.aflTeams.length; i++) {
+                    if (userMember.aflTeams[i]) {
+                        aflHtml += '<li style="padding: 8px; margin: 5px 0; background: #f8f9fa; border-radius: 5px;">' + 
+                                   '<strong>' + (i + 1) + '.</strong> ' + userMember.aflTeams[i] + '</li>';
+                    }
+                }
+                aflHtml += '</ul>';
+                aflPicksDiv.innerHTML = aflHtml;
+            } else {
+                nrlPicksDiv.innerHTML = '<p style="color: #7f8c8d;">No team picks data available. Admin needs to load complete data with team picks.</p>';
+                aflPicksDiv.innerHTML = '<p style="color: #7f8c8d;">No team picks data available. Admin needs to load complete data with team picks.</p>';
+            }
         }
 
         function renderPicksLeaderboard() {
@@ -1029,7 +1092,7 @@
         }
 
         function showScreen(screenName) {
-            var screens = ['home', 'nrl', 'afl', 'picks'];
+            var screens = ['home', 'nrl', 'afl', 'picks', 'admin'];
             for (var i = 0; i < screens.length; i++) {
                 document.getElementById(screens[i] + 'Screen').classList.add('hidden');
             }
@@ -1041,7 +1104,169 @@
             
             document.getElementById(screenName + 'Screen').classList.remove('hidden');
             
+            // Reset admin screen when entering
+            if (screenName === 'admin') {
+                document.getElementById('adminPasswordPrompt').classList.remove('hidden');
+                document.getElementById('adminContent').classList.add('hidden');
+                document.getElementById('adminPassword').value = '';
+            }
+            
             event.target.classList.add('active');
+        }
+
+        // Admin functions
+        function checkAdminPassword() {
+            var password = document.getElementById('adminPassword').value;
+            if (password === 'admin2026') {
+                document.getElementById('adminPasswordPrompt').classList.add('hidden');
+                document.getElementById('adminContent').classList.remove('hidden');
+                updateAdminStatus();
+            } else {
+                alert('Incorrect password');
+                document.getElementById('adminPassword').value = '';
+            }
+        }
+
+        function updateAdminStatus() {
+            document.getElementById('adminMemberCount').textContent = members.length;
+            document.getElementById('adminDataSource').textContent = dataSource;
+        }
+
+        function loadAdminData() {
+            var csvData = document.getElementById('adminDataInput').value.trim();
+            
+            if (!csvData) {
+                alert('Please paste your Excel data first');
+                return;
+            }
+            
+            try {
+                var lines = csvData.split('\n');
+                var headerRowIndex = -1;
+                
+                // Find header row
+                for (var i = 0; i < Math.min(10, lines.length); i++) {
+                    if (lines[i].includes('Rank') && lines[i].includes('Tipster') && lines[i].includes('Total Score')) {
+                        headerRowIndex = i;
+                        break;
+                    }
+                }
+                
+                if (headerRowIndex === -1) {
+                    throw new Error('Could not find header row');
+                }
+                
+                var headerLine = lines[headerRowIndex];
+                var headers = headerLine.includes('\t') ? headerLine.split('\t') : headerLine.split(',');
+                headers = headers.map(function(h) { return h.trim().replace(/"/g, ''); });
+                
+                // Find column indices
+                var rankIndex = -1, tipsterIndex = -1, totalScoreIndex = -1, changeIndex = -1, prtIndex = -1, roundScoreIndex = -1;
+                var aflTeam1Index = -1, aflTeam2Index = -1, aflTeam3Index = -1, aflTeam4Index = -1, aflTeam5Index = -1;
+                var nrlTeam1Index = -1, nrlTeam2Index = -1, nrlTeam3Index = -1, nrlTeam4Index = -1, nrlTeam5Index = -1;
+                
+                for (var h = 0; h < headers.length; h++) {
+                    var header = headers[h].toLowerCase();
+                    if (header.includes('rank')) rankIndex = h;
+                    if (header.includes('tipster') || header.includes('name')) tipsterIndex = h;
+                    if (header.includes('total score') || header.includes('total')) totalScoreIndex = h;
+                    if (header.includes('+/-') || header.includes('change')) changeIndex = h;
+                    if (header.includes('prt')) prtIndex = h;
+                    if (header.includes('rd score') || header.includes('round')) roundScoreIndex = h;
+                    
+                    // Team picks columns
+                    if (header.includes('afl team 1') || header === 'afl team 1') aflTeam1Index = h;
+                    if (header.includes('afl team 2') || header === 'afl team 2') aflTeam2Index = h;
+                    if (header.includes('afl team 3') || header === 'afl team 3') aflTeam3Index = h;
+                    if (header.includes('afl team 4') || header === 'afl team 4') aflTeam4Index = h;
+                    if (header.includes('afl team 5') || header === 'afl team 5') aflTeam5Index = h;
+                    if (header.includes('nrl team 1') || header === 'nrl team 1') nrlTeam1Index = h;
+                    if (header.includes('nrl team 2') || header === 'nrl team 2') nrlTeam2Index = h;
+                    if (header.includes('nrl team 3') || header === 'nrl team 3') nrlTeam3Index = h;
+                    if (header.includes('nrl team 4') || header === 'nrl team 4') nrlTeam4Index = h;
+                    if (header.includes('nrl team 5') || header === 'nrl team 5') nrlTeam5Index = h;
+                }
+                
+                if (rankIndex === -1 || tipsterIndex === -1 || totalScoreIndex === -1) {
+                    throw new Error('Missing required columns');
+                }
+                
+                // Process data rows
+                var newMembers = [];
+                for (var i = headerRowIndex + 1; i < lines.length; i++) {
+                    var line = lines[i].trim();
+                    if (!line || line.toLowerCase().includes('prize')) break;
+                    
+                    var values = line.includes('\t') ? line.split('\t') : line.split(',');
+                    values = values.map(function(v) { return v.trim().replace(/"/g, ''); });
+                    
+                    var rank = values[rankIndex];
+                    var tipster = values[tipsterIndex];
+                    var totalScore = values[totalScoreIndex];
+                    
+                    if (!rank || !tipster || !totalScore || rank === '-' || totalScore.includes('#')) continue;
+                    
+                    var member = {
+                        id: i,
+                        name: tipster,
+                        totalPoints: parseInt(totalScore) || 0,
+                        weekChange: parseInt(values[changeIndex] || 0),
+                        previousTotal: parseInt(values[prtIndex] || 0),
+                        roundScore: parseInt(values[roundScoreIndex] || 0)
+                    };
+                    
+                    // Add team picks if available
+                    if (aflTeam1Index !== -1) {
+                        member.aflTeams = [
+                            values[aflTeam1Index] || '',
+                            values[aflTeam2Index] || '',
+                            values[aflTeam3Index] || '',
+                            values[aflTeam4Index] || '',
+                            values[aflTeam5Index] || ''
+                        ];
+                        member.nrlTeams = [
+                            values[nrlTeam1Index] || '',
+                            values[nrlTeam2Index] || '',
+                            values[nrlTeam3Index] || '',
+                            values[nrlTeam4Index] || '',
+                            values[nrlTeam5Index] || ''
+                        ];
+                    }
+                    
+                    newMembers.push(member);
+                }
+                
+                if (newMembers.length > 10) {
+                    members = newMembers;
+                    dataSource = 'admin-loaded';
+                    
+                    // Save to localStorage for persistence
+                    localStorage.setItem('competitionData', JSON.stringify(members));
+                    
+                    renderAllData();
+                    updateAdminStatus();
+                    
+                    alert('Success! Loaded ' + members.length + ' members with their team picks.');
+                    document.getElementById('adminDataInput').value = '';
+                } else {
+                    throw new Error('Not enough valid data rows found');
+                }
+                
+            } catch (error) {
+                console.error('Load failed:', error);
+                alert('Load failed: ' + error.message);
+            }
+        }
+
+        function clearAdminData() {
+            if (confirm('Clear all loaded data and return to embedded sample data?')) {
+                localStorage.removeItem('competitionData');
+                loadEmbeddedData();
+                dataSource = 'embedded';
+                renderAllData();
+                updateAdminStatus();
+                alert('Data cleared. Showing sample data.');
+            }
         }
 
         // Manual data import functions
