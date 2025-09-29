@@ -48,7 +48,6 @@
             margin-bottom: 15px;
         }
 
-        /* Login Screen */
         .login-container {
             display: flex;
             flex-direction: column;
@@ -111,7 +110,6 @@
             background-color: #2980b9;
         }
 
-        /* Header with user info */
         .header {
             background-color: #2c3e50;
             color: white;
@@ -135,7 +133,6 @@
             cursor: pointer;
         }
 
-        /* User status box */
         .user-status {
             background: linear-gradient(135deg, #3498db, #2980b9);
             color: white;
@@ -144,6 +141,7 @@
             margin-bottom: 15px;
             text-align: center;
             box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+            cursor: pointer;
         }
 
         .status-title {
@@ -163,7 +161,6 @@
             opacity: 0.9;
         }
 
-        /* Data status indicator */
         .data-status {
             background: #3498db;
             color: white;
@@ -179,28 +176,10 @@
             background: #27ae60;
         }
 
-        .data-status.demo {
-            background: #f39c12;
-        }
-
-        .load-data-btn {
+        .data-status.error {
             background: #e74c3c;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: bold;
-            cursor: pointer;
-            margin: 10px auto;
-            display: block;
         }
 
-        .load-data-btn:hover {
-            background: #c0392b;
-        }
-
-        /* Home screen columns */
         .col-rank { flex: 0 0 10%; }
         .col-lw { flex: 0 0 8%; }
         .col-change { flex: 0 0 8%; }
@@ -209,7 +188,6 @@
         .col-prt { flex: 0 0 12%; }
         .col-round { flex: 0 0 12%; }
 
-        /* Enhanced table with horizontal scroll */
         .ladder-container {
             overflow-x: auto;
             margin-bottom: 15px;
@@ -220,7 +198,6 @@
             width: 100%;
         }
 
-        /* Column widths for ladder screens */
         .col-pos { flex: 0 0 35px; }
         .col-logo { flex: 0 0 30px; }
         .col-team-name { flex: 1; min-width: 100px; text-align: left; padding-left: 5px; }
@@ -232,7 +209,6 @@
             text-align: center;
         }
 
-        /* Table container with fixed header */
         .table-container {
             max-height: 400px;
             overflow-y: auto;
@@ -241,7 +217,6 @@
             background: white;
         }
 
-        /* Fixed table header */
         .table-header {
             position: sticky;
             top: 0;
@@ -288,7 +263,6 @@
         .negative { color: #e74c3c; }
         .neutral { color: #7f8c8d; }
 
-        /* Show more button */
         .show-more-btn {
             background: #3498db;
             color: white;
@@ -306,25 +280,6 @@
             background: #2980b9;
         }
 
-        /* Refresh button styles */
-        .refresh-btn {
-            background: #27ae60;
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 6px;
-            font-size: 12px;
-            cursor: pointer;
-            margin: 10px auto;
-            display: block;
-            font-weight: bold;
-        }
-
-        .refresh-btn:hover {
-            background: #229954;
-        }
-
-        /* Bottom Navigation */
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -361,7 +316,6 @@
             display: none !important;
         }
 
-        /* My Picks Page */
         .picks-section {
             background: white;
             margin-bottom: 15px;
@@ -382,75 +336,15 @@
             color: #7f8c8d;
         }
 
-        /* Data Import Modal */
-        .import-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.5);
-            z-index: 1000;
-            display: none;
-        }
-
-        .import-content {
-            background: white;
-            margin: 50px auto;
-            padding: 25px;
-            max-width: 550px;
-            border-radius: 12px;
-            max-height: 80vh;
-            overflow-y: auto;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-        }
-
-        .import-textarea {
-            width: 100%;
-            height: 180px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            padding: 12px;
-            font-family: monospace;
-            font-size: 12px;
-            resize: vertical;
-            margin-bottom: 15px;
-        }
-
-        .import-buttons {
-            text-align: right;
-        }
-
-        .import-btn {
-            padding: 10px 20px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: bold;
-            margin-left: 10px;
-            border: none;
-        }
-
-        .cancel-btn {
-            background: #95a5a6;
-            color: white;
-        }
-
-        .import-confirm-btn {
-            background: #27ae60;
-            color: white;
-        }
-
         @media (max-width: 480px) {
             .title { font-size: 18px; }
             .table-cell { font-size: 12px; }
             .nav-button { font-size: 10px; padding: 8px 3px; }
-            .import-content { margin: 20px; padding: 20px; }
         }
     </style>
 </head>
 <body>
     <div class="app-container">
-        <!-- Login Screen -->
         <div id="loginScreen" class="login-container">
             <div class="login-box">
                 <div class="login-title">Big Davos Footy Picks</div>
@@ -464,20 +358,20 @@
             </div>
         </div>
 
-        <!-- Header (hidden until logged in) -->
         <div id="appHeader" class="header hidden">
             <div class="user-info">Welcome, <span id="currentUser"></span></div>
             <button class="logout-btn" onclick="handleLogout()">Logout</button>
         </div>
 
-        <!-- Main App Content (hidden until logged in) -->
         <div id="mainApp" class="hidden">
-            <!-- Home Screen - Football Picks Leaderboard -->
             <div id="homeScreen" class="container">
                 <div class="title">Big Davos Footy Picks</div>
                 
-                <!-- User Status Box -->
-                <div id="userStatus" class="user-status" onclick="goToMyPosition()" style="cursor: pointer;">
+                <div id="dataStatus" class="data-status">
+                    Loading competition data...
+                </div>
+                
+                <div id="userStatus" class="user-status" onclick="goToMyPosition()">
                     <div class="status-title">Where You Sit (click to scroll to position)</div>
                     <div class="status-position" id="userPosition">Loading...</div>
                     <div class="status-points" id="userPointsInfo">Loading...</div>
@@ -498,45 +392,22 @@
                 <button class="show-more-btn" id="showMoreBtn" onclick="toggleShowMore()">Show All Players</button>
             </div>
 
-            <!-- NRL Ladder Screen -->
             <div id="nrlScreen" class="container hidden">
-                <div class="title">NRL Ladder 2025</div>
-                <div class="subtitle">Finals Week 3 - Storm vs Panthers/Broncos</div>
-                <div class="ladder-container">
-                    <div class="ladder-table">
-                        <div class="table-header">
-                            <div class="table-header-text col-pos">Pos</div>
-                            <div class="table-header-text col-logo"></div>
-                            <div class="table-header-text col-team-name">Team</div>
-                            <div class="table-header-text col-played">P</div>
-                            <div class="table-header-text col-won">W</div>
-                            <div class="table-header-text col-points">Pts</div>
-                        </div>
-                        <div id="nrlLadder"></div>
-                    </div>
+                <div class="title">NRL Teams 2025</div>
+                <div class="subtitle">All teams in the competition</div>
+                <div class="picks-section">
+                    <div id="nrlTeamsList"></div>
                 </div>
             </div>
 
-            <!-- AFL Ladder Screen -->
             <div id="aflScreen" class="container hidden">
-                <div class="title">AFL Ladder 2025</div>
-                <div class="subtitle">Brisbane Lions Back-to-Back Premiers! 122-75 vs Geelong</div>
-                <div class="ladder-container">
-                    <div class="ladder-table">
-                        <div class="table-header">
-                            <div class="table-header-text col-pos">Pos</div>
-                            <div class="table-header-text col-logo"></div>
-                            <div class="table-header-text col-team-name">Team</div>
-                            <div class="table-header-text col-played">P</div>
-                            <div class="table-header-text col-won">W</div>
-                            <div class="table-header-text col-points">Pts</div>
-                        </div>
-                        <div id="aflLadder"></div>
-                    </div>
+                <div class="title">AFL Teams 2025</div>
+                <div class="subtitle">All teams in the competition</div>
+                <div class="picks-section">
+                    <div id="aflTeamsList"></div>
                 </div>
             </div>
 
-            <!-- My Picks Screen -->
             <div id="picksScreen" class="container hidden">
                 <div class="title">My Team Picks</div>
                 <div id="userPicksContent">
@@ -551,201 +422,181 @@
                 </div>
             </div>
 
-            <!-- Admin Screen -->
-            <div id="adminScreen" class="container hidden">
-                <div class="title">Admin Panel</div>
-                
-                <!-- Password Protection -->
-                <div id="adminPasswordPrompt" class="picks-section">
-                    <h3>Enter Admin Password</h3>
-                    <div class="input-group">
-                        <input type="password" id="adminPassword" placeholder="Enter password">
-                    </div>
-                    <button class="login-btn" onclick="checkAdminPassword()">Access Admin</button>
-                </div>
-
-                <!-- Admin Content (hidden until password correct) -->
-                <div id="adminContent" class="hidden">
-                    <div class="data-status" style="background: #e74c3c;">
-                        Admin Mode - Load Competition Data
-                    </div>
-                    
-                    <div class="picks-section">
-                        <h3>Load Updated Competition Data</h3>
-                        <p style="margin-bottom: 15px;">Copy all data from your Excel spreadsheet (including headers) and paste below.</p>
-                        
-                        <textarea id="adminDataInput" class="import-textarea" placeholder="Paste Excel data here (Rank, LW, +/-, Tipster, Total Score, PRT, Rd score)"></textarea>
-                        
-                        <button class="login-btn" onclick="loadAdminData()">Load Data</button>
-                        <button class="login-btn" onclick="clearAdminData()" style="background-color: #95a5a6; margin-top: 10px;">Clear Current Data</button>
-                    </div>
-
-                    <div class="picks-section">
-                        <h3>Current Status</h3>
-                        <p><strong>Members loaded:</strong> <span id="adminMemberCount">0</span></p>
-                        <p><strong>Data source:</strong> <span id="adminDataSource">embedded</span></p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Bottom Navigation -->
             <div class="bottom-nav">
                 <div class="nav-button active" onclick="showScreen('home')">Home</div>
                 <div class="nav-button" onclick="showScreen('nrl')">NRL</div>
                 <div class="nav-button" onclick="showScreen('afl')">AFL</div>
                 <div class="nav-button" onclick="showScreen('picks')">My Picks</div>
-                <div class="nav-button" onclick="showScreen('admin')">Admin</div>
-            </div>
-        </div>
-
-        <!-- Data Import Modal -->
-        <div id="dataImportModal" class="import-modal">
-            <div class="import-content">
-                <h3 style="margin-bottom: 20px; color: #2c3e50;">Load Your Competition Data</h3>
-                
-                <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #3498db;">
-                    <p style="margin-bottom: 10px; font-weight: bold;">Quick 3-Step Process:</p>
-                    <p style="margin-bottom: 8px;"><strong>1.</strong> Click this link → <a href="https://docs.google.com/spreadsheets/d/e/2PACX-1vTLgqcAe03daukWsZq-NPTrRcy64Km_EI4dZOzINVYPNx_9IRgASLXF-L4HlpqbdT4GOz-g8wcow-5d/pubhtml" target="_blank" style="color: #3498db; font-weight: bold;">Open Your Data</a></p>
-                    <p style="margin-bottom: 8px;"><strong>2.</strong> Select all data (Ctrl+A) and copy (Ctrl+C)</p>
-                    <p><strong>3.</strong> Paste below and click Import</p>
-                </div>
-                
-                <textarea id="csvDataInput" class="import-textarea" placeholder="Paste your data here..."></textarea>
-                
-                <div class="import-buttons">
-                    <button class="import-btn cancel-btn" onclick="hideDataImport()">Cancel</button>
-                    <button class="import-btn import-confirm-btn" onclick="importCSVData()">Import My Data</button>
-                </div>
             </div>
         </div>
     </div>
 
     <script>
-        // Your Google Sheets URLs
-        const GOOGLE_SHEETS_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTLgqcAe03daukWsZq-NPTrRcy64Km_EI4dZOzINVYPNx_9IRgASLXF-L4HlpqbdT4GOz-g8wcow-5d/pub?gid=826168304&single=true&output=csv';
-        const GOOGLE_SHEETS_HTML_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTLgqcAe03daukWsZq-NPTrRcy64Km_EI4dZOzINVYPNx_9IRgASLXF-L4HlpqbdT4GOz-g8wcow-5d/pubhtml';
-
-        // Your current 2025 Footy Tipping competition data (embedded) - Extended to include more members
-        var embeddedCompetitionData = `Rank,LW,+/-,Tipster,Total Score,PRT,Rd score
-1,1,0,"Cam Shaw",1851,1842,9
-2,2,0,"Dr Carlos",1838,1838,0
-3,3,0,"Degenerates",1788,1788,0
-4,5,1,"Teal",1786,1769,17
-5,4,-1,"Ray01",1771,1752,19
-6,6,0,"Misty Ant",1758,1748,10
-7,8,1,"Callum Hughes",1746,1736,10
-8,7,-1,"Liam H",1739,1739,0
-9,10,1,"Dylan B",1738,1728,10
-10,9,-1,"DEEZ-NUTS",1733,1733,0
-11,12,1,"Jacob Taylor",1723,1713,10
-12,11,-1,"Matt-Man",1722,1722,0
-13,18,5,"Pembo",1715,1689,26
-14,15,1,"Buddhaliscous",1713,1694,19
-15,13,-2,"Matty G",1712,1712,0
-16,16,0,"KB Lager",1702,1692,10
-17,14,-3,"Sandi Campbell",1697,1697,0
-18,19,1,"James R",1694,1685,9
-19,17,-2,"Robbie1",1690,1690,0
-20,26,6,"Tim",1689,1670,19
-21,21,0,"Scotticus",1689,1679,10
-22,22,0,"Shane Campbell",1688,1678,10
-23,23,0,"Simmo",1687,1677,10
-24,24,0,"Manly Dan",1686,1676,10
-25,25,0,"Reidy",1685,1675,10
-26,27,1,"Bandit",1684,1665,19
-27,20,-7,"Yung-Gun",1682,1682,0
-28,28,0,"Keith S",1680,1670,10
-29,29,0,"BBQ Ben",1679,1669,10
-30,30,0,"Big T",1678,1668,10
-100,100,0,"Member 100",1500,1490,10
-150,150,0,"Member 150",1450,1440,10
-200,200,0,"Member 200",1400,1390,10
-250,250,0,"Member 250",1350,1340,10
-300,300,0,"Member 300",1300,1290,10
-349,349,0,"Big Davo",1250,1240,10
-350,350,0,"Member 350",1249,1239,10
-360,360,0,"Member 360",1240,1230,10
-370,370,0,"Member 370",1230,1220,10
-380,380,0,"Member 380",1220,1210,10`;
-
-        // Demo data for initial display (will be replaced by embedded data)
-        var defaultMembers = [
-            { id: 1, name: "Cam Shaw", totalPoints: 1851, weekChange: 0, previousTotal: 1842, roundScore: 9 },
-            { id: 2, name: "Dr Carlos", totalPoints: 1838, weekChange: 0, previousTotal: 1838, roundScore: 0 },
-            { id: 173, name: "Big Davo", totalPoints: 1505, weekChange: 7, previousTotal: 1488, roundScore: 17 }
-        ];
-
         var members = [];
         var showingAll = false;
         var currentUser = null;
-        var dataSource = 'embedded';
 
-        var nrlLadder = [
-            { pos: 1, logo: "🛡️", team: "Canberra Raiders", played: 24, won: 19, points: 44 },
-            { pos: 2, logo: "⛈️", team: "Melbourne Storm", played: 24, won: 17, points: 42 },
-            { pos: 3, logo: "🐎", team: "Brisbane Broncos", played: 24, won: 15, points: 38 },
-            { pos: 4, logo: "🐕", team: "Canterbury Bulldogs", played: 24, won: 16, points: 38 },
-            { pos: 5, logo: "🦈", team: "Cronulla Sharks", played: 24, won: 15, points: 36 },
-            { pos: 6, logo: "🗿", team: "New Zealand Warriors", played: 24, won: 14, points: 36 },
-            { pos: 7, logo: "🐓", team: "Sydney Roosters", played: 24, won: 13, points: 34 },
-            { pos: 8, logo: "🐬", team: "Redcliffe Dolphins", played: 24, won: 12, points: 34 },
-            { pos: 9, logo: "🦅", team: "Manly Sea Eagles", played: 24, won: 12, points: 34 },
-            { pos: 10, logo: "🐾", team: "Penrith Panthers", played: 24, won: 13, points: 33 }
-        ];
-
-        var aflLadder = [
-            { pos: 1, logo: "🦅", team: "Adelaide Crows", played: 23, won: 18, points: 72 },
-            { pos: 2, logo: "🦁", team: "Brisbane Lions", played: 23, won: 17, points: 68 },
-            { pos: 3, logo: "🐱", team: "Geelong Cats", played: 23, won: 16, points: 66 },
-            { pos: 4, logo: "😈", team: "Melbourne Demons", played: 23, won: 15, points: 60 },
-            { pos: 5, logo: "🦢", team: "Sydney Swans", played: 23, won: 14, points: 58 },
-            { pos: 6, logo: "⚫", team: "Collingwood Magpies", played: 23, won: 13, points: 54 },
-            { pos: 7, logo: "⚡", team: "Port Adelaide Power", played: 23, won: 12, points: 48 },
-            { pos: 8, logo: "🐕", team: "Western Bulldogs", played: 23, won: 11, points: 46 }
-        ];
+        var nrlTeams = [];
+        var aflTeams = [];
 
         document.addEventListener('DOMContentLoaded', function() {
-            // Try to load saved competition data first
-            var savedData = localStorage.getItem('competitionData');
-            if (savedData) {
-                try {
-                    members = JSON.parse(savedData);
-                    dataSource = 'saved';
-                    console.log('Loaded', members.length, 'members from saved data');
-                } catch (error) {
-                    console.error('Error loading saved data:', error);
-                    loadEmbeddedData();
-                }
-            } else {
-                // Load embedded data if no saved data
-                loadEmbeddedData();
-            }
-            
-            // Then check for existing login
+            loadDataFromCSV();
             checkExistingLogin();
         });
+
+        function loadDataFromCSV() {
+            fetch('competition-data.csv')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('CSV file not found');
+                    }
+                    return response.text();
+                })
+                .then(csvText => {
+                    parseAndLoadCSV(csvText);
+                    updateDataStatus('success', 'Loaded ' + members.length + ' members');
+                })
+                .catch(error => {
+                    console.error('Could not load CSV:', error);
+                    updateDataStatus('error', 'Error loading data - please refresh');
+                });
+        }
+
+        function parseAndLoadCSV(csvText) {
+            try {
+                var lines = csvText.trim().split('\n');
+                var headerLine = lines[0];
+                
+                var delimiter = headerLine.includes('\t') ? '\t' : ',';
+                var headers = headerLine.split(delimiter).map(function(h) {
+                    return h.trim().replace(/"/g, '');
+                });
+                
+                var indices = {};
+                for (var h = 0; h < headers.length; h++) {
+                    var header = headers[h].toLowerCase();
+                    if (header.includes('rank')) indices.rank = h;
+                    if (header.includes('lw')) indices.lw = h;
+                    if (header.includes('+/-') || header.includes('change')) indices.change = h;
+                    if (header.includes('tipster') || header.includes('name')) indices.tipster = h;
+                    if (header.includes('total score') || header.includes('total')) indices.totalScore = h;
+                    if (header.includes('prt')) indices.prt = h;
+                    if (header.includes('rd score') || header.includes('round')) indices.roundScore = h;
+                    
+                    if (header === 'afl team 1') indices.aflTeam1 = h;
+                    if (header === 'afl team 2') indices.aflTeam2 = h;
+                    if (header === 'afl team 3') indices.aflTeam3 = h;
+                    if (header === 'afl team 4') indices.aflTeam4 = h;
+                    if (header === 'afl team 5') indices.aflTeam5 = h;
+                    if (header === 'nrl team 1') indices.nrlTeam1 = h;
+                    if (header === 'nrl team 2') indices.nrlTeam2 = h;
+                    if (header === 'nrl team 3') indices.nrlTeam3 = h;
+                    if (header === 'nrl team 4') indices.nrlTeam4 = h;
+                    if (header === 'nrl team 5') indices.nrlTeam5 = h;
+                }
+                
+                var newMembers = [];
+                for (var i = 1; i < lines.length; i++) {
+                    var line = lines[i].trim();
+                    if (!line) continue;
+                    
+                    var values = line.split(delimiter).map(function(v) {
+                        return v.trim().replace(/"/g, '');
+                    });
+                    
+                    var tipster = values[indices.tipster];
+                    var totalScore = values[indices.totalScore];
+                    
+                    if (!tipster || !totalScore || totalScore.includes('#')) continue;
+                    
+                    var member = {
+                        id: i,
+                        name: tipster,
+                        totalPoints: parseInt(totalScore) || 0,
+                        weekChange: parseInt(values[indices.change] || 0),
+                        previousTotal: parseInt(values[indices.prt] || 0),
+                        roundScore: parseInt(values[indices.roundScore] || 0)
+                    };
+                    
+                    if (indices.aflTeam1 !== undefined) {
+                        member.aflTeams = [
+                            values[indices.aflTeam1] || '',
+                            values[indices.aflTeam2] || '',
+                            values[indices.aflTeam3] || '',
+                            values[indices.aflTeam4] || '',
+                            values[indices.aflTeam5] || ''
+                        ];
+                        member.nrlTeams = [
+                            values[indices.nrlTeam1] || '',
+                            values[indices.nrlTeam2] || '',
+                            values[indices.nrlTeam3] || '',
+                            values[indices.nrlTeam4] || '',
+                            values[indices.nrlTeam5] || ''
+                        ];
+                    }
+                    
+                    newMembers.push(member);
+                }
+                
+                if (newMembers.length > 0) {
+                    members = newMembers;
+                    console.log('Loaded', members.length, 'members from CSV');
+                    
+                    // Extract unique team names
+                    extractTeamNames();
+                }
+            } catch (error) {
+                console.error('Error parsing CSV:', error);
+            }
+        }
+
+        function extractTeamNames() {
+            var nrlSet = new Set();
+            var aflSet = new Set();
+            
+            for (var i = 0; i < members.length; i++) {
+                var member = members[i];
+                if (member.nrlTeams && member.nrlTeams.length > 0 && member.nrlTeams[0]) {
+                    nrlSet.add(member.nrlTeams[0].trim());
+                }
+                if (member.aflTeams && member.aflTeams.length > 0 && member.aflTeams[0]) {
+                    aflSet.add(member.aflTeams[0].trim());
+                }
+            }
+            
+            nrlTeams = Array.from(nrlSet).filter(function(t) { return t.length > 0; }).sort();
+            aflTeams = Array.from(aflSet).filter(function(t) { return t.length > 0; }).sort();
+            
+            console.log('Found', nrlTeams.length, 'unique NRL teams');
+            console.log('Found', aflTeams.length, 'unique AFL teams');
+        }
+
+        function updateDataStatus(type, message) {
+            var statusDiv = document.getElementById('dataStatus');
+            statusDiv.className = 'data-status ' + type;
+            statusDiv.textContent = message;
+        }
 
         function checkExistingLogin() {
             var savedUser = localStorage.getItem('footballPicksUser');
             if (savedUser) {
-                // Only auto-login if we can find the user in the loaded data
-                var foundMember = members.find(function(member) {
-                    return member.name && member.name.toLowerCase() === savedUser.toLowerCase();
-                });
-                
-                if (foundMember) {
-                    currentUser = savedUser;
-                    showMainApp();
-                } else {
-                    // Clear invalid saved user and show login
-                    localStorage.removeItem('footballPicksUser');
-                }
+                setTimeout(function() {
+                    var foundMember = members.find(function(member) {
+                        return member.name && member.name.toLowerCase() === savedUser.toLowerCase();
+                    });
+                    
+                    if (foundMember) {
+                        currentUser = savedUser;
+                        showMainApp();
+                    } else {
+                        localStorage.removeItem('footballPicksUser');
+                    }
+                }, 500);
             }
-            // If no saved user or invalid user, login screen stays visible (default)
         }
 
         function skipLogin() {
-            currentUser = "Big Davo";
+            currentUser = "Guest";
             showMainApp();
         }
 
@@ -767,7 +618,7 @@
                 localStorage.setItem('footballPicksUser', currentUser);
                 showMainApp();
             } else {
-                alert('Name not found in competition. Please check spelling or contact admin.');
+                alert('Name not found in competition. Please check spelling.');
             }
         }
 
@@ -786,156 +637,7 @@
             document.getElementById('appHeader').classList.remove('hidden');
             document.getElementById('mainApp').classList.remove('hidden');
             
-            // Load embedded data automatically
-            loadEmbeddedData();
             renderAllData();
-        }
-
-        function loadEmbeddedData() {
-            try {
-                // Parse the embedded CSV data
-                var lines = embeddedCompetitionData.trim().split('\n');
-                var headers = lines[0].split(',').map(function(h) {
-                    return h.trim().replace(/"/g, '');
-                });
-                
-                var newMembers = [];
-                for (var i = 1; i < lines.length; i++) {
-                    if (lines[i].trim()) {
-                        var values = lines[i].split(',').map(function(v) {
-                            return v.trim().replace(/"/g, '');
-                        });
-                        
-                        var member = {};
-                        headers.forEach(function(header, index) {
-                            member[header] = values[index] || '';
-                        });
-                        
-                        if (member.Tipster && member['Total Score']) {
-                            newMembers.push({
-                                id: i,
-                                name: member.Tipster,
-                                totalPoints: parseInt(member['Total Score']) || 0,
-                                weekChange: parseInt(member['+/-']) || 0,
-                                previousTotal: parseInt(member.PRT) || 0,
-                                roundScore: parseInt(member['Rd score']) || 0
-                            });
-                        }
-                    }
-                }
-                
-                if (newMembers.length > 0) {
-                    members = newMembers;
-                    dataSource = 'embedded';
-                    console.log('Loaded', members.length, 'members from embedded data');
-                } else {
-                    members = defaultMembers;
-                    dataSource = 'demo';
-                }
-                
-            } catch (error) {
-                console.error('Error loading embedded data:', error);
-                members = defaultMembers;
-                dataSource = 'demo';
-            }
-        }
-
-        function autoLoadRealData() {
-            // Show loading status
-            document.getElementById('dataLoadSection').style.display = 'none';
-            document.getElementById('loadingStatus').style.display = 'block';
-            
-            console.log('Attempting automatic data load...');
-            
-            // Try multiple approaches to bypass CORS
-            Promise.resolve()
-                .then(() => {
-                    // Method 1: Try CORS proxy
-                    console.log('Trying CORS proxy...');
-                    const proxyUrl = 'https://api.allorigins.win/get?url=' + encodeURIComponent(GOOGLE_SHEETS_CSV_URL);
-                    return fetch(proxyUrl)
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.contents && data.contents.length > 100) {
-                                return parseCSVData(data.contents);
-                            }
-                            throw new Error('Proxy returned insufficient data');
-                        });
-                })
-                .catch(() => {
-                    // Method 2: Try different proxy
-                    console.log('Trying alternative proxy...');
-                    const altProxyUrl = 'https://cors-anywhere.herokuapp.com/' + GOOGLE_SHEETS_CSV_URL;
-                    return fetch(altProxyUrl)
-                        .then(response => response.text())
-                        .then(csvText => parseCSVData(csvText));
-                })
-                .catch(() => {
-                    // Method 3: Try direct fetch (might work in some browsers)
-                    console.log('Trying direct fetch...');
-                    return fetch(GOOGLE_SHEETS_CSV_URL)
-                        .then(response => response.text())
-                        .then(csvText => parseCSVData(csvText));
-                })
-                .then(newMembers => {
-                    // Success!
-                    if (newMembers && newMembers.length > 50) {
-                        members = newMembers;
-                        dataSource = 'auto-loaded';
-                        
-                        document.getElementById('loadingStatus').style.display = 'none';
-                        document.getElementById('successMessage').classList.remove('hidden');
-                        document.getElementById('successMessage').textContent = 'Auto-loaded ' + members.length + ' members from Google Sheets!';
-                        
-                        console.log('Auto-load successful:', members.length, 'members');
-                        renderAllData();
-                        return;
-                    }
-                    throw new Error('Insufficient data loaded');
-                })
-                .catch(error => {
-                    // All methods failed - show manual fallback
-                    console.error('Auto-load failed:', error);
-                    document.getElementById('loadingStatus').style.display = 'none';
-                    document.getElementById('manualFallback').style.display = 'block';
-                });
-        }
-
-        function parseCSVData(csvText) {
-            const lines = csvText.split('\n');
-            if (lines.length < 2) {
-                throw new Error('No data rows found');
-            }
-            
-            const headers = lines[0].split(',').map(h => h.trim().replace(/"/g, ''));
-            const newMembers = [];
-            
-            for (let i = 1; i < lines.length; i++) {
-                if (lines[i].trim()) {
-                    const values = lines[i].split(',').map(v => v.trim().replace(/"/g, ''));
-                    const member = {};
-                    
-                    headers.forEach((header, index) => {
-                        member[header] = values[index] || '';
-                    });
-                    
-                    const tipsterName = member.Tipster || member.tipster || member.Name || member.name;
-                    const totalScore = member['Total Score'] || member['total score'] || member.Total || member.Points;
-                    
-                    if (tipsterName && totalScore) {
-                        newMembers.push({
-                            id: i,
-                            name: tipsterName,
-                            totalPoints: parseInt(totalScore) || 0,
-                            weekChange: parseInt(member['+/-'] || member.Change || 0),
-                            previousTotal: parseInt(member.PRT || member['Previous Total'] || 0),
-                            roundScore: parseInt(member['Rd score'] || member['Round Score'] || 0)
-                        });
-                    }
-                }
-            }
-            
-            return newMembers;
         }
 
         function goToMyPosition() {
@@ -944,7 +646,6 @@
             });
             
             if (userMember) {
-                // Find the user's row and scroll to it
                 var userRow = document.querySelector('[data-member="' + userMember.name + '"]');
                 if (userRow) {
                     userRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -954,8 +655,8 @@
 
         function renderAllData() {
             renderPicksLeaderboard();
-            renderNRLLadder();
-            renderAFLLadder();
+            renderNRLTeams();
+            renderAFLTeams();
             renderUserPicks();
         }
 
@@ -970,7 +671,6 @@
             var aflPicksDiv = document.getElementById('aflPicks');
             
             if (userMember && userMember.nrlTeams && userMember.aflTeams) {
-                // Render NRL picks
                 var nrlHtml = '<ul style="list-style: none; padding: 0;">';
                 for (var i = 0; i < userMember.nrlTeams.length; i++) {
                     if (userMember.nrlTeams[i]) {
@@ -981,7 +681,6 @@
                 nrlHtml += '</ul>';
                 nrlPicksDiv.innerHTML = nrlHtml;
                 
-                // Render AFL picks
                 var aflHtml = '<ul style="list-style: none; padding: 0;">';
                 for (var i = 0; i < userMember.aflTeams.length; i++) {
                     if (userMember.aflTeams[i]) {
@@ -992,8 +691,8 @@
                 aflHtml += '</ul>';
                 aflPicksDiv.innerHTML = aflHtml;
             } else {
-                nrlPicksDiv.innerHTML = '<p style="color: #7f8c8d;">No team picks data available. Admin needs to load complete data with team picks.</p>';
-                aflPicksDiv.innerHTML = '<p style="color: #7f8c8d;">No team picks data available. Admin needs to load complete data with team picks.</p>';
+                nrlPicksDiv.innerHTML = '<p style="color: #7f8c8d;">Team picks not available in data.</p>';
+                aflPicksDiv.innerHTML = '<p style="color: #7f8c8d;">Team picks not available in data.</p>';
             }
         }
 
@@ -1055,44 +754,50 @@
             renderPicksLeaderboard();
         }
 
-        function renderNRLLadder() {
-            var nrlContainer = document.getElementById('nrlLadder');
-            var html = '';
+        function renderNRLTeams() {
+            var container = document.getElementById('nrlTeamsList');
             
-            for (var i = 0; i < nrlLadder.length; i++) {
-                var team = nrlLadder[i];
-                html += '<div class="table-row">';
-                html += '<div class="table-cell col-pos">' + team.pos + '</div>';
-                html += '<div class="table-cell col-logo team-logo">' + team.logo + '</div>';
-                html += '<div class="table-cell col-team-name">' + team.team + '</div>';
-                html += '<div class="table-cell col-played">' + team.played + '</div>';
-                html += '<div class="table-cell col-won">' + team.won + '</div>';
-                html += '<div class="table-cell col-points">' + team.points + '</div>';
-                html += '</div>';
+            if (nrlTeams.length === 0) {
+                container.innerHTML = '<p style="color: #7f8c8d; text-align: center;">No NRL teams found in data</p>';
+                return;
             }
-            nrlContainer.innerHTML = html;
+            
+            var html = '<h3 style="margin-bottom: 15px;">NRL Teams (' + nrlTeams.length + ')</h3>';
+            html += '<ul style="list-style: none; padding: 0;">';
+            
+            for (var i = 0; i < nrlTeams.length; i++) {
+                html += '<li style="padding: 12px; margin: 8px 0; background: #f8f9fa; border-radius: 5px; border-left: 4px solid #3498db;">';
+                html += '<strong>' + (i + 1) + '.</strong> ' + nrlTeams[i];
+                html += '</li>';
+            }
+            
+            html += '</ul>';
+            container.innerHTML = html;
         }
 
-        function renderAFLLadder() {
-            var aflContainer = document.getElementById('aflLadder');
-            var html = '';
+        function renderAFLTeams() {
+            var container = document.getElementById('aflTeamsList');
             
-            for (var i = 0; i < aflLadder.length; i++) {
-                var team = aflLadder[i];
-                html += '<div class="table-row">';
-                html += '<div class="table-cell col-pos">' + team.pos + '</div>';
-                html += '<div class="table-cell col-logo team-logo">' + team.logo + '</div>';
-                html += '<div class="table-cell col-team-name">' + team.team + '</div>';
-                html += '<div class="table-cell col-played">' + team.played + '</div>';
-                html += '<div class="table-cell col-won">' + team.won + '</div>';
-                html += '<div class="table-cell col-points">' + team.points + '</div>';
-                html += '</div>';
+            if (aflTeams.length === 0) {
+                container.innerHTML = '<p style="color: #7f8c8d; text-align: center;">No AFL teams found in data</p>';
+                return;
             }
-            aflContainer.innerHTML = html;
+            
+            var html = '<h3 style="margin-bottom: 15px;">AFL Teams (' + aflTeams.length + ')</h3>';
+            html += '<ul style="list-style: none; padding: 0;">';
+            
+            for (var i = 0; i < aflTeams.length; i++) {
+                html += '<li style="padding: 12px; margin: 8px 0; background: #f8f9fa; border-radius: 5px; border-left: 4px solid #e74c3c;">';
+                html += '<strong>' + (i + 1) + '.</strong> ' + aflTeams[i];
+                html += '</li>';
+            }
+            
+            html += '</ul>';
+            container.innerHTML = html;
         }
 
         function showScreen(screenName) {
-            var screens = ['home', 'nrl', 'afl', 'picks', 'admin'];
+            var screens = ['home', 'nrl', 'afl', 'picks'];
             for (var i = 0; i < screens.length; i++) {
                 document.getElementById(screens[i] + 'Screen').classList.add('hidden');
             }
@@ -1104,304 +809,7 @@
             
             document.getElementById(screenName + 'Screen').classList.remove('hidden');
             
-            // Reset admin screen when entering
-            if (screenName === 'admin') {
-                document.getElementById('adminPasswordPrompt').classList.remove('hidden');
-                document.getElementById('adminContent').classList.add('hidden');
-                document.getElementById('adminPassword').value = '';
-            }
-            
             event.target.classList.add('active');
-        }
-
-        // Admin functions
-        function checkAdminPassword() {
-            var password = document.getElementById('adminPassword').value;
-            if (password === 'admin2026') {
-                document.getElementById('adminPasswordPrompt').classList.add('hidden');
-                document.getElementById('adminContent').classList.remove('hidden');
-                updateAdminStatus();
-            } else {
-                alert('Incorrect password');
-                document.getElementById('adminPassword').value = '';
-            }
-        }
-
-        function updateAdminStatus() {
-            document.getElementById('adminMemberCount').textContent = members.length;
-            document.getElementById('adminDataSource').textContent = dataSource;
-        }
-
-        function loadAdminData() {
-            var csvData = document.getElementById('adminDataInput').value.trim();
-            
-            if (!csvData) {
-                alert('Please paste your Excel data first');
-                return;
-            }
-            
-            try {
-                var lines = csvData.split('\n');
-                var headerRowIndex = -1;
-                
-                // Find header row
-                for (var i = 0; i < Math.min(10, lines.length); i++) {
-                    if (lines[i].includes('Rank') && lines[i].includes('Tipster') && lines[i].includes('Total Score')) {
-                        headerRowIndex = i;
-                        break;
-                    }
-                }
-                
-                if (headerRowIndex === -1) {
-                    throw new Error('Could not find header row');
-                }
-                
-                var headerLine = lines[headerRowIndex];
-                var headers = headerLine.includes('\t') ? headerLine.split('\t') : headerLine.split(',');
-                headers = headers.map(function(h) { return h.trim().replace(/"/g, ''); });
-                
-                // Find column indices
-                var rankIndex = -1, tipsterIndex = -1, totalScoreIndex = -1, changeIndex = -1, prtIndex = -1, roundScoreIndex = -1;
-                var aflTeam1Index = -1, aflTeam2Index = -1, aflTeam3Index = -1, aflTeam4Index = -1, aflTeam5Index = -1;
-                var nrlTeam1Index = -1, nrlTeam2Index = -1, nrlTeam3Index = -1, nrlTeam4Index = -1, nrlTeam5Index = -1;
-                
-                for (var h = 0; h < headers.length; h++) {
-                    var header = headers[h].toLowerCase();
-                    if (header.includes('rank')) rankIndex = h;
-                    if (header.includes('tipster') || header.includes('name')) tipsterIndex = h;
-                    if (header.includes('total score') || header.includes('total')) totalScoreIndex = h;
-                    if (header.includes('+/-') || header.includes('change')) changeIndex = h;
-                    if (header.includes('prt')) prtIndex = h;
-                    if (header.includes('rd score') || header.includes('round')) roundScoreIndex = h;
-                    
-                    // Team picks columns
-                    if (header.includes('afl team 1') || header === 'afl team 1') aflTeam1Index = h;
-                    if (header.includes('afl team 2') || header === 'afl team 2') aflTeam2Index = h;
-                    if (header.includes('afl team 3') || header === 'afl team 3') aflTeam3Index = h;
-                    if (header.includes('afl team 4') || header === 'afl team 4') aflTeam4Index = h;
-                    if (header.includes('afl team 5') || header === 'afl team 5') aflTeam5Index = h;
-                    if (header.includes('nrl team 1') || header === 'nrl team 1') nrlTeam1Index = h;
-                    if (header.includes('nrl team 2') || header === 'nrl team 2') nrlTeam2Index = h;
-                    if (header.includes('nrl team 3') || header === 'nrl team 3') nrlTeam3Index = h;
-                    if (header.includes('nrl team 4') || header === 'nrl team 4') nrlTeam4Index = h;
-                    if (header.includes('nrl team 5') || header === 'nrl team 5') nrlTeam5Index = h;
-                }
-                
-                if (rankIndex === -1 || tipsterIndex === -1 || totalScoreIndex === -1) {
-                    throw new Error('Missing required columns');
-                }
-                
-                // Process data rows
-                var newMembers = [];
-                for (var i = headerRowIndex + 1; i < lines.length; i++) {
-                    var line = lines[i].trim();
-                    if (!line || line.toLowerCase().includes('prize')) break;
-                    
-                    var values = line.includes('\t') ? line.split('\t') : line.split(',');
-                    values = values.map(function(v) { return v.trim().replace(/"/g, ''); });
-                    
-                    var rank = values[rankIndex];
-                    var tipster = values[tipsterIndex];
-                    var totalScore = values[totalScoreIndex];
-                    
-                    if (!rank || !tipster || !totalScore || rank === '-' || totalScore.includes('#')) continue;
-                    
-                    var member = {
-                        id: i,
-                        name: tipster,
-                        totalPoints: parseInt(totalScore) || 0,
-                        weekChange: parseInt(values[changeIndex] || 0),
-                        previousTotal: parseInt(values[prtIndex] || 0),
-                        roundScore: parseInt(values[roundScoreIndex] || 0)
-                    };
-                    
-                    // Add team picks if available
-                    if (aflTeam1Index !== -1) {
-                        member.aflTeams = [
-                            values[aflTeam1Index] || '',
-                            values[aflTeam2Index] || '',
-                            values[aflTeam3Index] || '',
-                            values[aflTeam4Index] || '',
-                            values[aflTeam5Index] || ''
-                        ];
-                        member.nrlTeams = [
-                            values[nrlTeam1Index] || '',
-                            values[nrlTeam2Index] || '',
-                            values[nrlTeam3Index] || '',
-                            values[nrlTeam4Index] || '',
-                            values[nrlTeam5Index] || ''
-                        ];
-                    }
-                    
-                    newMembers.push(member);
-                }
-                
-                if (newMembers.length > 10) {
-                    members = newMembers;
-                    dataSource = 'admin-loaded';
-                    
-                    // Save to localStorage for persistence
-                    localStorage.setItem('competitionData', JSON.stringify(members));
-                    
-                    renderAllData();
-                    updateAdminStatus();
-                    
-                    alert('Success! Loaded ' + members.length + ' members with their team picks.');
-                    document.getElementById('adminDataInput').value = '';
-                } else {
-                    throw new Error('Not enough valid data rows found');
-                }
-                
-            } catch (error) {
-                console.error('Load failed:', error);
-                alert('Load failed: ' + error.message);
-            }
-        }
-
-        function clearAdminData() {
-            if (confirm('Clear all loaded data and return to embedded sample data?')) {
-                localStorage.removeItem('competitionData');
-                loadEmbeddedData();
-                dataSource = 'embedded';
-                renderAllData();
-                updateAdminStatus();
-                alert('Data cleared. Showing sample data.');
-            }
-        }
-
-        // Manual data import functions
-        function showDataImport() {
-            document.getElementById('dataImportModal').style.display = 'block';
-        }
-
-        function hideDataImport() {
-            document.getElementById('dataImportModal').style.display = 'none';
-            document.getElementById('csvDataInput').value = '';
-        }
-
-        function importCSVData() {
-            var csvData = document.getElementById('csvDataInput').value.trim();
-            
-            if (!csvData) {
-                alert('Please paste your data first');
-                return;
-            }
-            
-            try {
-                console.log('Processing data, length:', csvData.length);
-                
-                // Check if it's HTML data or raw CSV/tab-separated data
-                var lines = csvData.split('\n');
-                var processedData = [];
-                
-                // Look for header row and data rows
-                var headerRowIndex = -1;
-                for (var i = 0; i < Math.min(10, lines.length); i++) {
-                    if (lines[i].includes('Rank') && lines[i].includes('Tipster') && lines[i].includes('Total Score')) {
-                        headerRowIndex = i;
-                        break;
-                    }
-                }
-                
-                if (headerRowIndex === -1) {
-                    throw new Error('Could not find header row with Rank, Tipster, and Total Score columns');
-                }
-                
-                // Process header
-                var headerLine = lines[headerRowIndex];
-                var headers = [];
-                
-                // Split by tabs first (more likely in your data), then by commas
-                if (headerLine.includes('\t')) {
-                    headers = headerLine.split('\t');
-                } else {
-                    headers = headerLine.split(',');
-                }
-                
-                headers = headers.map(function(h) { return h.trim().replace(/"/g, ''); });
-                console.log('Headers found:', headers);
-                
-                // Find column indices
-                var rankIndex = -1, tipsterIndex = -1, totalScoreIndex = -1, changeIndex = -1, prtIndex = -1, roundScoreIndex = -1;
-                
-                for (var h = 0; h < headers.length; h++) {
-                    var header = headers[h].toLowerCase();
-                    if (header.includes('rank')) rankIndex = h;
-                    if (header.includes('tipster') || header.includes('name')) tipsterIndex = h;
-                    if (header.includes('total score') || header.includes('total')) totalScoreIndex = h;
-                    if (header.includes('+/-') || header.includes('change')) changeIndex = h;
-                    if (header.includes('prt')) prtIndex = h;
-                    if (header.includes('rd score') || header.includes('round')) roundScoreIndex = h;
-                }
-                
-                console.log('Column indices - Rank:', rankIndex, 'Tipster:', tipsterIndex, 'Total:', totalScoreIndex);
-                
-                if (rankIndex === -1 || tipsterIndex === -1 || totalScoreIndex === -1) {
-                    throw new Error('Could not find required columns (Rank, Tipster, Total Score)');
-                }
-                
-                // Process data rows
-                var newMembers = [];
-                for (var i = headerRowIndex + 1; i < lines.length; i++) {
-                    var line = lines[i].trim();
-                    if (!line || line.toLowerCase().includes('prize')) break; // Stop at prizes section
-                    
-                    var values = [];
-                    if (line.includes('\t')) {
-                        values = line.split('\t');
-                    } else {
-                        values = line.split(',');
-                    }
-                    
-                    values = values.map(function(v) { return v.trim().replace(/"/g, ''); });
-                    
-                    // Extract data using column indices
-                    var rank = values[rankIndex];
-                    var tipster = values[tipsterIndex];
-                    var totalScore = values[totalScoreIndex];
-                    
-                    // Skip invalid rows
-                    if (!rank || !tipster || !totalScore || rank === '-') continue;
-                    
-                    // Skip rows with #VALUE! or other errors
-                    if (totalScore.includes('#') || tipster.includes('#')) continue;
-                    
-                    newMembers.push({
-                        id: i,
-                        name: tipster,
-                        totalPoints: parseInt(totalScore) || 0,
-                        weekChange: parseInt(values[changeIndex] || 0),
-                        previousTotal: parseInt(values[prtIndex] || 0),
-                        roundScore: parseInt(values[roundScoreIndex] || 0)
-                    });
-                }
-                
-                console.log('Processed members:', newMembers.length);
-                console.log('Sample members:', newMembers.slice(0, 3));
-                console.log('Looking for Big Davo:', newMembers.filter(function(m) { return m.name.toLowerCase().includes('davo'); }));
-                
-                if (newMembers.length > 10) {
-                    members = newMembers;
-                    dataSource = 'real';
-                    
-                    // Hide load section and show success
-                    document.getElementById('dataLoadSection').style.display = 'none';
-                    document.getElementById('successMessage').classList.remove('hidden');
-                    document.getElementById('successMessage').textContent = 'All ' + members.length + ' members loaded from your competition!';
-                    hideDataImport();
-                    
-                    console.log('Successfully imported', members.length, 'members');
-                    renderAllData();
-                    
-                    alert('Success! Loaded ' + members.length + ' members from your competition data.');
-                } else {
-                    throw new Error('Only found ' + newMembers.length + ' valid members. Check your data format.');
-                }
-                
-            } catch (error) {
-                console.error('Import failed:', error);
-                alert('Import failed: ' + error.message + '\n\nMake sure you copied the complete data including headers.');
-            }
         }
     </script>
 </body>
