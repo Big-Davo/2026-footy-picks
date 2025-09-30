@@ -202,7 +202,7 @@
 
         .col-pos { flex: 0 0 35px; }
         .col-logo { flex: 0 0 30px; }
-        .col-team-name { flex: 1; min-width: 100px; text-align: left; padding-left: 5px; }
+        .col-team-name { flex: 0 0 140px; min-width: 140px; text-align: left; padding-left: 5px; font-size: 11px; }
         .col-played { flex: 0 0 30px; }
         .col-won { flex: 0 0 30px; }
 
@@ -521,7 +521,7 @@
                     
                     nrlLadder.push({
                         pos: values[0] || values[1],
-                        team: values[2],
+                        team: values[3],
                         played: values[4],
                         points: values[5],
                         wins: values[6],
