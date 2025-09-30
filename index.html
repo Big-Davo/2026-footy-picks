@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Big Davos Footy Picks</title>
+    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="apple-touch-icon" href="logo.png">
     <style>
         * {
             margin: 0;
@@ -393,18 +395,40 @@
             </div>
 
             <div id="nrlScreen" class="container hidden">
-                <div class="title">NRL Teams 2025</div>
-                <div class="subtitle">All teams in the competition</div>
-                <div class="picks-section">
-                    <div id="nrlTeamsList"></div>
+                <div class="title">NRL Ladder 2025</div>
+                <div class="subtitle">Live ladder standings</div>
+                <div class="ladder-container">
+                    <div class="ladder-table">
+                        <div class="table-header">
+                            <div class="table-header-text col-pos">Pos</div>
+                            <div class="table-header-text col-team-name">Team</div>
+                            <div class="table-header-text col-played">P</div>
+                            <div class="table-header-text col-won">W</div>
+                            <div class="table-header-text col-won">L</div>
+                            <div class="table-header-text col-points">Pts</div>
+                            <div class="table-header-text col-won">+/-</div>
+                        </div>
+                        <div id="nrlLadderTable"></div>
+                    </div>
                 </div>
             </div>
 
             <div id="aflScreen" class="container hidden">
-                <div class="title">AFL Teams 2025</div>
-                <div class="subtitle">All teams in the competition</div>
-                <div class="picks-section">
-                    <div id="aflTeamsList"></div>
+                <div class="title">AFL Ladder 2025</div>
+                <div class="subtitle">Live ladder standings</div>
+                <div class="ladder-container">
+                    <div class="ladder-table">
+                        <div class="table-header">
+                            <div class="table-header-text col-pos">Pos</div>
+                            <div class="table-header-text col-team-name">Team</div>
+                            <div class="table-header-text col-played">P</div>
+                            <div class="table-header-text col-won">W</div>
+                            <div class="table-header-text col-won">L</div>
+                            <div class="table-header-text col-points">Pts</div>
+                            <div class="table-header-text col-won">%</div>
+                        </div>
+                        <div id="aflLadderTable"></div>
+                    </div>
                 </div>
             </div>
 
@@ -438,6 +462,111 @@
 
         var nrlTeams = [];
         var aflTeams = [];
+        var nrlLadder = [];
+        var aflLadder = [];
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadDataFromCSV();
+            loadNRLLadder();
+            loadAFLLadder();
+            checkExistingLogin();
+        });
+
+        function loadNRLLadder() {
+            fetch('nrl-ladder.csv')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('NRL ladder CSV not found');
+                    }
+                    return response.text();
+                })
+                .then(csvText => {
+                    parseNRLLadder(csvText);
+                })
+                .catch(error => {
+                    console.error('Could not load NRL ladder:', error);
+                });
+        }
+
+        function loadAFLLadder() {
+            fetch('afl-ladder.csv')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('AFL ladder CSV not found');
+                    }
+                    return response.text();
+                })
+                .then(csvText => {
+                    parseAFLLadder(csvText);
+                })
+                .catch(error => {
+                    console.error('Could not load AFL ladder:', error);
+                });
+        }
+
+        function parseNRLLadder(csvText) {
+            try {
+                var lines = csvText.trim().split('\n');
+                var headerLine = lines[0];
+                var delimiter = headerLine.includes('\t') ? '\t' : ',';
+                
+                nrlLadder = [];
+                for (var i = 1; i < lines.length; i++) {
+                    var line = lines[i].trim();
+                    if (!line) continue;
+                    
+                    var values = line.split(delimiter).map(function(v) {
+                        return v.trim().replace(/"/g, '');
+                    });
+                    
+                    nrlLadder.push({
+                        pos: values[0] || values[1],
+                        team: values[2],
+                        played: values[4],
+                        points: values[5],
+                        wins: values[6],
+                        lost: values[8],
+                        diff: values[11]
+                    });
+                }
+                console.log('Loaded', nrlLadder.length, 'NRL teams from ladder');
+                renderNRLLadder();
+            } catch (error) {
+                console.error('Error parsing NRL ladder:', error);
+            }
+        }
+
+        function parseAFLLadder(csvText) {
+            try {
+                var lines = csvText.trim().split('\n');
+                var headerLine = lines[0];
+                var delimiter = headerLine.includes('\t') ? '\t' : ',';
+                
+                aflLadder = [];
+                for (var i = 1; i < lines.length; i++) {
+                    var line = lines[i].trim();
+                    if (!line) continue;
+                    
+                    var values = line.split(delimiter).map(function(v) {
+                        return v.trim().replace(/"/g, '');
+                    });
+                    
+                    aflLadder.push({
+                        pos: values[0],
+                        team: values[1],
+                        played: values[2],
+                        wins: values[3],
+                        losses: values[4],
+                        points: values[7],
+                        percentage: values[10]
+                    });
+                }
+                console.log('Loaded', aflLadder.length, 'AFL teams from ladder');
+                renderAFLLadder();
+            } catch (error) {
+                console.error('Error parsing AFL ladder:', error);
+            }
+        }
 
         document.addEventListener('DOMContentLoaded', function() {
             loadDataFromCSV();
@@ -655,8 +784,8 @@
 
         function renderAllData() {
             renderPicksLeaderboard();
-            renderNRLTeams();
-            renderAFLTeams();
+            renderNRLLadder();
+            renderAFLLadder();
             renderUserPicks();
         }
 
@@ -754,45 +883,51 @@
             renderPicksLeaderboard();
         }
 
-        function renderNRLTeams() {
-            var container = document.getElementById('nrlTeamsList');
+        function renderNRLLadder() {
+            var container = document.getElementById('nrlLadderTable');
             
-            if (nrlTeams.length === 0) {
-                container.innerHTML = '<p style="color: #7f8c8d; text-align: center;">No NRL teams found in data</p>';
+            if (nrlLadder.length === 0) {
+                container.innerHTML = '<p style="padding: 20px; text-align: center; color: #7f8c8d;">NRL ladder data loading...</p>';
                 return;
             }
             
-            var html = '<h3 style="margin-bottom: 15px;">NRL Teams (' + nrlTeams.length + ')</h3>';
-            html += '<ul style="list-style: none; padding: 0;">';
-            
-            for (var i = 0; i < nrlTeams.length; i++) {
-                html += '<li style="padding: 12px; margin: 8px 0; background: #f8f9fa; border-radius: 5px; border-left: 4px solid #3498db;">';
-                html += '<strong>' + (i + 1) + '.</strong> ' + nrlTeams[i];
-                html += '</li>';
+            var html = '';
+            for (var i = 0; i < nrlLadder.length; i++) {
+                var team = nrlLadder[i];
+                html += '<div class="table-row">';
+                html += '<div class="table-cell col-pos">' + team.pos + '</div>';
+                html += '<div class="table-cell col-team-name">' + team.team + '</div>';
+                html += '<div class="table-cell col-played">' + team.played + '</div>';
+                html += '<div class="table-cell col-won">' + team.wins + '</div>';
+                html += '<div class="table-cell col-won">' + team.lost + '</div>';
+                html += '<div class="table-cell col-points">' + team.points + '</div>';
+                html += '<div class="table-cell col-won">' + team.diff + '</div>';
+                html += '</div>';
             }
-            
-            html += '</ul>';
             container.innerHTML = html;
         }
 
-        function renderAFLTeams() {
-            var container = document.getElementById('aflTeamsList');
+        function renderAFLLadder() {
+            var container = document.getElementById('aflLadderTable');
             
-            if (aflTeams.length === 0) {
-                container.innerHTML = '<p style="color: #7f8c8d; text-align: center;">No AFL teams found in data</p>';
+            if (aflLadder.length === 0) {
+                container.innerHTML = '<p style="padding: 20px; text-align: center; color: #7f8c8d;">AFL ladder data loading...</p>';
                 return;
             }
             
-            var html = '<h3 style="margin-bottom: 15px;">AFL Teams (' + aflTeams.length + ')</h3>';
-            html += '<ul style="list-style: none; padding: 0;">';
-            
-            for (var i = 0; i < aflTeams.length; i++) {
-                html += '<li style="padding: 12px; margin: 8px 0; background: #f8f9fa; border-radius: 5px; border-left: 4px solid #e74c3c;">';
-                html += '<strong>' + (i + 1) + '.</strong> ' + aflTeams[i];
-                html += '</li>';
+            var html = '';
+            for (var i = 0; i < aflLadder.length; i++) {
+                var team = aflLadder[i];
+                html += '<div class="table-row">';
+                html += '<div class="table-cell col-pos">' + team.pos + '</div>';
+                html += '<div class="table-cell col-team-name">' + team.team + '</div>';
+                html += '<div class="table-cell col-played">' + team.played + '</div>';
+                html += '<div class="table-cell col-won">' + team.wins + '</div>';
+                html += '<div class="table-cell col-won">' + team.losses + '</div>';
+                html += '<div class="table-cell col-points">' + team.points + '</div>';
+                html += '<div class="table-cell col-won">' + team.percentage + '</div>';
+                html += '</div>';
             }
-            
-            html += '</ul>';
             container.innerHTML = html;
         }
 
