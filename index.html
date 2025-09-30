@@ -512,23 +512,31 @@
         function parseNRLLadder(csvText) {
             try {
                 var lines = csvText.trim().split('\n');
+                if (lines.length < 2) {
+                    console.log('NRL CSV has no data rows');
+                    return;
+                }
+                
                 var headerLine = lines[0];
                 var delimiter = headerLine.includes('\t') ? '\t' : ',';
+                
+                console.log('Parsing NRL ladder, total lines:', lines.length);
                 
                 nrlLadder = [];
                 for (var i = 1; i < lines.length; i++) {
                     var line = lines[i].trim();
-                    if (!line || line.length < 5) continue;
+                    if (!line) continue;
                     
                     var values = line.split(delimiter).map(function(v) {
                         return v.trim().replace(/"/g, '');
                     });
                     
-                    if (values.length < 12) continue;
+                    var team = values[3];
+                    if (!team || team.length === 0) continue;
                     
                     nrlLadder.push({
-                        pos: values[0] || values[1],
-                        team: values[3],
+                        pos: values[0] || values[2],
+                        team: team,
                         played: values[4],
                         points: values[5],
                         wins: values[6],
@@ -546,23 +554,31 @@
         function parseAFLLadder(csvText) {
             try {
                 var lines = csvText.trim().split('\n');
+                if (lines.length < 2) {
+                    console.log('AFL CSV has no data rows');
+                    return;
+                }
+                
                 var headerLine = lines[0];
                 var delimiter = headerLine.includes('\t') ? '\t' : ',';
+                
+                console.log('Parsing AFL ladder, total lines:', lines.length);
                 
                 aflLadder = [];
                 for (var i = 1; i < lines.length; i++) {
                     var line = lines[i].trim();
-                    if (!line || line.length < 5) continue;
+                    if (!line) continue;
                     
                     var values = line.split(delimiter).map(function(v) {
                         return v.trim().replace(/"/g, '');
                     });
                     
-                    if (values.length < 11) continue;
+                    var team = values[1];
+                    if (!team || team.length === 0) continue;
                     
                     aflLadder.push({
                         pos: values[0],
-                        team: values[1],
+                        team: team,
                         played: values[2],
                         wins: values[3],
                         losses: values[4],
