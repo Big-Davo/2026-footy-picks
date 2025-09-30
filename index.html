@@ -518,11 +518,13 @@
                 nrlLadder = [];
                 for (var i = 1; i < lines.length; i++) {
                     var line = lines[i].trim();
-                    if (!line) continue;
+                    if (!line || line.length < 5) continue;
                     
                     var values = line.split(delimiter).map(function(v) {
                         return v.trim().replace(/"/g, '');
                     });
+                    
+                    if (values.length < 12) continue;
                     
                     nrlLadder.push({
                         pos: values[0] || values[1],
@@ -535,7 +537,7 @@
                     });
                 }
                 console.log('Loaded', nrlLadder.length, 'NRL teams from ladder');
-                renderNRLLadder();
+                if (nrlLadder.length > 0) renderNRLLadder();
             } catch (error) {
                 console.error('Error parsing NRL ladder:', error);
             }
@@ -550,11 +552,13 @@
                 aflLadder = [];
                 for (var i = 1; i < lines.length; i++) {
                     var line = lines[i].trim();
-                    if (!line) continue;
+                    if (!line || line.length < 5) continue;
                     
                     var values = line.split(delimiter).map(function(v) {
                         return v.trim().replace(/"/g, '');
                     });
+                    
+                    if (values.length < 11) continue;
                     
                     aflLadder.push({
                         pos: values[0],
@@ -567,7 +571,7 @@
                     });
                 }
                 console.log('Loaded', aflLadder.length, 'AFL teams from ladder');
-                renderAFLLadder();
+                if (aflLadder.length > 0) renderAFLLadder();
             } catch (error) {
                 console.error('Error parsing AFL ladder:', error);
             }
