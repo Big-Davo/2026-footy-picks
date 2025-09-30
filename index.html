@@ -647,9 +647,9 @@
                         id: i,
                         name: tipster,
                         totalPoints: parseInt(totalScore) || 0,
-                        weekChange: parseInt(values[indices.change] || 0),
-                        previousTotal: parseInt(values[indices.prt] || 0),
-                        roundScore: parseInt(values[indices.roundScore] || 0)
+                        weekChange: parseInt(values[indices.change]) || 0,
+                        previousTotal: parseInt(values[indices.prt]) || 0,
+                        roundScore: parseInt(values[indices.roundScore]) || 0
                     };
                     
                     if (indices.aflTeam1 !== undefined) {
@@ -842,9 +842,15 @@
             for (var i = 0; i < membersToShow.length; i++) {
                 var member = membersToShow[i];
                 var actualPosition = sortedMembers.indexOf(member) + 1;
-                var lastWeekPosition = actualPosition - member.weekChange;
-                var changeClass = member.weekChange > 0 ? 'positive' : member.weekChange < 0 ? 'negative' : 'neutral';
-                var changeText = member.weekChange > 0 ? '+' + member.weekChange : member.weekChange < 0 ? member.weekChange.toString() : '-';
+                
+                var weekChange = member.weekChange || 0;
+                var lastWeekPosition = actualPosition - weekChange;
+                if (isNaN(lastWeekPosition) || lastWeekPosition < 1) {
+                    lastWeekPosition = '-';
+                }
+                
+                var changeClass = weekChange > 0 ? 'positive' : weekChange < 0 ? 'negative' : 'neutral';
+                var changeText = weekChange > 0 ? '+' + weekChange : weekChange < 0 ? weekChange.toString() : '-';
                 
                 var rowClass = member.name === currentUser ? 'style="background-color: #e8f5e8; border: 2px solid #27ae60;"' : '';
                 
