@@ -610,7 +610,7 @@
                 for (var h = 0; h < headers.length; h++) {
                     var header = headers[h].toLowerCase();
                     if (header.includes('rank')) indices.rank = h;
-                    if (header.includes('lw')) indices.lw = h;
+                    if (header.includes('lw') || header === 'lw') indices.lw = h;
                     if (header.includes('+/-') || header.includes('change')) indices.change = h;
                     if (header.includes('tipster') || header.includes('name')) indices.tipster = h;
                     if (header.includes('total score') || header.includes('total')) indices.totalScore = h;
@@ -647,6 +647,7 @@
                         id: i,
                         name: tipster,
                         totalPoints: parseInt(totalScore) || 0,
+                        lastWeek: values[indices.lw] || '-',
                         weekChange: parseInt(values[indices.change] || 0),
                         previousTotal: parseInt(values[indices.prt] || 0),
                         roundScore: parseInt(values[indices.roundScore] || 0)
@@ -842,10 +843,6 @@
             for (var i = 0; i < membersToShow.length; i++) {
                 var member = membersToShow[i];
                 var actualPosition = sortedMembers.indexOf(member) + 1;
-                var lastWeekPosition = actualPosition - member.weekChange;
-                
-                // Show "-" if LW would be invalid
-                var lwDisplay = (isNaN(lastWeekPosition) || lastWeekPosition < 1) ? '-' : lastWeekPosition;
                 
                 var changeClass = member.weekChange > 0 ? 'positive' : member.weekChange < 0 ? 'negative' : 'neutral';
                 var changeText = member.weekChange > 0 ? '+' + member.weekChange : member.weekChange < 0 ? member.weekChange.toString() : '-';
@@ -854,7 +851,7 @@
                 
                 html += '<div class="table-row" ' + rowClass + ' data-member="' + member.name + '">';
                 html += '<div class="table-cell col-rank">' + actualPosition + '</div>';
-                html += '<div class="table-cell col-lw">' + lwDisplay + '</div>';
+                html += '<div class="table-cell col-lw">' + member.lastWeek + '</div>';
                 html += '<div class="table-cell col-change ' + changeClass + '">' + changeText + '</div>';
                 html += '<div class="table-cell col-team">' + member.name + '</div>';
                 html += '<div class="table-cell col-points">' + member.totalPoints + '</div>';
