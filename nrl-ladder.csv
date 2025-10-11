@@ -1,18 +1,17 @@
-Pos	Team	Pos_1	Column1	played	points	wins	drawn	lost	byes	for	against	diff.	home	away	form	Next	Column18
-1		1	Storm	1	2	1	0	0	0	56	18	38	1 - 0	0 - 0	3 - 2	BYE	
-2		2	Broncos	1	2	1	0	0	0	50	14	36	0 - 0	1 - 0	4 - 1	Raiders	
-3		3	Sea Eagles	1	2	1	0	0	0	42	12	30	1 - 0	0 - 0	3 - 2	Warriors	
-4		4	Raiders	1	2	1	0	0	0	30	8	22	1 - 0	0 - 0	3 - 1	Broncos	
-5		5	Bulldogs	1	2	1	0	0	0	28	20	8	0 - 0	1 - 0	2 - 3	Titans	
-6		6	Panthers	1	2	1	0	0	0	28	22	6	1 - 0	0 - 0	2 - 3	Roosters	
-7		7	Knights	1	2	1	0	0	0	10	8	2	0 - 0	1 - 0	0 - 5	Dolphins	
-8		8	Rabbitohs	1	2	1	0	0	0	16	14	2	1 - 0	0 - 0	3 - 1	Dragons	
-9		9	Titans	0	2	0	0	0	1	0	0	0	0 - 0	0 - 0	1 - 4	Bulldogs	
-10		10	Dolphins	1	0	0	0	1	0	14	16	-2	0 - 0	0 - 1	2 - 3	Knights	
-11		11	Wests Tigers	1	0	0	0	1	0	8	10	-2	0 - 1	0 - 0	1 - 3	Eels	
-12		12	Sharks	1	0	0	0	1	0	22	28	-6	0 - 0	0 - 1	3 - 1	Cowboys	
-13		13	Dragons	1	0	0	0	1	0	20	28	-8	0 - 1	0 - 0	1 - 4	Rabbitohs	
-14		14	Warriors	1	0	0	0	1	0	8	30	-22	0 - 0	0 - 1	2 - 3	Sea Eagles	
-15		15	Cowboys	1	0	0	0	1	0	12	42	-30	0 - 0	0 - 1	2 - 2	Sharks	
-16		16	Roosters	1	0	0	0	1	0	14	50	-36	0 - 1	0 - 0	4 - 1	Panthers	
-17		17	Eels	1	0	0	0	1	0	18	56	-38	0 - 0	0 - 1	4 - 1	Wests Tigers	
+1		1	Raiders	24	44	19	0	5	3	654	506	148	11 - 1	8 - 4	3 - 1	Broncos	
+2		2	Storm	24	40	17	0	7	3	671	459	212	9 - 3	8 - 4	3 - 2	Bulldogs	
+3		3	Bulldogs	24	38	16	0	8	3	534	414	120	9 - 3	7 - 5	2 - 3	Storm	
+4		4	Broncos	24	36	15	0	9	3	680	508	172	9 - 3	6 - 6	4 - 1	Raiders	
+5		5	Sharks	24	36	15	0	9	3	599	490	109	10 - 2	5 - 7	3 - 1	Roosters	
+6		6	Warriors	24	34	14	0	10	3	517	496	21	7 - 5	7 - 5	2 - 3	Panthers	
+7		7	Panthers	24	33	13	1	10	3	576	469	107	6 - 6	7 - 4	2 - 3	Warriors	
+8		8	Roosters	24	32	13	0	11	3	653	521	132	6 - 6	7 - 5	4 - 1	Sharks	
+9		9	Dolphins	24	30	12	0	12	3	721	596	125	7 - 5	5 - 7	2 - 3		
+10		10	Sea Eagles	24	30	12	0	12	3	555	534	21	8 - 4	4 - 8	3 - 2		
+11		11	Eels	24	26	10	0	14	3	502	578	-76	6 - 6	4 - 8	4 - 1		
+12		12	Cowboys	24	25	9	1	14	3	538	684	-146	5 - 6	4 - 8	2 - 2		
+13		13	Wests Tigers	24	24	9	0	15	3	477	612	-135	5 - 7	4 - 8	1 - 3		
+14		14	Rabbitohs	24	24	9	0	15	3	427	608	-181	6 - 6	3 - 9	3 - 1		
+15		15	Dragons	24	22	8	0	16	3	498	628	-130	6 - 6	2 - 10	1 - 4		
+16		16	Titans	24	18	6	0	18	3	520	719	-199	3 - 9	3 - 9	1 - 4		
+17		17	Knights	24	18	6	0	18	3	338	638	-300	2 - 10	4 - 8	0 - 5		
