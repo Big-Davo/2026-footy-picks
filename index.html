@@ -13,7 +13,7 @@
         .container { flex: 1; padding: 15px; padding-bottom: 80px; overflow-y: auto; }
         .container-friends { flex: 1; padding: 10px 10px 80px 10px; overflow-y: auto; }
         .title { font-size: 22px; font-weight: bold; text-align: center; margin-bottom: 5px; color: #2c3e50; padding: 0 10px; }
-        .title-friends { font-size: 16px; font-weight: bold; text-align: center; margin-bottom: 6px; color: #2c3e50; padding: 0 5px; }
+        .title-friends { font-size: 16px; font-weight: bold; text-align: center; margin-bottom: 4px; color: #2c3e50; padding: 0 5px; }
         .subtitle { font-size: 14px; text-align: center; color: #7f8c8d; margin-bottom: 15px; }
         .login-container { display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; padding: 20px; }
         .login-box { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); width: 100%; max-width: 350px; }
@@ -32,7 +32,7 @@
         .status-position { font-size: 24px; font-weight: bold; }
         .status-points { font-size: 14px; }
 
-        /* Standard column widths */
+        /* Standard columns */
         .col-rank { flex: 0 0 40px; }
         .col-lw { flex: 0 0 35px; }
         .col-change { flex: 0 0 40px; }
@@ -41,7 +41,7 @@
         .col-prt { flex: 0 0 45px; }
         .col-round { flex: 0 0 55px; }
 
-        /* Compact column widths for friends page */
+        /* Friends compact columns */
         .col-rank-f { flex: 0 0 32px; }
         .col-lw-f { flex: 0 0 28px; }
         .col-change-f { flex: 0 0 30px; }
@@ -50,39 +50,55 @@
         .col-prt-f { flex: 0 0 36px; }
         .col-round-f { flex: 0 0 44px; }
 
-        .col-pos { flex: 0 0 35px; }
-        .col-team-name { flex: 0 0 140px; min-width: 140px; text-align: left; padding-left: 5px; font-size: 11px; }
-        .col-played { flex: 0 0 30px; }
-        .col-won { flex: 0 0 30px; }
+        /* Ladder compact columns */
+        .col-pos { flex: 0 0 30px; }
+        .col-team-name { flex: 1; min-width: 100px; text-align: left; padding-left: 5px; font-size: 11px; }
+        .col-played { flex: 0 0 26px; }
+        .col-won { flex: 0 0 26px; }
+        .col-pts { flex: 0 0 26px; }
+        .col-diff { flex: 0 0 30px; }
+
         .ladder-container { overflow-x: auto; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); background: white; }
-        .ladder-table { min-width: 600px; width: 100%; }
         .table-container { max-height: 400px; overflow-y: auto; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); background: white; }
         .table-container-friends { border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); background: white; }
-        .table-header { position: sticky; top: 0; z-index: 10; display: flex; background-color: #34495e; padding: 10px 6px; border-radius: 8px 8px 0 0; }
+        .table-header { position: sticky; top: 0; z-index: 10; display: flex; background-color: #34495e; padding: 8px 6px; border-radius: 8px 8px 0 0; }
         .table-header-text { color: white; font-weight: bold; font-size: 12px; text-align: center; }
         .table-header-text-sm { color: white; font-weight: bold; font-size: 11px; text-align: center; }
+
+        /* Standard row */
         .table-row { display: flex; background-color: white; padding: 12px 8px; margin-bottom: 2px; align-items: center; border-bottom: 1px solid #f0f0f0; }
-        .table-row-compact { display: flex; background-color: white; padding: 7px 6px; margin-bottom: 1px; align-items: center; border-bottom: 1px solid #f0f0f0; }
+        /* Compact row for friends and ladders */
+        .table-row-compact { display: flex; background-color: white; padding: 6px 6px; margin-bottom: 1px; align-items: center; border-bottom: 1px solid #f0f0f0; }
+
         .table-row:hover { background-color: #f8f9fa; }
+        .table-row-compact:hover { background-color: #f8f9fa; }
         .table-row:last-child { border-bottom: none; border-radius: 0 0 8px 8px; }
         .table-row-compact:last-child { border-bottom: none; border-radius: 0 0 8px 8px; }
+
         .table-cell { font-size: 13px; text-align: center; color: #2c3e50; }
         .table-cell-sm { font-size: 12px; text-align: center; color: #2c3e50; }
+
         .positive { color: #27ae60; font-weight: bold; }
         .negative { color: #e74c3c; font-weight: bold; }
         .neutral { color: #7f8c8d; }
+
         .show-more-btn { background: #3498db; color: white; border: none; padding: 12px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; margin: 15px auto; display: block; font-size: 14px; }
         .show-more-btn:hover { background: #2980b9; }
+
         .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; display: flex; background-color: #2c3e50; padding: 8px 5px; border-top: 1px solid #34495e; }
         .nav-button { flex: 1; text-align: center; padding: 10px 5px; border-radius: 6px; margin: 0 3px; color: white; font-weight: bold; cursor: pointer; transition: background-color 0.3s; font-size: 11px; }
         .nav-button:hover { background-color: #34495e; }
         .nav-button.active { background-color: #3498db; }
         .hidden { display: none !important; }
-        .picks-section { background: white; margin-bottom: 15px; border-radius: 8px; padding: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        .picks-section h3 { color: #2c3e50; margin-bottom: 10px; font-size: 16px; }
+
+        /* My Picks - compact */
+        .picks-section { background: white; margin-bottom: 10px; border-radius: 8px; padding: 8px 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .picks-section h3 { color: #2c3e50; margin-bottom: 6px; font-size: 14px; }
+        .picks-item { padding: 5px 8px; margin: 3px 0; background: #f8f9fa; border-radius: 5px; font-size: 13px; }
+
         .loading { text-align: center; padding: 30px; color: #7f8c8d; }
 
-        /* Friends note - compact */
+        /* Friends note */
         .friends-note { background: white; border-radius: 8px; padding: 5px 12px; margin-bottom: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); font-size: 11px; color: #2c3e50; line-height: 1.5; }
         .friends-note strong { font-size: 11px; }
 
@@ -142,11 +158,11 @@
                 <button class="show-more-btn" id="showMoreBtn" onclick="toggleShowMore()">Show All Players</button>
             </div>
 
-            <!-- FRIENDS SCREEN - compact layout -->
+            <!-- FRIENDS SCREEN -->
             <div id="friendsScreen" class="container-friends">
                 <div class="title-friends">No Idea Footy Tipsters</div>
                 <div class="title-friends" id="friendsWeekTitle" style="color: #3498db; font-size: 13px;"></div>
-                <div class="friends-note">
+                <div class="friends-note" style="margin-top: 6px;">
                     <strong>LW</strong> = Last Week's ranking &nbsp;|&nbsp;
                     <strong>+/-</strong> = Change &nbsp;|&nbsp;
                     <strong>PRT</strong> = Previous Total &nbsp;|&nbsp;
@@ -167,47 +183,43 @@
             </div>
 
             <!-- NRL SCREEN -->
-            <div id="nrlScreen" class="container hidden">
+            <div id="nrlScreen" class="container">
                 <div class="title">NRL Ladder 2026</div>
                 <div class="subtitle">Live ladder standings</div>
-                <div class="ladder-container">
-                    <div class="ladder-table">
-                        <div class="table-header">
-                            <div class="table-header-text col-pos">Pos</div>
-                            <div class="table-header-text col-team-name">Team</div>
-                            <div class="table-header-text col-played">P</div>
-                            <div class="table-header-text col-won">W</div>
-                            <div class="table-header-text col-won">L</div>
-                            <div class="table-header-text col-points">Pts</div>
-                            <div class="table-header-text col-won">+/-</div>
-                        </div>
-                        <div id="nrlLadderTable"></div>
+                <div class="table-container-friends" style="box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                    <div class="table-header">
+                        <div class="table-header-text-sm col-pos">Pos</div>
+                        <div class="table-header-text-sm col-team-name">Team</div>
+                        <div class="table-header-text-sm col-played">P</div>
+                        <div class="table-header-text-sm col-won">W</div>
+                        <div class="table-header-text-sm col-won">L</div>
+                        <div class="table-header-text-sm col-pts">Pts</div>
+                        <div class="table-header-text-sm col-diff">+/-</div>
                     </div>
+                    <div id="nrlLadderTable"></div>
                 </div>
             </div>
 
             <!-- AFL SCREEN -->
-            <div id="aflScreen" class="container hidden">
+            <div id="aflScreen" class="container">
                 <div class="title">AFL Ladder 2026</div>
                 <div class="subtitle">Live ladder standings</div>
-                <div class="ladder-container">
-                    <div class="ladder-table">
-                        <div class="table-header">
-                            <div class="table-header-text col-pos">Pos</div>
-                            <div class="table-header-text col-team-name">Team</div>
-                            <div class="table-header-text col-played">P</div>
-                            <div class="table-header-text col-won">W</div>
-                            <div class="table-header-text col-won">L</div>
-                            <div class="table-header-text col-points">Pts</div>
-                            <div class="table-header-text col-won">%</div>
-                        </div>
-                        <div id="aflLadderTable"></div>
+                <div class="table-container-friends" style="box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                    <div class="table-header">
+                        <div class="table-header-text-sm col-pos">Pos</div>
+                        <div class="table-header-text-sm col-team-name">Team</div>
+                        <div class="table-header-text-sm col-played">P</div>
+                        <div class="table-header-text-sm col-won">W</div>
+                        <div class="table-header-text-sm col-won">L</div>
+                        <div class="table-header-text-sm col-pts">Pts</div>
+                        <div class="table-header-text-sm col-diff">%</div>
                     </div>
+                    <div id="aflLadderTable"></div>
                 </div>
             </div>
 
             <!-- MY PICKS SCREEN -->
-            <div id="picksScreen" class="container hidden">
+            <div id="picksScreen" class="container">
                 <div class="title">My Team Picks</div>
                 <div id="userPicksContent">
                     <div class="picks-section">
@@ -265,12 +277,10 @@
                 var lines = csvText.trim().split('\n');
                 if (lines.length < 3) return;
 
-                // Line 1 = week/stage title
                 var weekTitle = lines[0].trim().replace(/"/g, '');
                 var titleEl = document.getElementById('friendsWeekTitle');
                 if (titleEl) titleEl.textContent = weekTitle;
 
-                // Line 2 = headers
                 var delimiter = lines[1].includes('\t') ? '\t' : ',';
                 var headers = lines[1].split(delimiter).map(function(h) {
                     return h.trim().replace(/"/g, '').toLowerCase();
@@ -287,14 +297,11 @@
                     if (headers[h].includes('rd score') || headers[h].includes('round')) indices.roundScore = h;
                 }
 
-                // Line 3 onwards = data
                 friends = [];
                 for (var i = 2; i < lines.length; i++) {
                     var line = lines[i].trim();
                     if (!line) continue;
-                    var values = line.split(delimiter).map(function(v) {
-                        return v.trim().replace(/"/g, '');
-                    });
+                    var values = line.split(delimiter).map(function(v) { return v.trim().replace(/"/g, ''); });
                     if (!values[indices.tipster]) continue;
                     friends.push({
                         rank: values[indices.rank] || (i - 1),
@@ -307,9 +314,7 @@
                     });
                 }
                 renderFriends();
-            } catch (error) {
-                console.error('Error parsing friends data:', error);
-            }
+            } catch (error) { console.error('Error parsing friends data:', error); }
         }
 
         function renderFriends() {
@@ -322,11 +327,7 @@
             for (var i = 0; i < friends.length; i++) {
                 var f = friends[i];
                 var pos = i + 1;
-                var rowClass = '';
-                if (pos <= 2) rowClass = 'friends-row-green';
-                else if (pos <= 5) rowClass = 'friends-row-yellow';
-                else if (pos <= 8) rowClass = 'friends-row-amber';
-                else rowClass = 'friends-row-orange';
+                var rowClass = pos <= 2 ? 'friends-row-green' : pos <= 5 ? 'friends-row-yellow' : pos <= 8 ? 'friends-row-amber' : 'friends-row-orange';
                 var changeVal = parseInt(f.change) || 0;
                 var changeClass = changeVal > 0 ? 'positive' : changeVal < 0 ? 'negative' : 'neutral';
                 var changeText = changeVal > 0 ? '+' + changeVal : changeVal < 0 ? changeVal : '-';
@@ -579,13 +580,13 @@
             if (userMember && userMember.nrlTeams && userMember.aflTeams) {
                 var nrlHtml = '<ul style="list-style:none;padding:0;">';
                 for (var i = 0; i < userMember.nrlTeams.length; i++) {
-                    if (userMember.nrlTeams[i]) nrlHtml += '<li style="padding:8px;margin:5px 0;background:#f8f9fa;border-radius:5px;"><strong>' + (i+1) + '.</strong> ' + userMember.nrlTeams[i] + '</li>';
+                    if (userMember.nrlTeams[i]) nrlHtml += '<li class="picks-item"><strong>' + (i+1) + '.</strong> ' + userMember.nrlTeams[i] + '</li>';
                 }
                 nrlHtml += '</ul>';
                 nrlPicksDiv.innerHTML = nrlHtml;
                 var aflHtml = '<ul style="list-style:none;padding:0;">';
                 for (var i = 0; i < userMember.aflTeams.length; i++) {
-                    if (userMember.aflTeams[i]) aflHtml += '<li style="padding:8px;margin:5px 0;background:#f8f9fa;border-radius:5px;"><strong>' + (i+1) + '.</strong> ' + userMember.aflTeams[i] + '</li>';
+                    if (userMember.aflTeams[i]) aflHtml += '<li class="picks-item"><strong>' + (i+1) + '.</strong> ' + userMember.aflTeams[i] + '</li>';
                 }
                 aflHtml += '</ul>';
                 aflPicksDiv.innerHTML = aflHtml;
@@ -601,7 +602,16 @@
             var html = '';
             for (var i = 0; i < nrlLadder.length; i++) {
                 var team = nrlLadder[i];
-                html += '<div class="table-row"><div class="table-cell col-pos">' + team.pos + '</div><div class="table-cell col-team-name">' + team.team + '</div><div class="table-cell col-played">' + team.played + '</div><div class="table-cell col-won">' + team.wins + '</div><div class="table-cell col-won">' + team.lost + '</div><div class="table-cell col-points">' + team.points + '</div><div class="table-cell col-won">' + team.diff + '</div></div>';
+                var rowStyle = i < 8 ? 'style="border-left: 3px solid #27ae60;"' : '';
+                html += '<div class="table-row-compact" ' + rowStyle + '>';
+                html += '<div class="table-cell-sm col-pos">' + team.pos + '</div>';
+                html += '<div class="table-cell-sm col-team-name">' + team.team + '</div>';
+                html += '<div class="table-cell-sm col-played">' + team.played + '</div>';
+                html += '<div class="table-cell-sm col-won">' + team.wins + '</div>';
+                html += '<div class="table-cell-sm col-won">' + team.lost + '</div>';
+                html += '<div class="table-cell-sm col-pts">' + team.points + '</div>';
+                html += '<div class="table-cell-sm col-diff">' + team.diff + '</div>';
+                html += '</div>';
             }
             container.innerHTML = html;
         }
@@ -612,7 +622,16 @@
             var html = '';
             for (var i = 0; i < aflLadder.length; i++) {
                 var team = aflLadder[i];
-                html += '<div class="table-row"><div class="table-cell col-pos">' + team.pos + '</div><div class="table-cell col-team-name">' + team.team + '</div><div class="table-cell col-played">' + team.played + '</div><div class="table-cell col-won">' + team.wins + '</div><div class="table-cell col-won">' + team.losses + '</div><div class="table-cell col-points">' + team.points + '</div><div class="table-cell col-won">' + team.percentage + '</div></div>';
+                var rowStyle = i < 8 ? 'style="border-left: 3px solid #27ae60;"' : '';
+                html += '<div class="table-row-compact" ' + rowStyle + '>';
+                html += '<div class="table-cell-sm col-pos">' + team.pos + '</div>';
+                html += '<div class="table-cell-sm col-team-name">' + team.team + '</div>';
+                html += '<div class="table-cell-sm col-played">' + team.played + '</div>';
+                html += '<div class="table-cell-sm col-won">' + team.wins + '</div>';
+                html += '<div class="table-cell-sm col-won">' + team.losses + '</div>';
+                html += '<div class="table-cell-sm col-pts">' + team.points + '</div>';
+                html += '<div class="table-cell-sm col-diff">' + team.percentage + '</div>';
+                html += '</div>';
             }
             container.innerHTML = html;
         }
