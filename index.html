@@ -519,10 +519,19 @@
 
         function goToMyPosition() {
             var userMember = members.find(function(m) { return m.name === currentUser; });
-            if (userMember) {
+            if (!userMember) return;
+        
+            // If not showing all, switch to show all first then scroll
+            if (!showingAll) {
+                showingAll = true;
+                renderPicksLeaderboard();
+            }
+        
+            // Small delay to allow render before scrolling
+            setTimeout(function() {
                 var userRow = document.querySelector('[data-member="' + userMember.name + '"]');
                 if (userRow) userRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }
+            }, 100);
         }
 
         function renderAllData() {
