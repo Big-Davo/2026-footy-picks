@@ -144,7 +144,8 @@
 
             <!-- FRIENDS SCREEN - compact layout -->
             <div id="friendsScreen" class="container-friends">
-                <div class="title-friends" id="friendsWeekTitle">No Idea Footy Tipsters</div>
+                <div class="title-friends">No Idea Footy Tipsters</div>
+                <div class="title-friends" id="friendsWeekTitle" style="color: #3498db; font-size: 13px;"></div>
                 <div class="friends-note">
                     <strong>LW</strong> = Last Week's ranking &nbsp;|&nbsp;
                     <strong>+/-</strong> = Change &nbsp;|&nbsp;
@@ -267,7 +268,7 @@
                 // Line 1 = week/stage title
                 var weekTitle = lines[0].trim().replace(/"/g, '');
                 var titleEl = document.getElementById('friendsWeekTitle');
-                if (titleEl) titleEl.textContent = 'No Idea Footy Tipsters - ' + weekTitle;
+                if (titleEl) titleEl.textContent = weekTitle;
 
                 // Line 2 = headers
                 var delimiter = lines[1].includes('\t') ? '\t' : ',';
