@@ -98,103 +98,78 @@
         .login-btn {
             width: 100%;
             padding: 12px;
-            background-color: #3498db;
+            background: #3498db;
             color: white;
             border: none;
             border-radius: 8px;
             font-size: 16px;
             font-weight: bold;
             cursor: pointer;
-            margin-bottom: 15px;
         }
 
-        .login-btn:hover {
-            background-color: #2980b9;
-        }
+        .login-btn:hover { background: #2980b9; }
 
         .header {
             background-color: #2c3e50;
             color: white;
-            padding: 15px;
+            padding: 10px 15px;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        .user-info {
-            font-size: 14px;
-        }
+        .user-info { font-size: 14px; }
 
         .logout-btn {
             background: #e74c3c;
             color: white;
             border: none;
-            padding: 8px 12px;
-            border-radius: 5px;
-            font-size: 12px;
+            padding: 6px 12px;
+            border-radius: 6px;
             cursor: pointer;
+            font-size: 12px;
+        }
+
+        .data-status {
+            text-align: center;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-weight: bold;
+            background: #27ae60;
+            color: white;
         }
 
         .user-status {
-            background: linear-gradient(135deg, #3498db, #2980b9);
+            background: #3498db;
             color: white;
             padding: 15px;
             border-radius: 8px;
             margin-bottom: 15px;
             text-align: center;
-            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
             cursor: pointer;
         }
 
-        .status-title {
-            font-size: 14px;
-            opacity: 0.9;
-            margin-bottom: 5px;
-        }
+        .status-title { font-size: 12px; margin-bottom: 5px; }
+        .status-position { font-size: 24px; font-weight: bold; }
+        .status-points { font-size: 14px; }
 
-        .status-position {
-            font-size: 20px;
-            font-weight: bold;
-            margin-bottom: 3px;
-        }
+        .col-rank { flex: 0 0 40px; }
+        .col-lw { flex: 0 0 35px; }
+        .col-change { flex: 0 0 40px; }
+        .col-team { flex: 1; min-width: 80px; text-align: left; padding-left: 5px; }
+        .col-points { flex: 0 0 65px; }
+        .col-prt { flex: 0 0 45px; }
+        .col-round { flex: 0 0 55px; }
 
-        .status-points {
-            font-size: 14px;
-            opacity: 0.9;
-        }
-
-        .data-status {
-            background: #3498db;
-            color: white;
-            padding: 12px 15px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            text-align: center;
-            font-size: 14px;
-            font-weight: bold;
-        }
-
-        .data-status.success {
-            background: #27ae60;
-        }
-
-        .data-status.error {
-            background: #e74c3c;
-        }
-
-        .col-rank { flex: 0 0 10%; }
-        .col-lw { flex: 0 0 8%; }
-        .col-change { flex: 0 0 8%; }
-        .col-team { flex: 1; text-align: left; padding-left: 8px; }
-        .col-points { flex: 0 0 16%; font-weight: bold; }
-        .col-prt { flex: 0 0 12%; }
-        .col-round { flex: 0 0 12%; }
+        .col-pos { flex: 0 0 35px; }
+        .col-logo { flex: 0 0 30px; }
+        .col-team-name { flex: 0 0 140px; min-width: 140px; text-align: left; padding-left: 5px; font-size: 11px; }
+        .col-played { flex: 0 0 30px; }
+        .col-won { flex: 0 0 30px; }
 
         .ladder-container {
             overflow-x: auto;
-            overflow-y: auto;
-            max-height: 500px;
-            margin-bottom: 15px;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             background: white;
@@ -203,17 +178,6 @@
         .ladder-table {
             min-width: 600px;
             width: 100%;
-        }
-
-        .col-pos { flex: 0 0 35px; }
-        .col-logo { flex: 0 0 30px; }
-        .col-team-name { flex: 0 0 140px; min-width: 140px; text-align: left; padding-left: 5px; font-size: 11px; }
-        .col-played { flex: 0 0 30px; }
-        .col-won { flex: 0 0 30px; }
-
-        .team-logo {
-            font-size: 16px;
-            text-align: center;
         }
 
         .table-container {
@@ -251,14 +215,8 @@
             border-bottom: 1px solid #f0f0f0;
         }
 
-        .table-row:hover {
-            background-color: #f8f9fa;
-        }
-
-        .table-row:last-child {
-            border-bottom: none;
-            border-radius: 0 0 8px 8px;
-        }
+        .table-row:hover { background-color: #f8f9fa; }
+        .table-row:last-child { border-bottom: none; border-radius: 0 0 8px 8px; }
 
         .table-cell {
             font-size: 13px;
@@ -283,9 +241,7 @@
             font-size: 14px;
         }
 
-        .show-more-btn:hover {
-            background: #2980b9;
-        }
+        .show-more-btn:hover { background: #2980b9; }
 
         .bottom-nav {
             position: fixed;
@@ -311,17 +267,10 @@
             font-size: 11px;
         }
 
-        .nav-button:hover {
-            background-color: #34495e;
-        }
+        .nav-button:hover { background-color: #34495e; }
+        .nav-button.active { background-color: #3498db; }
 
-        .nav-button.active {
-            background-color: #3498db;
-        }
-
-        .hidden {
-            display: none !important;
-        }
+        .hidden { display: none !important; }
 
         .picks-section {
             background: white;
@@ -342,6 +291,26 @@
             padding: 30px;
             color: #7f8c8d;
         }
+
+        /* Friends tab styles */
+        .friends-note {
+            background: white;
+            border-radius: 8px;
+            padding: 12px 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            font-size: 12px;
+            color: #2c3e50;
+            line-height: 1.8;
+        }
+
+        .friends-note strong { font-size: 13px; }
+
+        .friends-row-green { background-color: #92D050 !important; }
+        .friends-row-yellow { background-color: #FFD961 !important; }
+        .friends-row-amber { background-color: #FFC409 !important; }
+        .friends-row-orange { background-color: #E26B0A !important; color: white; }
+        .friends-row-orange .table-cell { color: white; }
 
         @media (max-width: 480px) {
             .title { font-size: 18px; }
@@ -371,19 +340,16 @@
         </div>
 
         <div id="mainApp" class="hidden">
+
+            <!-- HOME SCREEN -->
             <div id="homeScreen" class="container">
                 <div class="title">Big Davos Footy Picks</div>
-                
-                <div id="dataStatus" class="data-status">
-                    Loading competition data...
-                </div>
-                
+                <div id="dataStatus" class="data-status">Loading competition data...</div>
                 <div id="userStatus" class="user-status" onclick="goToMyPosition()">
                     <div class="status-title">Where You Sit (click to scroll to position)</div>
                     <div class="status-position" id="userPosition">Loading...</div>
                     <div class="status-points" id="userPointsInfo">Loading...</div>
                 </div>
-                
                 <div class="table-container">
                     <div class="table-header">
                         <div class="table-header-text col-rank">Rank</div>
@@ -399,8 +365,33 @@
                 <button class="show-more-btn" id="showMoreBtn" onclick="toggleShowMore()">Show All Players</button>
             </div>
 
+            <!-- FRIENDS SCREEN -->
+            <div id="friendsScreen" class="container hidden">
+                <div class="title">No Idea Footy Tipsters</div>
+                <div class="friends-note">
+                    <strong>Note:</strong><br>
+                    LW = Last Week's ranking<br>
+                    +/- = Change in ranking from last week<br>
+                    PRT = Previous Total<br>
+                    Rd score = Recent Score
+                </div>
+                <div class="table-container">
+                    <div class="table-header">
+                        <div class="table-header-text col-rank">Rank</div>
+                        <div class="table-header-text col-lw">LW</div>
+                        <div class="table-header-text col-change">+/-</div>
+                        <div class="table-header-text col-team">Tipster</div>
+                        <div class="table-header-text col-points">Total Score</div>
+                        <div class="table-header-text col-prt">PRT</div>
+                        <div class="table-header-text col-round">Rd score</div>
+                    </div>
+                    <div id="friendsList"></div>
+                </div>
+            </div>
+
+            <!-- NRL SCREEN -->
             <div id="nrlScreen" class="container hidden">
-                <div class="title">NRL Ladder 2025</div>
+                <div class="title">NRL Ladder 2026</div>
                 <div class="subtitle">Live ladder standings</div>
                 <div class="ladder-container">
                     <div class="ladder-table">
@@ -418,8 +409,9 @@
                 </div>
             </div>
 
+            <!-- AFL SCREEN -->
             <div id="aflScreen" class="container hidden">
-                <div class="title">AFL Ladder 2025</div>
+                <div class="title">AFL Ladder 2026</div>
                 <div class="subtitle">Live ladder standings</div>
                 <div class="ladder-container">
                     <div class="ladder-table">
@@ -437,6 +429,7 @@
                 </div>
             </div>
 
+            <!-- MY PICKS SCREEN -->
             <div id="picksScreen" class="container hidden">
                 <div class="title">My Team Picks</div>
                 <div id="userPicksContent">
@@ -451,20 +444,22 @@
                 </div>
             </div>
 
+            <!-- BOTTOM NAV -->
             <div class="bottom-nav">
-                <div class="nav-button active" onclick="showScreen('home')">Home</div>
-                <div class="nav-button" onclick="showScreen('nrl')">NRL</div>
-                <div class="nav-button" onclick="showScreen('afl')">AFL</div>
-                <div class="nav-button" onclick="showScreen('picks')">My Picks</div>
+                <div class="nav-button active" onclick="showScreen('home', this)">Home</div>
+                <div class="nav-button" onclick="showScreen('friends', this)">Friends</div>
+                <div class="nav-button" onclick="showScreen('nrl', this)">NRL</div>
+                <div class="nav-button" onclick="showScreen('afl', this)">AFL</div>
+                <div class="nav-button" onclick="showScreen('picks', this)">My Picks</div>
             </div>
         </div>
     </div>
 
     <script>
         var members = [];
+        var friends = [];
         var showingAll = false;
         var currentUser = null;
-
         var nrlTeams = [];
         var aflTeams = [];
         var nrlLadder = [];
@@ -472,68 +467,131 @@
 
         document.addEventListener('DOMContentLoaded', function() {
             loadDataFromCSV();
+            loadFriendsData();
             loadNRLLadder();
             loadAFLLadder();
             checkExistingLogin();
         });
 
-        function loadNRLLadder() {
-            fetch('nrl-ladder.csv')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('NRL ladder CSV not found');
-                    }
+        function loadFriendsData() {
+            fetch('friends-data.csv')
+                .then(function(response) {
+                    if (!response.ok) throw new Error('Friends data not found');
                     return response.text();
                 })
-                .then(csvText => {
-                    parseNRLLadder(csvText);
+                .then(function(csvText) {
+                    parseFriendsData(csvText);
                 })
-                .catch(error => {
-                    console.error('Could not load NRL ladder:', error);
+                .catch(function(error) {
+                    console.log('Friends data error:', error);
                 });
+        }
+
+        function parseFriendsData(csvText) {
+            try {
+                var lines = csvText.trim().split('\n');
+                if (lines.length < 2) return;
+
+                var delimiter = lines[0].includes('\t') ? '\t' : ',';
+                var headers = lines[0].split(delimiter).map(function(h) {
+                    return h.trim().replace(/"/g, '').toLowerCase();
+                });
+
+                var indices = {};
+                for (var h = 0; h < headers.length; h++) {
+                    if (headers[h].includes('rank')) indices.rank = h;
+                    if (headers[h] === 'lw') indices.lw = h;
+                    if (headers[h].includes('+/-')) indices.change = h;
+                    if (headers[h].includes('tipster')) indices.tipster = h;
+                    if (headers[h].includes('total')) indices.totalScore = h;
+                    if (headers[h].includes('prt')) indices.prt = h;
+                    if (headers[h].includes('rd score') || headers[h].includes('round')) indices.roundScore = h;
+                }
+
+                friends = [];
+                for (var i = 1; i < lines.length; i++) {
+                    var line = lines[i].trim();
+                    if (!line) continue;
+                    var values = line.split(delimiter).map(function(v) {
+                        return v.trim().replace(/"/g, '');
+                    });
+                    if (!values[indices.tipster]) continue;
+                    friends.push({
+                        rank: values[indices.rank] || i,
+                        lw: values[indices.lw] || '-',
+                        change: values[indices.change] || '-',
+                        tipster: values[indices.tipster],
+                        totalScore: values[indices.totalScore] || 0,
+                        prt: values[indices.prt] || 0,
+                        roundScore: values[indices.roundScore] || 0
+                    });
+                }
+                renderFriends();
+            } catch (error) {
+                console.error('Error parsing friends data:', error);
+            }
+        }
+
+        function renderFriends() {
+            var container = document.getElementById('friendsList');
+            if (friends.length === 0) {
+                container.innerHTML = '<p style="padding:20px;text-align:center;color:#7f8c8d;">No friends data available.</p>';
+                return;
+            }
+
+            var html = '';
+            for (var i = 0; i < friends.length; i++) {
+                var f = friends[i];
+                var rowClass = '';
+                var pos = i + 1;
+                if (pos <= 2) rowClass = 'friends-row-green';
+                else if (pos <= 5) rowClass = 'friends-row-yellow';
+                else if (pos <= 8) rowClass = 'friends-row-amber';
+                else rowClass = 'friends-row-orange';
+
+                var changeVal = parseInt(f.change) || 0;
+                var changeClass = changeVal > 0 ? 'positive' : changeVal < 0 ? 'negative' : 'neutral';
+                var changeText = changeVal > 0 ? '+' + changeVal : changeVal < 0 ? changeVal : '-';
+
+                html += '<div class="table-row ' + rowClass + '">';
+                html += '<div class="table-cell col-rank"><strong>' + f.rank + '</strong></div>';
+                html += '<div class="table-cell col-lw">' + f.lw + '</div>';
+                html += '<div class="table-cell col-change ' + changeClass + '">' + changeText + '</div>';
+                html += '<div class="table-cell col-team">' + f.tipster + '</div>';
+                html += '<div class="table-cell col-points"><strong>' + f.totalScore + '</strong></div>';
+                html += '<div class="table-cell col-prt">' + f.prt + '</div>';
+                html += '<div class="table-cell col-round">' + f.roundScore + '</div>';
+                html += '</div>';
+            }
+            container.innerHTML = html;
+        }
+
+        function loadNRLLadder() {
+            fetch('nrl-ladder.csv')
+                .then(function(response) { return response.text(); })
+                .then(function(csvText) { parseNRLLadder(csvText); })
+                .catch(function(error) { console.error('NRL ladder error:', error); });
         }
 
         function loadAFLLadder() {
             fetch('afl-ladder.csv')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('AFL ladder CSV not found');
-                    }
-                    return response.text();
-                })
-                .then(csvText => {
-                    parseAFLLadder(csvText);
-                })
-                .catch(error => {
-                    console.error('Could not load AFL ladder:', error);
-                });
+                .then(function(response) { return response.text(); })
+                .then(function(csvText) { parseAFLLadder(csvText); })
+                .catch(function(error) { console.error('AFL ladder error:', error); });
         }
 
         function parseNRLLadder(csvText) {
             try {
                 var lines = csvText.trim().split('\n');
-                if (lines.length < 2) {
-                    console.log('NRL CSV has no data rows');
-                    return;
-                }
-                
-                var headerLine = lines[0];
-                var delimiter = headerLine.includes('\t') ? '\t' : ',';
-                
-                console.log('Parsing NRL ladder, total lines:', lines.length);
-                
+                if (lines.length < 2) return;
+                var delimiter = lines[0].includes('\t') ? '\t' : ',';
                 nrlLadder = [];
                 for (var i = 1; i < lines.length; i++) {
                     var line = lines[i].trim();
                     if (!line) continue;
-                    
-                    var values = line.split(delimiter).map(function(v) {
-                        return v.trim().replace(/"/g, '');
-                    });
-                    
+                    var values = line.split(delimiter).map(function(v) { return v.trim().replace(/"/g, ''); });
                     var team = values[3];
                     if (!team || team.length === 0) continue;
-                    
                     nrlLadder.push({
                         pos: values[0] || values[2],
                         team: team,
@@ -544,38 +602,22 @@
                         diff: values[11]
                     });
                 }
-                console.log('Loaded', nrlLadder.length, 'NRL teams from ladder');
                 if (nrlLadder.length > 0) renderNRLLadder();
-            } catch (error) {
-                console.error('Error parsing NRL ladder:', error);
-            }
+            } catch (error) { console.error('Error parsing NRL ladder:', error); }
         }
 
         function parseAFLLadder(csvText) {
             try {
                 var lines = csvText.trim().split('\n');
-                if (lines.length < 2) {
-                    console.log('AFL CSV has no data rows');
-                    return;
-                }
-                
-                var headerLine = lines[0];
-                var delimiter = headerLine.includes('\t') ? '\t' : ',';
-                
-                console.log('Parsing AFL ladder, total lines:', lines.length);
-                
+                if (lines.length < 2) return;
+                var delimiter = lines[0].includes('\t') ? '\t' : ',';
                 aflLadder = [];
                 for (var i = 1; i < lines.length; i++) {
                     var line = lines[i].trim();
                     if (!line) continue;
-                    
-                    var values = line.split(delimiter).map(function(v) {
-                        return v.trim().replace(/"/g, '');
-                    });
-                    
+                    var values = line.split(delimiter).map(function(v) { return v.trim().replace(/"/g, ''); });
                     var team = values[1];
                     if (!team || team.length === 0) continue;
-                    
                     aflLadder.push({
                         pos: values[0],
                         team: team,
@@ -586,33 +628,20 @@
                         percentage: values[10]
                     });
                 }
-                console.log('Loaded', aflLadder.length, 'AFL teams from ladder');
                 if (aflLadder.length > 0) renderAFLLadder();
-            } catch (error) {
-                console.error('Error parsing AFL ladder:', error);
-            }
+            } catch (error) { console.error('Error parsing AFL ladder:', error); }
         }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            loadDataFromCSV();
-            checkExistingLogin();
-        });
 
         function loadDataFromCSV() {
             fetch('competition-data.csv')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('CSV file not found');
-                    }
+                .then(function(response) {
+                    if (!response.ok) throw new Error('Data not found');
                     return response.text();
                 })
-                .then(csvText => {
-                    parseAndLoadCSV(csvText);
-                    updateDataStatus('success', 'Loaded ' + members.length + ' members');
-                })
-                .catch(error => {
-                    console.error('Could not load CSV:', error);
-                    updateDataStatus('error', 'Error loading data - please refresh');
+                .then(function(csvText) { parseAndLoadCSV(csvText); })
+                .catch(function(error) {
+                    updateDataStatus('error', 'Error loading data');
+                    console.error('CSV error:', error);
                 });
         }
 
@@ -620,23 +649,19 @@
             try {
                 var lines = csvText.trim().split('\n');
                 var headerLine = lines[0];
-                
                 var delimiter = headerLine.includes('\t') ? '\t' : ',';
-                var headers = headerLine.split(delimiter).map(function(h) {
-                    return h.trim().replace(/"/g, '');
-                });
-                
+                var headers = headerLine.split(delimiter).map(function(h) { return h.trim().replace(/"/g, ''); });
+
                 var indices = {};
                 for (var h = 0; h < headers.length; h++) {
                     var header = headers[h].toLowerCase();
                     if (header.includes('rank')) indices.rank = h;
-                    if (header.includes('lw') || header === 'lw') indices.lw = h;
+                    if (header === 'lw') indices.lw = h;
                     if (header.includes('+/-') || header.includes('change')) indices.change = h;
                     if (header.includes('tipster') || header.includes('name')) indices.tipster = h;
                     if (header.includes('total score') || header.includes('total')) indices.totalScore = h;
                     if (header.includes('prt')) indices.prt = h;
                     if (header.includes('rd score') || header.includes('round')) indices.roundScore = h;
-                    
                     if (header === 'afl team 1') indices.aflTeam1 = h;
                     if (header === 'afl team 2') indices.aflTeam2 = h;
                     if (header === 'afl team 3') indices.aflTeam3 = h;
@@ -648,21 +673,15 @@
                     if (header === 'nrl team 4') indices.nrlTeam4 = h;
                     if (header === 'nrl team 5') indices.nrlTeam5 = h;
                 }
-                
+
                 var newMembers = [];
                 for (var i = 1; i < lines.length; i++) {
                     var line = lines[i].trim();
                     if (!line) continue;
-                    
-                    var values = line.split(delimiter).map(function(v) {
-                        return v.trim().replace(/"/g, '');
-                    });
-                    
+                    var values = line.split(delimiter).map(function(v) { return v.trim().replace(/"/g, ''); });
                     var tipster = values[indices.tipster];
                     var totalScore = values[indices.totalScore];
-                    
                     if (!tipster || !totalScore || totalScore.includes('#')) continue;
-                    
                     var member = {
                         id: i,
                         name: tipster,
@@ -672,7 +691,6 @@
                         previousTotal: parseInt(values[indices.prt] || 0),
                         roundScore: parseInt(values[indices.roundScore] || 0)
                     };
-                    
                     if (indices.aflTeam1 !== undefined) {
                         member.aflTeams = [
                             values[indices.aflTeam1] || '',
@@ -689,41 +707,28 @@
                             values[indices.nrlTeam5] || ''
                         ];
                     }
-                    
                     newMembers.push(member);
                 }
-                
+
                 if (newMembers.length > 0) {
                     members = newMembers;
-                    console.log('Loaded', members.length, 'members from CSV');
-                    
-                    // Extract unique team names
+                    updateDataStatus('success', 'Loaded ' + members.length + ' members');
                     extractTeamNames();
+                    renderAllData();
                 }
-            } catch (error) {
-                console.error('Error parsing CSV:', error);
-            }
+            } catch (error) { console.error('Error parsing CSV:', error); }
         }
 
         function extractTeamNames() {
             var nrlSet = new Set();
             var aflSet = new Set();
-            
             for (var i = 0; i < members.length; i++) {
                 var member = members[i];
-                if (member.nrlTeams && member.nrlTeams.length > 0 && member.nrlTeams[0]) {
-                    nrlSet.add(member.nrlTeams[0].trim());
-                }
-                if (member.aflTeams && member.aflTeams.length > 0 && member.aflTeams[0]) {
-                    aflSet.add(member.aflTeams[0].trim());
-                }
+                if (member.nrlTeams && member.nrlTeams[0]) nrlSet.add(member.nrlTeams[0].trim());
+                if (member.aflTeams && member.aflTeams[0]) aflSet.add(member.aflTeams[0].trim());
             }
-            
             nrlTeams = Array.from(nrlSet).filter(function(t) { return t.length > 0; }).sort();
             aflTeams = Array.from(aflSet).filter(function(t) { return t.length > 0; }).sort();
-            
-            console.log('Found', nrlTeams.length, 'unique NRL teams');
-            console.log('Found', aflTeams.length, 'unique AFL teams');
         }
 
         function updateDataStatus(type, message) {
@@ -739,7 +744,6 @@
                     var foundMember = members.find(function(member) {
                         return member.name && member.name.toLowerCase() === savedUser.toLowerCase();
                     });
-                    
                     if (foundMember) {
                         currentUser = savedUser;
                         showMainApp();
@@ -758,16 +762,10 @@
         function handleLogin() {
             var nameInput = document.getElementById('loginName');
             var name = nameInput.value.trim();
-            
-            if (!name) {
-                alert('Please enter your name');
-                return;
-            }
-
+            if (!name) { alert('Please enter your name'); return; }
             var foundMember = members.find(function(member) {
                 return member.name && member.name.toLowerCase() === name.toLowerCase();
             });
-
             if (foundMember) {
                 currentUser = foundMember.name;
                 localStorage.setItem('footballPicksUser', currentUser);
@@ -791,20 +789,14 @@
             document.getElementById('loginScreen').classList.add('hidden');
             document.getElementById('appHeader').classList.remove('hidden');
             document.getElementById('mainApp').classList.remove('hidden');
-            
             renderAllData();
         }
 
         function goToMyPosition() {
-            var userMember = members.find(function(member) {
-                return member.name === currentUser;
-            });
-            
+            var userMember = members.find(function(member) { return member.name === currentUser; });
             if (userMember) {
                 var userRow = document.querySelector('[data-member="' + userMember.name + '"]');
-                if (userRow) {
-                    userRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }
+                if (userRow) userRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
         }
 
@@ -813,62 +805,49 @@
             renderNRLLadder();
             renderAFLLadder();
             renderUserPicks();
+            renderFriends();
         }
 
         function renderUserPicks() {
             if (!currentUser) return;
-            
-            var userMember = members.find(function(member) {
-                return member.name === currentUser;
-            });
-            
+            var userMember = members.find(function(member) { return member.name === currentUser; });
             var nrlPicksDiv = document.getElementById('nrlPicks');
             var aflPicksDiv = document.getElementById('aflPicks');
-            
             if (userMember && userMember.nrlTeams && userMember.aflTeams) {
                 var nrlHtml = '<ul style="list-style: none; padding: 0;">';
                 for (var i = 0; i < userMember.nrlTeams.length; i++) {
                     if (userMember.nrlTeams[i]) {
-                        nrlHtml += '<li style="padding: 8px; margin: 5px 0; background: #f8f9fa; border-radius: 5px;">' + 
-                                   '<strong>' + (i + 1) + '.</strong> ' + userMember.nrlTeams[i] + '</li>';
+                        nrlHtml += '<li style="padding: 8px; margin: 5px 0; background: #f8f9fa; border-radius: 5px;"><strong>' + (i + 1) + '.</strong> ' + userMember.nrlTeams[i] + '</li>';
                     }
                 }
                 nrlHtml += '</ul>';
                 nrlPicksDiv.innerHTML = nrlHtml;
-                
                 var aflHtml = '<ul style="list-style: none; padding: 0;">';
                 for (var i = 0; i < userMember.aflTeams.length; i++) {
                     if (userMember.aflTeams[i]) {
-                        aflHtml += '<li style="padding: 8px; margin: 5px 0; background: #f8f9fa; border-radius: 5px;">' + 
-                                   '<strong>' + (i + 1) + '.</strong> ' + userMember.aflTeams[i] + '</li>';
+                        aflHtml += '<li style="padding: 8px; margin: 5px 0; background: #f8f9fa; border-radius: 5px;"><strong>' + (i + 1) + '.</strong> ' + userMember.aflTeams[i] + '</li>';
                     }
                 }
                 aflHtml += '</ul>';
                 aflPicksDiv.innerHTML = aflHtml;
             } else {
-                nrlPicksDiv.innerHTML = '<p style="color: #7f8c8d;">Team picks not available in data.</p>';
-                aflPicksDiv.innerHTML = '<p style="color: #7f8c8d;">Team picks not available in data.</p>';
+                nrlPicksDiv.innerHTML = '<p style="color: #7f8c8d;">Team picks not available.</p>';
+                aflPicksDiv.innerHTML = '<p style="color: #7f8c8d;">Team picks not available.</p>';
             }
         }
 
         function renderPicksLeaderboard() {
             var sortedMembers = members.sort(function(a, b) { return b.totalPoints - a.totalPoints; });
             var picksList = document.getElementById('picksList');
-            
             updateUserStatus(sortedMembers);
-            
             var membersToShow = showingAll ? sortedMembers : sortedMembers.slice(0, 15);
-            
             var html = '';
             for (var i = 0; i < membersToShow.length; i++) {
                 var member = membersToShow[i];
                 var actualPosition = sortedMembers.indexOf(member) + 1;
-                
                 var changeClass = member.weekChange > 0 ? 'positive' : member.weekChange < 0 ? 'negative' : 'neutral';
                 var changeText = member.weekChange > 0 ? '+' + member.weekChange : member.weekChange < 0 ? member.weekChange.toString() : '-';
-                
                 var rowClass = member.name === currentUser ? 'style="background-color: #e8f5e8; border: 2px solid #27ae60;"' : '';
-                
                 html += '<div class="table-row" ' + rowClass + ' data-member="' + member.name + '">';
                 html += '<div class="table-cell col-rank">' + actualPosition + '</div>';
                 html += '<div class="table-cell col-lw">' + member.lastWeek + '</div>';
@@ -880,27 +859,19 @@
                 html += '</div>';
             }
             picksList.innerHTML = html;
-            
             var btn = document.getElementById('showMoreBtn');
             btn.textContent = showingAll ? 'Show Top 15' : 'Show All Players (' + sortedMembers.length + ')';
         }
 
         function updateUserStatus(sortedMembers) {
-            var userMember = sortedMembers.find(function(member) {
-                return member.name === currentUser;
-            });
-            
+            var userMember = sortedMembers.find(function(member) { return member.name === currentUser; });
             if (userMember) {
                 var position = sortedMembers.indexOf(userMember) + 1;
                 var suffix = position === 1 ? 'st' : position === 2 ? 'nd' : position === 3 ? 'rd' : 'th';
-                
                 document.getElementById('userPosition').textContent = position + suffix + ' Place';
-                document.getElementById('userPointsInfo').textContent = userMember.totalPoints + ' points';
-                
-                var changeText = userMember.weekChange > 0 ? ' (Up ' + userMember.weekChange + ')' : 
-                                userMember.weekChange < 0 ? ' (Down ' + Math.abs(userMember.weekChange) + ')' : 
-                                ' (No change)';
-                document.getElementById('userPointsInfo').textContent += changeText;
+                var changeText = userMember.weekChange > 0 ? ' (Up ' + userMember.weekChange + ')' :
+                                userMember.weekChange < 0 ? ' (Down ' + Math.abs(userMember.weekChange) + ')' : ' (No change)';
+                document.getElementById('userPointsInfo').textContent = userMember.totalPoints + ' points' + changeText;
             }
         }
 
@@ -911,12 +882,10 @@
 
         function renderNRLLadder() {
             var container = document.getElementById('nrlLadderTable');
-            
             if (nrlLadder.length === 0) {
-                container.innerHTML = '<p style="padding: 20px; text-align: center; color: #7f8c8d;">NRL ladder data loading...</p>';
+                container.innerHTML = '<p style="padding: 20px; text-align: center; color: #7f8c8d;">NRL ladder loading...</p>';
                 return;
             }
-            
             var html = '';
             for (var i = 0; i < nrlLadder.length; i++) {
                 var team = nrlLadder[i];
@@ -935,12 +904,10 @@
 
         function renderAFLLadder() {
             var container = document.getElementById('aflLadderTable');
-            
             if (aflLadder.length === 0) {
-                container.innerHTML = '<p style="padding: 20px; text-align: center; color: #7f8c8d;">AFL ladder data loading...</p>';
+                container.innerHTML = '<p style="padding: 20px; text-align: center; color: #7f8c8d;">AFL ladder loading...</p>';
                 return;
             }
-            
             var html = '';
             for (var i = 0; i < aflLadder.length; i++) {
                 var team = aflLadder[i];
@@ -957,20 +924,17 @@
             container.innerHTML = html;
         }
 
-        function showScreen(screenName) {
-            var screens = ['home', 'nrl', 'afl', 'picks'];
+        function showScreen(screenName, btn) {
+            var screens = ['home', 'friends', 'nrl', 'afl', 'picks'];
             for (var i = 0; i < screens.length; i++) {
                 document.getElementById(screens[i] + 'Screen').classList.add('hidden');
             }
-            
             var navButtons = document.querySelectorAll('.nav-button');
             for (var i = 0; i < navButtons.length; i++) {
                 navButtons[i].classList.remove('active');
             }
-            
             document.getElementById(screenName + 'Screen').classList.remove('hidden');
-            
-            event.target.classList.add('active');
+            if (btn) btn.classList.add('active');
         }
     </script>
 </body>
