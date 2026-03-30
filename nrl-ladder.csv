@@ -3,10 +3,10 @@ Pos,Team,Pos_1,Column1,played,points,wins,drawn,lost,byes,for,against,diff.,home
 2,,2,Warriors,4,6,3,0,1,0,134,68,66,2 - 1,1 - 0,3 - 1,Sharks
 3,,3,Wests Tigers,3,6,2,0,1,1,92,50,42,1 - 0,1 - 1,2 - 1,Eels
 4,,4,Knights,4,6,3,0,1,0,100,88,12,1 - 1,2 - 0,3 - 1,Raiders
-5,,5,Bulldogs,3,6,2,0,1,1,45,48,-3,1 - 1,1 - 0,2 - 1,Rabbitohs
-6,,6,Storm,4,4,2,0,2,0,136,70,66,1 - 1,1 - 1,2 - 2,Panthers
-7,,7,Dolphins,4,4,2,0,2,0,98,90,8,1 - 1,1 - 1,2 - 2,Sea Eagles
-8,,8,Rabbitohs,3,4,2,0,1,0,78,72,6,1 - 0,1 - 1,2 - 1,Bulldogs
+5,,5,Rabbitohs,3,6,2,0,1,1,78,72,6,1 - 0,1 - 1,2 - 1,Bulldogs
+6,,6,Bulldogs,3,6,2,0,1,1,45,48,-3,1 - 1,1 - 0,2 - 1,Rabbitohs
+7,,7,Storm,4,4,2,0,2,0,136,70,66,1 - 1,1 - 1,2 - 2,Panthers
+8,,8,Dolphins,4,4,2,0,2,0,98,90,8,1 - 1,1 - 1,2 - 2,Sea Eagles
 9,,9,Sharks,4,4,2,0,2,0,100,96,4,1 - 1,1 - 1,2 - 2,Warriors
 10,,10,Broncos,4,4,2,0,2,0,76,92,-16,1 - 2,1 - 0,2 - 2,Titans
 11,,11,Cowboys,4,4,2,0,2,0,92,112,-20,2 - 0,0 - 2,2 - 2,Dragons
