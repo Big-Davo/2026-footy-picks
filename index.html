@@ -51,6 +51,12 @@
         .col-round-f { flex: 0 0 44px; }
         .col-arrow-f { flex: 0 0 20px; }
 
+        /* Friends sport score columns */
+        .col-rank-s { flex: 0 0 32px; }
+        .col-team-s { flex: 1; min-width: 70px; text-align: left; padding-left: 4px; }
+        .col-score-s { flex: 0 0 52px; }
+        .col-arrow-s { flex: 0 0 20px; }
+
         /* Ladder compact columns */
         .col-pos { flex: 0 0 30px; }
         .col-team-name { flex: 1; min-width: 100px; text-align: left; padding-left: 5px; font-size: 11px; }
@@ -221,14 +227,14 @@
                 <div class="title-friends">No Idea Footy Tipsters</div>
                 <div class="title-friends" id="friendsWeekTitle" style="color: #3498db; font-size: 13px;"></div>
 
-                <!-- Toggle bar — switches between Friends, NRL ladder, AFL ladder -->
+                <!-- Toggle bar -->
                 <div class="view-toggle" style="margin-top: 6px;">
-                    <button class="toggle-btn active" onclick="switchFriendsView('friends', this)">Friends</button>
-                    <button class="toggle-btn" onclick="switchFriendsView('nrl', this)">NRL Ladder</button>
-                    <button class="toggle-btn" onclick="switchFriendsView('afl', this)">AFL Ladder</button>
+                    <button class="toggle-btn active" onclick="switchFriendsView('friends', this)">Overall</button>
+                    <button class="toggle-btn" onclick="switchFriendsView('nrl', this)">NRL Round</button>
+                    <button class="toggle-btn" onclick="switchFriendsView('afl', this)">AFL Round</button>
                 </div>
 
-                <!-- Friends view (default) -->
+                <!-- Friends overall view (default) -->
                 <div id="friendsView">
                     <div class="friends-note">
                         <strong>LW</strong> = Last Week's ranking &nbsp;|&nbsp;
@@ -252,35 +258,31 @@
                     </div>
                 </div>
 
-                <!-- NRL ladder view (hidden by default) -->
+                <!-- NRL round score view (hidden by default) -->
                 <div id="friendsNrlView" class="hidden">
+                    <div class="tap-hint">Tap a name to see their picks 👆</div>
                     <div class="table-container-friends">
-                        <div class="table-header">
-                            <div class="table-header-text-sm col-pos">Pos</div>
-                            <div class="table-header-text-sm col-team-name">Team</div>
-                            <div class="table-header-text-sm col-played">P</div>
-                            <div class="table-header-text-sm col-won">W</div>
-                            <div class="table-header-text-sm col-won">L</div>
-                            <div class="table-header-text-sm col-pts">Pts</div>
-                            <div class="table-header-text-sm col-diff">+/-</div>
+                        <div class="table-header" style="background-color: #1a3c6e;">
+                            <div class="table-header-text-sm col-rank-s">Rank</div>
+                            <div class="table-header-text-sm col-team-s">Tipster</div>
+                            <div class="table-header-text-sm col-score-s">NRL Score</div>
+                            <div class="table-header-text-sm col-arrow-s"></div>
                         </div>
-                        <div id="friendsNrlTable"></div>
+                        <div id="friendsNrlList"></div>
                     </div>
                 </div>
 
-                <!-- AFL ladder view (hidden by default) -->
+                <!-- AFL round score view (hidden by default) -->
                 <div id="friendsAflView" class="hidden">
+                    <div class="tap-hint">Tap a name to see their picks 👆</div>
                     <div class="table-container-friends">
-                        <div class="table-header">
-                            <div class="table-header-text-sm col-pos">Pos</div>
-                            <div class="table-header-text-sm col-team-name">Team</div>
-                            <div class="table-header-text-sm col-played">P</div>
-                            <div class="table-header-text-sm col-won">W</div>
-                            <div class="table-header-text-sm col-won">L</div>
-                            <div class="table-header-text-sm col-pts">Pts</div>
-                            <div class="table-header-text-sm col-diff">%</div>
+                        <div class="table-header" style="background-color: #002b5c;">
+                            <div class="table-header-text-sm col-rank-s">Rank</div>
+                            <div class="table-header-text-sm col-team-s">Tipster</div>
+                            <div class="table-header-text-sm col-score-s">AFL Score</div>
+                            <div class="table-header-text-sm col-arrow-s"></div>
                         </div>
-                        <div id="friendsAflTable"></div>
+                        <div id="friendsAflList"></div>
                     </div>
                 </div>
             </div>
@@ -378,6 +380,13 @@
         var nrlLadder = [];
         var aflLadder = [];
 
+        // Names of the friends group — used to filter members for NRL/AFL views
+        var friendNames = [
+            "Big Davo", "Cameron 01", "Cameron 02", "BigDavo 2",
+            "JohnC", "JohnC2", "Ginger1", "Ginger2",
+            "Wcord2", "Dylan C", "RobynC"
+        ];
+
         document.addEventListener('DOMContentLoaded', function() {
             loadDataFromCSV();
             loadFriendsData();
@@ -388,71 +397,83 @@
 
         // ── FRIENDS VIEW TOGGLE ───────────────────────────────────
         function switchFriendsView(view, btn) {
-            // Hide all three views
             document.getElementById('friendsView').classList.add('hidden');
             document.getElementById('friendsNrlView').classList.add('hidden');
             document.getElementById('friendsAflView').classList.add('hidden');
 
-            // Deactivate all toggle buttons
             var btns = document.querySelectorAll('.toggle-btn');
             for (var i = 0; i < btns.length; i++) { btns[i].classList.remove('active'); }
 
-            // Show selected view and activate button
             if (view === 'friends') {
                 document.getElementById('friendsView').classList.remove('hidden');
             } else if (view === 'nrl') {
                 document.getElementById('friendsNrlView').classList.remove('hidden');
-                renderFriendsNrlLadder();
+                renderFriendsNrlScores();
             } else if (view === 'afl') {
                 document.getElementById('friendsAflView').classList.remove('hidden');
-                renderFriendsAflLadder();
+                renderFriendsAflScores();
             }
             if (btn) btn.classList.add('active');
         }
 
-        // Render NRL ladder into the friends page NRL view
-        function renderFriendsNrlLadder() {
-            var container = document.getElementById('friendsNrlTable');
-            if (nrlLadder.length === 0) {
-                container.innerHTML = '<p style="padding:20px;text-align:center;color:#7f8c8d;">NRL ladder loading...</p>';
+        // Friends ranked by NRL round score
+        function renderFriendsNrlScores() {
+            var container = document.getElementById('friendsNrlList');
+
+            // Filter members to friends group and sort by NRL round score descending
+            var friendMembers = members.filter(function(m) {
+                return friendNames.some(function(fn) {
+                    return fn.toLowerCase() === m.name.toLowerCase();
+                });
+            });
+            friendMembers.sort(function(a, b) { return (b.nrlRoundScore || 0) - (a.nrlRoundScore || 0); });
+
+            if (friendMembers.length === 0) {
+                container.innerHTML = '<p style="padding:20px;text-align:center;color:#7f8c8d;">No data available.</p>';
                 return;
             }
+
             var html = '';
-            for (var i = 0; i < nrlLadder.length; i++) {
-                var team = nrlLadder[i];
-                var rowStyle = i < 8 ? 'style="border-left: 3px solid #27ae60;"' : '';
-                html += '<div class="table-row-ladder" ' + rowStyle + '>';
-                html += '<div class="table-cell-sm col-pos">' + team.pos + '</div>';
-                html += '<div class="table-cell-sm col-team-name">' + team.team + '</div>';
-                html += '<div class="table-cell-sm col-played">' + team.played + '</div>';
-                html += '<div class="table-cell-sm col-won">' + team.wins + '</div>';
-                html += '<div class="table-cell-sm col-won">' + team.lost + '</div>';
-                html += '<div class="table-cell-sm col-pts">' + team.points + '</div>';
-                html += '<div class="table-cell-sm col-diff">' + team.diff + '</div>';
+            for (var i = 0; i < friendMembers.length; i++) {
+                var m = friendMembers[i];
+                var pos = i + 1;
+                var rowClass = pos <= 2 ? 'friends-row-green' : pos <= 5 ? 'friends-row-yellow' : pos <= 8 ? 'friends-row-amber' : 'friends-row-orange';
+                html += '<div class="table-row-compact ' + rowClass + '" onclick="openPicksDrawer(\'' + m.name.replace(/'/g, "\\'") + '\')">';
+                html += '<div class="table-cell-sm col-rank-s"><strong>' + pos + '</strong></div>';
+                html += '<div class="table-cell-sm col-team-s"><strong>' + m.name + '</strong></div>';
+                html += '<div class="table-cell-sm col-score-s"><strong>' + (m.nrlRoundScore || 0) + '</strong></div>';
+                html += '<div class="table-cell-sm col-arrow-s" style="color:rgba(0,0,0,0.3);font-size:10px;">&#8250;</div>';
                 html += '</div>';
             }
             container.innerHTML = html;
         }
 
-        // Render AFL ladder into the friends page AFL view
-        function renderFriendsAflLadder() {
-            var container = document.getElementById('friendsAflTable');
-            if (aflLadder.length === 0) {
-                container.innerHTML = '<p style="padding:20px;text-align:center;color:#7f8c8d;">AFL ladder loading...</p>';
+        // Friends ranked by AFL round score
+        function renderFriendsAflScores() {
+            var container = document.getElementById('friendsAflList');
+
+            var friendMembers = members.filter(function(m) {
+                return friendNames.some(function(fn) {
+                    return fn.toLowerCase() === m.name.toLowerCase();
+                });
+            });
+            friendMembers.sort(function(a, b) { return (b.aflRoundScore || 0) - (a.aflRoundScore || 0); });
+
+            if (friendMembers.length === 0) {
+                container.innerHTML = '<p style="padding:20px;text-align:center;color:#7f8c8d;">No data available.</p>';
                 return;
             }
+
             var html = '';
-            for (var i = 0; i < aflLadder.length; i++) {
-                var team = aflLadder[i];
-                var rowStyle = i < 8 ? 'style="border-left: 3px solid #27ae60;"' : '';
-                html += '<div class="table-row-ladder" ' + rowStyle + '>';
-                html += '<div class="table-cell-sm col-pos">' + team.pos + '</div>';
-                html += '<div class="table-cell-sm col-team-name">' + team.team + '</div>';
-                html += '<div class="table-cell-sm col-played">' + team.played + '</div>';
-                html += '<div class="table-cell-sm col-won">' + team.wins + '</div>';
-                html += '<div class="table-cell-sm col-won">' + team.losses + '</div>';
-                html += '<div class="table-cell-sm col-pts">' + team.points + '</div>';
-                html += '<div class="table-cell-sm col-diff">' + team.percentage + '</div>';
+            for (var i = 0; i < friendMembers.length; i++) {
+                var m = friendMembers[i];
+                var pos = i + 1;
+                var rowClass = pos <= 2 ? 'friends-row-green' : pos <= 5 ? 'friends-row-yellow' : pos <= 8 ? 'friends-row-amber' : 'friends-row-orange';
+                html += '<div class="table-row-compact ' + rowClass + '" onclick="openPicksDrawer(\'' + m.name.replace(/'/g, "\\'") + '\')">';
+                html += '<div class="table-cell-sm col-rank-s"><strong>' + pos + '</strong></div>';
+                html += '<div class="table-cell-sm col-team-s"><strong>' + m.name + '</strong></div>';
+                html += '<div class="table-cell-sm col-score-s"><strong>' + (m.aflRoundScore || 0) + '</strong></div>';
+                html += '<div class="table-cell-sm col-arrow-s" style="color:rgba(0,0,0,0.3);font-size:10px;">&#8250;</div>';
                 html += '</div>';
             }
             container.innerHTML = html;
@@ -663,6 +684,7 @@
                     if (header.includes('total score') || header.includes('total')) indices.totalScore = h;
                     if (header.includes('prt')) indices.prt = h;
                     if (header.includes('rd score') || header.includes('round')) indices.roundScore = h;
+                    // Team name columns
                     if (header === 'afl team 1') indices.aflTeam1 = h;
                     if (header === 'afl team 2') indices.aflTeam2 = h;
                     if (header === 'afl team 3') indices.aflTeam3 = h;
@@ -674,6 +696,21 @@
                     if (header === 'nrl team 4') indices.nrlTeam4 = h;
                     if (header === 'nrl team 5') indices.nrlTeam5 = h;
                 }
+
+                // Score columns sit immediately after each team name column
+                if (indices.aflTeam1 !== undefined) {
+                    indices.aflScore1 = indices.aflTeam1 + 1;
+                    indices.aflScore2 = indices.aflTeam2 + 1;
+                    indices.aflScore3 = indices.aflTeam3 + 1;
+                    indices.aflScore4 = indices.aflTeam4 + 1;
+                    indices.aflScore5 = indices.aflTeam5 + 1;
+                    indices.nrlScore1 = indices.nrlTeam1 + 1;
+                    indices.nrlScore2 = indices.nrlTeam2 + 1;
+                    indices.nrlScore3 = indices.nrlTeam3 + 1;
+                    indices.nrlScore4 = indices.nrlTeam4 + 1;
+                    indices.nrlScore5 = indices.nrlTeam5 + 1;
+                }
+
                 var newMembers = [];
                 for (var i = 1; i < lines.length; i++) {
                     var line = lines[i].trim();
@@ -682,6 +719,7 @@
                     var tipster = values[indices.tipster];
                     var totalScore = values[indices.totalScore];
                     if (!tipster || !totalScore || totalScore.includes('#')) continue;
+
                     var member = {
                         id: i, name: tipster,
                         totalPoints: parseInt(totalScore) || 0,
@@ -690,9 +728,31 @@
                         previousTotal: parseInt(values[indices.prt] || 0),
                         roundScore: parseInt(values[indices.roundScore] || 0)
                     };
+
                     if (indices.aflTeam1 !== undefined) {
-                        member.aflTeams = [values[indices.aflTeam1]||'', values[indices.aflTeam2]||'', values[indices.aflTeam3]||'', values[indices.aflTeam4]||'', values[indices.aflTeam5]||''];
-                        member.nrlTeams = [values[indices.nrlTeam1]||'', values[indices.nrlTeam2]||'', values[indices.nrlTeam3]||'', values[indices.nrlTeam4]||'', values[indices.nrlTeam5]||''];
+                        member.aflTeams = [
+                            values[indices.aflTeam1]||'', values[indices.aflTeam2]||'',
+                            values[indices.aflTeam3]||'', values[indices.aflTeam4]||'',
+                            values[indices.aflTeam5]||''
+                        ];
+                        member.nrlTeams = [
+                            values[indices.nrlTeam1]||'', values[indices.nrlTeam2]||'',
+                            values[indices.nrlTeam3]||'', values[indices.nrlTeam4]||'',
+                            values[indices.nrlTeam5]||''
+                        ];
+                        // Sum NRL and AFL round scores separately
+                        member.nrlRoundScore =
+                            (parseInt(values[indices.nrlScore1]) || 0) +
+                            (parseInt(values[indices.nrlScore2]) || 0) +
+                            (parseInt(values[indices.nrlScore3]) || 0) +
+                            (parseInt(values[indices.nrlScore4]) || 0) +
+                            (parseInt(values[indices.nrlScore5]) || 0);
+                        member.aflRoundScore =
+                            (parseInt(values[indices.aflScore1]) || 0) +
+                            (parseInt(values[indices.aflScore2]) || 0) +
+                            (parseInt(values[indices.aflScore3]) || 0) +
+                            (parseInt(values[indices.aflScore4]) || 0) +
+                            (parseInt(values[indices.aflScore5]) || 0);
                     }
                     newMembers.push(member);
                 }
