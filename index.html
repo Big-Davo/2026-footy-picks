@@ -49,6 +49,7 @@
         .col-points-f { flex: 0 0 52px; }
         .col-prt-f { flex: 0 0 36px; }
         .col-round-f { flex: 0 0 44px; }
+        .col-arrow-f { flex: 0 0 20px; }
 
         /* Ladder compact columns */
         .col-pos { flex: 0 0 30px; }
@@ -67,11 +68,13 @@
 
         /* Standard row */
         .table-row { display: flex; background-color: white; padding: 12px 8px; margin-bottom: 2px; align-items: center; border-bottom: 1px solid #f0f0f0; }
-        /* Compact row for friends and ladders */
-        .table-row-compact { display: flex; background-color: white; padding: 6px 6px; margin-bottom: 1px; align-items: center; border-bottom: 1px solid #f0f0f0; }
+
+        /* Friends rows — taller for easier finger tapping */
+        .table-row-compact { display: flex; background-color: white; padding: 10px 6px; margin-bottom: 1px; align-items: center; border-bottom: 1px solid #f0f0f0; cursor: pointer; min-height: 48px; transition: filter 0.15s ease; }
 
         .table-row:hover { background-color: #f8f9fa; }
-        .table-row-compact:hover { background-color: #f8f9fa; }
+        .table-row-compact:hover { filter: brightness(0.94); }
+        .table-row-compact:active { filter: brightness(0.88); }
         .table-row:last-child { border-bottom: none; border-radius: 0 0 8px 8px; }
         .table-row-compact:last-child { border-bottom: none; border-radius: 0 0 8px 8px; }
 
@@ -108,6 +111,84 @@
         .friends-row-amber { background-color: #FFC409 !important; }
         .friends-row-orange { background-color: #E26B0A !important; }
         .friends-row-orange .table-cell-sm { color: white !important; }
+
+        /* ── PICKS DRAWER ── */
+        .drawer-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.45);
+            z-index: 100; opacity: 0; pointer-events: none;
+            transition: opacity 0.25s ease;
+        }
+        .drawer-overlay.open { opacity: 1; pointer-events: all; }
+
+        .picks-drawer {
+            position: fixed; bottom: 0; left: 0; right: 0;
+            background: white; border-radius: 18px 18px 0 0;
+            z-index: 101; padding: 0 0 90px 0;
+            transform: translateY(100%);
+            transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+            max-height: 75vh; overflow-y: auto;
+            box-shadow: 0 -4px 24px rgba(0,0,0,0.18);
+        }
+        .picks-drawer.open { transform: translateY(0); }
+
+        .drawer-handle {
+            width: 40px; height: 4px; background: #ddd;
+            border-radius: 2px; margin: 12px auto 0 auto;
+        }
+
+        .drawer-header {
+            padding: 12px 16px 10px 16px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .drawer-name {
+            font-size: 18px; font-weight: bold; color: #2c3e50;
+            margin-bottom: 2px;
+        }
+        .drawer-subtitle {
+            font-size: 12px; color: #7f8c8d;
+        }
+
+        .drawer-picks-grid {
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 12px; padding: 14px 16px;
+        }
+
+        .drawer-picks-col h4 {
+            font-size: 13px; font-weight: bold; color: #fff;
+            padding: 6px 10px; border-radius: 6px 6px 0 0;
+            margin-bottom: 0;
+        }
+        .drawer-picks-col.nrl h4 { background: #1a3c6e; }
+        .drawer-picks-col.afl h4 { background: #002b5c; }
+
+        .drawer-pick-item {
+            display: flex; align-items: center; gap: 8px;
+            padding: 8px 10px; border-bottom: 1px solid #f5f5f5;
+            font-size: 13px; color: #2c3e50; background: #fafafa;
+        }
+        .drawer-pick-item:last-child { border-bottom: none; border-radius: 0 0 6px 6px; }
+        .drawer-pick-num {
+            font-size: 11px; color: #aaa; font-weight: bold;
+            min-width: 16px;
+        }
+        .drawer-no-picks {
+            padding: 20px; text-align: center; color: #aaa; font-size: 13px;
+        }
+
+        .drawer-close-btn {
+            display: block; margin: 0 16px 4px 16px;
+            padding: 12px; background: #ecf0f1; border: none;
+            border-radius: 8px; font-size: 14px; font-weight: bold;
+            color: #2c3e50; cursor: pointer; width: calc(100% - 32px);
+            text-align: center;
+        }
+        .drawer-close-btn:active { background: #dde1e4; }
+
+        /* Tap hint on friends rows */
+        .tap-hint {
+            font-size: 9px; color: rgba(0,0,0,0.35); text-align: center;
+            margin-bottom: 4px; letter-spacing: 0.3px;
+        }
 
         @media (max-width: 480px) { .title { font-size: 18px; } .table-cell { font-size: 12px; } .nav-button { font-size: 10px; padding: 8px 3px; } }
     </style>
@@ -168,6 +249,7 @@
                     <strong>PRT</strong> = Previous Total &nbsp;|&nbsp;
                     <strong>Rd</strong> = Recent Score
                 </div>
+                <div class="tap-hint">Tap a name to see their picks 👆</div>
                 <div class="table-container-friends">
                     <div class="table-header">
                         <div class="table-header-text-sm col-rank-f">Rank</div>
@@ -177,6 +259,7 @@
                         <div class="table-header-text-sm col-points-f">Total</div>
                         <div class="table-header-text-sm col-prt-f">PRT</div>
                         <div class="table-header-text-sm col-round-f">Rd</div>
+                        <div class="table-header-text-sm col-arrow-f"></div>
                     </div>
                     <div id="friendsList"></div>
                 </div>
@@ -244,6 +327,27 @@
         </div>
     </div>
 
+    <!-- PICKS DRAWER -->
+    <div class="drawer-overlay" id="drawerOverlay" onclick="closePicksDrawer()"></div>
+    <div class="picks-drawer" id="picksDrawer">
+        <div class="drawer-handle"></div>
+        <div class="drawer-header">
+            <div class="drawer-name" id="drawerName"></div>
+            <div class="drawer-subtitle">Round picks</div>
+        </div>
+        <div class="drawer-picks-grid">
+            <div class="drawer-picks-col nrl">
+                <h4>🏉 NRL Picks</h4>
+                <div id="drawerNrlPicks"></div>
+            </div>
+            <div class="drawer-picks-col afl">
+                <h4>🦘 AFL Picks</h4>
+                <div id="drawerAflPicks"></div>
+            </div>
+        </div>
+        <button class="drawer-close-btn" onclick="closePicksDrawer()">Close</button>
+    </div>
+
     <script>
         var members = [];
         var friends = [];
@@ -262,6 +366,58 @@
             checkExistingLogin();
         });
 
+        // ── PICKS DRAWER ──────────────────────────────────────────
+        function openPicksDrawer(tipsterName) {
+            // Look up this person's picks from the full competition data
+            var member = members.find(function(m) {
+                return m.name && m.name.toLowerCase() === tipsterName.toLowerCase();
+            });
+
+            document.getElementById('drawerName').textContent = tipsterName;
+
+            var nrlContainer = document.getElementById('drawerNrlPicks');
+            var aflContainer = document.getElementById('drawerAflPicks');
+
+            if (member && member.nrlTeams && member.nrlTeams.some(function(t) { return t; })) {
+                var nrlHtml = '';
+                for (var i = 0; i < member.nrlTeams.length; i++) {
+                    if (member.nrlTeams[i]) {
+                        nrlHtml += '<div class="drawer-pick-item">';
+                        nrlHtml += '<span class="drawer-pick-num">' + (i + 1) + '</span>';
+                        nrlHtml += member.nrlTeams[i];
+                        nrlHtml += '</div>';
+                    }
+                }
+                nrlContainer.innerHTML = nrlHtml || '<div class="drawer-no-picks">No picks found</div>';
+            } else {
+                nrlContainer.innerHTML = '<div class="drawer-no-picks">No picks found</div>';
+            }
+
+            if (member && member.aflTeams && member.aflTeams.some(function(t) { return t; })) {
+                var aflHtml = '';
+                for (var i = 0; i < member.aflTeams.length; i++) {
+                    if (member.aflTeams[i]) {
+                        aflHtml += '<div class="drawer-pick-item">';
+                        aflHtml += '<span class="drawer-pick-num">' + (i + 1) + '</span>';
+                        aflHtml += member.aflTeams[i];
+                        aflHtml += '</div>';
+                    }
+                }
+                aflContainer.innerHTML = aflHtml || '<div class="drawer-no-picks">No picks found</div>';
+            } else {
+                aflContainer.innerHTML = '<div class="drawer-no-picks">No picks found</div>';
+            }
+
+            document.getElementById('drawerOverlay').classList.add('open');
+            document.getElementById('picksDrawer').classList.add('open');
+        }
+
+        function closePicksDrawer() {
+            document.getElementById('drawerOverlay').classList.remove('open');
+            document.getElementById('picksDrawer').classList.remove('open');
+        }
+
+        // ── FRIENDS DATA ──────────────────────────────────────────
         function loadFriendsData() {
             fetch('friends-data.csv')
                 .then(function(response) {
@@ -331,19 +487,22 @@
                 var changeVal = parseInt(f.change) || 0;
                 var changeClass = changeVal > 0 ? 'positive' : changeVal < 0 ? 'negative' : 'neutral';
                 var changeText = changeVal > 0 ? '+' + changeVal : changeVal < 0 ? changeVal : '-';
-                html += '<div class="table-row-compact ' + rowClass + '">';
+                // Each row is tappable — calls openPicksDrawer with the tipster name
+                html += '<div class="table-row-compact ' + rowClass + '" onclick="openPicksDrawer(\'' + f.tipster.replace(/'/g, "\\'") + '\')">';
                 html += '<div class="table-cell-sm col-rank-f"><strong>' + f.rank + '</strong></div>';
                 html += '<div class="table-cell-sm col-lw-f">' + f.lw + '</div>';
                 html += '<div class="table-cell-sm col-change-f ' + changeClass + '">' + changeText + '</div>';
-                html += '<div class="table-cell-sm col-team-f">' + f.tipster + '</div>';
+                html += '<div class="table-cell-sm col-team-f"><strong>' + f.tipster + '</strong></div>';
                 html += '<div class="table-cell-sm col-points-f"><strong>' + f.totalScore + '</strong></div>';
                 html += '<div class="table-cell-sm col-prt-f">' + f.prt + '</div>';
                 html += '<div class="table-cell-sm col-round-f">' + f.roundScore + '</div>';
+                html += '<div class="table-cell-sm col-arrow-f" style="color:rgba(0,0,0,0.3);font-size:10px;">&#8250;</div>';
                 html += '</div>';
             }
             container.innerHTML = html;
         }
 
+        // ── NRL / AFL LADDERS ─────────────────────────────────────
         function loadNRLLadder() {
             fetch('nrl-ladder.csv')
                 .then(function(response) { return response.text(); })
@@ -394,6 +553,7 @@
             } catch (error) { console.error('Error parsing AFL ladder:', error); }
         }
 
+        // ── COMPETITION DATA ──────────────────────────────────────
         function loadDataFromCSV() {
             fetch('competition-data.csv')
                 .then(function(response) {
@@ -520,14 +680,7 @@
         function goToMyPosition() {
             var userMember = members.find(function(m) { return m.name === currentUser; });
             if (!userMember) return;
-        
-            // If not showing all, switch to show all first then scroll
-            if (!showingAll) {
-                showingAll = true;
-                renderPicksLeaderboard();
-            }
-        
-            // Small delay to allow render before scrolling
+            if (!showingAll) { showingAll = true; renderPicksLeaderboard(); }
             setTimeout(function() {
                 var userRow = document.querySelector('[data-member="' + userMember.name + '"]');
                 if (userRow) userRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -612,7 +765,7 @@
             for (var i = 0; i < nrlLadder.length; i++) {
                 var team = nrlLadder[i];
                 var rowStyle = i < 8 ? 'style="border-left: 3px solid #27ae60;"' : '';
-                html += '<div class="table-row-compact" ' + rowStyle + '>';
+                html += '<div class="table-row-compact" ' + rowStyle + ' onclick="">';
                 html += '<div class="table-cell-sm col-pos">' + team.pos + '</div>';
                 html += '<div class="table-cell-sm col-team-name">' + team.team + '</div>';
                 html += '<div class="table-cell-sm col-played">' + team.played + '</div>';
@@ -632,7 +785,7 @@
             for (var i = 0; i < aflLadder.length; i++) {
                 var team = aflLadder[i];
                 var rowStyle = i < 8 ? 'style="border-left: 3px solid #27ae60;"' : '';
-                html += '<div class="table-row-compact" ' + rowStyle + '>';
+                html += '<div class="table-row-compact" ' + rowStyle + ' onclick="">';
                 html += '<div class="table-cell-sm col-pos">' + team.pos + '</div>';
                 html += '<div class="table-cell-sm col-team-name">' + team.team + '</div>';
                 html += '<div class="table-cell-sm col-played">' + team.played + '</div>';
