@@ -59,7 +59,6 @@
         .col-pts { flex: 0 0 26px; }
         .col-diff { flex: 0 0 30px; }
 
-        .ladder-container { overflow-x: auto; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); background: white; }
         .table-container { max-height: 400px; overflow-y: auto; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); background: white; }
         .table-container-friends { border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); background: white; }
         .table-header { position: sticky; top: 0; z-index: 10; display: flex; background-color: #34495e; padding: 8px 6px; border-radius: 8px 8px 0 0; }
@@ -68,15 +67,19 @@
 
         /* Standard row */
         .table-row { display: flex; background-color: white; padding: 12px 8px; margin-bottom: 2px; align-items: center; border-bottom: 1px solid #f0f0f0; }
-
-        /* Friends rows — taller for easier finger tapping */
-        .table-row-compact { display: flex; background-color: white; padding: 8px 6px; margin-bottom: 1px; align-items: center; border-bottom: 1px solid #f0f0f0; cursor: pointer; min-height: 44px; transition: filter 0.15s ease; }
-
         .table-row:hover { background-color: #f8f9fa; }
+        .table-row:last-child { border-bottom: none; border-radius: 0 0 8px 8px; }
+
+        /* Friends rows — tappable, slightly taller for fingers */
+        .table-row-compact { display: flex; background-color: white; padding: 8px 6px; margin-bottom: 1px; align-items: center; border-bottom: 1px solid #f0f0f0; cursor: pointer; min-height: 44px; transition: filter 0.15s ease; }
         .table-row-compact:hover { filter: brightness(0.94); }
         .table-row-compact:active { filter: brightness(0.88); }
-        .table-row:last-child { border-bottom: none; border-radius: 0 0 8px 8px; }
         .table-row-compact:last-child { border-bottom: none; border-radius: 0 0 8px 8px; }
+
+        /* Ladder rows — original compact size, no tap interaction */
+        .table-row-ladder { display: flex; background-color: white; padding: 6px 6px; margin-bottom: 1px; align-items: center; border-bottom: 1px solid #f0f0f0; }
+        .table-row-ladder:hover { background-color: #f8f9fa; }
+        .table-row-ladder:last-child { border-bottom: none; border-radius: 0 0 8px 8px; }
 
         .table-cell { font-size: 13px; text-align: center; color: #2c3e50; }
         .table-cell-sm { font-size: 12px; text-align: center; color: #2c3e50; }
@@ -94,11 +97,10 @@
         .nav-button.active { background-color: #3498db; }
         .hidden { display: none !important; }
 
-        /* My Picks - compact */
+        /* My Picks */
         .picks-section { background: white; margin-bottom: 10px; border-radius: 8px; padding: 8px 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
         .picks-section h3 { color: #2c3e50; margin-bottom: 6px; font-size: 14px; }
         .picks-item { padding: 5px 8px; margin: 3px 0; background: #f8f9fa; border-radius: 5px; font-size: 13px; }
-
         .loading { text-align: center; padding: 30px; color: #7f8c8d; }
 
         /* Friends note */
@@ -111,6 +113,20 @@
         .friends-row-amber { background-color: #FFC409 !important; }
         .friends-row-orange { background-color: #E26B0A !important; }
         .friends-row-orange .table-cell-sm { color: white !important; }
+
+        /* ── TOGGLE BAR ── */
+        .view-toggle {
+            display: flex; background: white; border-radius: 8px;
+            padding: 4px; margin-bottom: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1); gap: 4px;
+        }
+        .toggle-btn {
+            flex: 1; padding: 7px 4px; border: none; border-radius: 6px;
+            font-size: 11px; font-weight: bold; cursor: pointer;
+            background: transparent; color: #7f8c8d;
+            transition: background 0.2s, color 0.2s;
+        }
+        .toggle-btn.active { background: #2c3e50; color: white; }
 
         /* ── PICKS DRAWER ── */
         .drawer-overlay {
@@ -131,64 +147,25 @@
         }
         .picks-drawer.open { transform: translateY(0); }
 
-        .drawer-handle {
-            width: 40px; height: 4px; background: #ddd;
-            border-radius: 2px; margin: 12px auto 0 auto;
-        }
+        .drawer-handle { width: 40px; height: 4px; background: #ddd; border-radius: 2px; margin: 12px auto 0 auto; }
+        .drawer-header { padding: 12px 16px 10px 16px; border-bottom: 1px solid #f0f0f0; }
+        .drawer-name { font-size: 18px; font-weight: bold; color: #2c3e50; margin-bottom: 2px; }
+        .drawer-subtitle { font-size: 12px; color: #7f8c8d; }
 
-        .drawer-header {
-            padding: 12px 16px 10px 16px;
-            border-bottom: 1px solid #f0f0f0;
-        }
-        .drawer-name {
-            font-size: 18px; font-weight: bold; color: #2c3e50;
-            margin-bottom: 2px;
-        }
-        .drawer-subtitle {
-            font-size: 12px; color: #7f8c8d;
-        }
-
-        .drawer-picks-grid {
-            display: grid; grid-template-columns: 1fr 1fr;
-            gap: 12px; padding: 14px 16px;
-        }
-
-        .drawer-picks-col h4 {
-            font-size: 13px; font-weight: bold; color: #fff;
-            padding: 6px 10px; border-radius: 6px 6px 0 0;
-            margin-bottom: 0;
-        }
+        .drawer-picks-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 14px 16px; }
+        .drawer-picks-col h4 { font-size: 13px; font-weight: bold; color: #fff; padding: 6px 10px; border-radius: 6px 6px 0 0; margin-bottom: 0; }
         .drawer-picks-col.nrl h4 { background: #1a3c6e; }
         .drawer-picks-col.afl h4 { background: #002b5c; }
 
-        .drawer-pick-item {
-            display: flex; align-items: center; gap: 8px;
-            padding: 8px 10px; border-bottom: 1px solid #f5f5f5;
-            font-size: 13px; color: #2c3e50; background: #fafafa;
-        }
+        .drawer-pick-item { display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-bottom: 1px solid #f5f5f5; font-size: 13px; color: #2c3e50; background: #fafafa; }
         .drawer-pick-item:last-child { border-bottom: none; border-radius: 0 0 6px 6px; }
-        .drawer-pick-num {
-            font-size: 11px; color: #aaa; font-weight: bold;
-            min-width: 16px;
-        }
-        .drawer-no-picks {
-            padding: 20px; text-align: center; color: #aaa; font-size: 13px;
-        }
+        .drawer-pick-num { font-size: 11px; color: #aaa; font-weight: bold; min-width: 16px; }
+        .drawer-no-picks { padding: 20px; text-align: center; color: #aaa; font-size: 13px; }
 
-        .drawer-close-btn {
-            display: block; margin: 0 16px 4px 16px;
-            padding: 12px; background: #ecf0f1; border: none;
-            border-radius: 8px; font-size: 14px; font-weight: bold;
-            color: #2c3e50; cursor: pointer; width: calc(100% - 32px);
-            text-align: center;
-        }
+        .drawer-close-btn { display: block; margin: 0 16px 4px 16px; padding: 12px; background: #ecf0f1; border: none; border-radius: 8px; font-size: 14px; font-weight: bold; color: #2c3e50; cursor: pointer; width: calc(100% - 32px); text-align: center; }
         .drawer-close-btn:active { background: #dde1e4; }
 
-        /* Tap hint on friends rows */
-        .tap-hint {
-            font-size: 9px; color: rgba(0,0,0,0.35); text-align: center;
-            margin-bottom: 4px; letter-spacing: 0.3px;
-        }
+        .tap-hint { font-size: 9px; color: rgba(0,0,0,0.35); text-align: center; margin-bottom: 4px; letter-spacing: 0.3px; }
 
         @media (max-width: 480px) { .title { font-size: 18px; } .table-cell { font-size: 12px; } .nav-button { font-size: 10px; padding: 8px 3px; } }
     </style>
@@ -243,25 +220,68 @@
             <div id="friendsScreen" class="container-friends">
                 <div class="title-friends">No Idea Footy Tipsters</div>
                 <div class="title-friends" id="friendsWeekTitle" style="color: #3498db; font-size: 13px;"></div>
-                <div class="friends-note" style="margin-top: 6px;">
-                    <strong>LW</strong> = Last Week's ranking &nbsp;|&nbsp;
-                    <strong>+/-</strong> = Change &nbsp;|&nbsp;
-                    <strong>PRT</strong> = Previous Total &nbsp;|&nbsp;
-                    <strong>Rd</strong> = Recent Score
+
+                <!-- Toggle bar — switches between Friends, NRL ladder, AFL ladder -->
+                <div class="view-toggle" style="margin-top: 6px;">
+                    <button class="toggle-btn active" onclick="switchFriendsView('friends', this)">Friends</button>
+                    <button class="toggle-btn" onclick="switchFriendsView('nrl', this)">NRL Ladder</button>
+                    <button class="toggle-btn" onclick="switchFriendsView('afl', this)">AFL Ladder</button>
                 </div>
-                <div class="tap-hint">Tap a name to see their picks 👆</div>
-                <div class="table-container-friends">
-                    <div class="table-header">
-                        <div class="table-header-text-sm col-rank-f">Rank</div>
-                        <div class="table-header-text-sm col-lw-f">LW</div>
-                        <div class="table-header-text-sm col-change-f">+/-</div>
-                        <div class="table-header-text-sm col-team-f">Tipster</div>
-                        <div class="table-header-text-sm col-points-f">Total</div>
-                        <div class="table-header-text-sm col-prt-f">PRT</div>
-                        <div class="table-header-text-sm col-round-f">Rd</div>
-                        <div class="table-header-text-sm col-arrow-f"></div>
+
+                <!-- Friends view (default) -->
+                <div id="friendsView">
+                    <div class="friends-note">
+                        <strong>LW</strong> = Last Week's ranking &nbsp;|&nbsp;
+                        <strong>+/-</strong> = Change &nbsp;|&nbsp;
+                        <strong>PRT</strong> = Previous Total &nbsp;|&nbsp;
+                        <strong>Rd</strong> = Recent Score
                     </div>
-                    <div id="friendsList"></div>
+                    <div class="tap-hint">Tap a name to see their picks 👆</div>
+                    <div class="table-container-friends">
+                        <div class="table-header">
+                            <div class="table-header-text-sm col-rank-f">Rank</div>
+                            <div class="table-header-text-sm col-lw-f">LW</div>
+                            <div class="table-header-text-sm col-change-f">+/-</div>
+                            <div class="table-header-text-sm col-team-f">Tipster</div>
+                            <div class="table-header-text-sm col-points-f">Total</div>
+                            <div class="table-header-text-sm col-prt-f">PRT</div>
+                            <div class="table-header-text-sm col-round-f">Rd</div>
+                            <div class="table-header-text-sm col-arrow-f"></div>
+                        </div>
+                        <div id="friendsList"></div>
+                    </div>
+                </div>
+
+                <!-- NRL ladder view (hidden by default) -->
+                <div id="friendsNrlView" class="hidden">
+                    <div class="table-container-friends">
+                        <div class="table-header">
+                            <div class="table-header-text-sm col-pos">Pos</div>
+                            <div class="table-header-text-sm col-team-name">Team</div>
+                            <div class="table-header-text-sm col-played">P</div>
+                            <div class="table-header-text-sm col-won">W</div>
+                            <div class="table-header-text-sm col-won">L</div>
+                            <div class="table-header-text-sm col-pts">Pts</div>
+                            <div class="table-header-text-sm col-diff">+/-</div>
+                        </div>
+                        <div id="friendsNrlTable"></div>
+                    </div>
+                </div>
+
+                <!-- AFL ladder view (hidden by default) -->
+                <div id="friendsAflView" class="hidden">
+                    <div class="table-container-friends">
+                        <div class="table-header">
+                            <div class="table-header-text-sm col-pos">Pos</div>
+                            <div class="table-header-text-sm col-team-name">Team</div>
+                            <div class="table-header-text-sm col-played">P</div>
+                            <div class="table-header-text-sm col-won">W</div>
+                            <div class="table-header-text-sm col-won">L</div>
+                            <div class="table-header-text-sm col-pts">Pts</div>
+                            <div class="table-header-text-sm col-diff">%</div>
+                        </div>
+                        <div id="friendsAflTable"></div>
+                    </div>
                 </div>
             </div>
 
@@ -366,15 +386,85 @@
             checkExistingLogin();
         });
 
+        // ── FRIENDS VIEW TOGGLE ───────────────────────────────────
+        function switchFriendsView(view, btn) {
+            // Hide all three views
+            document.getElementById('friendsView').classList.add('hidden');
+            document.getElementById('friendsNrlView').classList.add('hidden');
+            document.getElementById('friendsAflView').classList.add('hidden');
+
+            // Deactivate all toggle buttons
+            var btns = document.querySelectorAll('.toggle-btn');
+            for (var i = 0; i < btns.length; i++) { btns[i].classList.remove('active'); }
+
+            // Show selected view and activate button
+            if (view === 'friends') {
+                document.getElementById('friendsView').classList.remove('hidden');
+            } else if (view === 'nrl') {
+                document.getElementById('friendsNrlView').classList.remove('hidden');
+                renderFriendsNrlLadder();
+            } else if (view === 'afl') {
+                document.getElementById('friendsAflView').classList.remove('hidden');
+                renderFriendsAflLadder();
+            }
+            if (btn) btn.classList.add('active');
+        }
+
+        // Render NRL ladder into the friends page NRL view
+        function renderFriendsNrlLadder() {
+            var container = document.getElementById('friendsNrlTable');
+            if (nrlLadder.length === 0) {
+                container.innerHTML = '<p style="padding:20px;text-align:center;color:#7f8c8d;">NRL ladder loading...</p>';
+                return;
+            }
+            var html = '';
+            for (var i = 0; i < nrlLadder.length; i++) {
+                var team = nrlLadder[i];
+                var rowStyle = i < 8 ? 'style="border-left: 3px solid #27ae60;"' : '';
+                html += '<div class="table-row-ladder" ' + rowStyle + '>';
+                html += '<div class="table-cell-sm col-pos">' + team.pos + '</div>';
+                html += '<div class="table-cell-sm col-team-name">' + team.team + '</div>';
+                html += '<div class="table-cell-sm col-played">' + team.played + '</div>';
+                html += '<div class="table-cell-sm col-won">' + team.wins + '</div>';
+                html += '<div class="table-cell-sm col-won">' + team.lost + '</div>';
+                html += '<div class="table-cell-sm col-pts">' + team.points + '</div>';
+                html += '<div class="table-cell-sm col-diff">' + team.diff + '</div>';
+                html += '</div>';
+            }
+            container.innerHTML = html;
+        }
+
+        // Render AFL ladder into the friends page AFL view
+        function renderFriendsAflLadder() {
+            var container = document.getElementById('friendsAflTable');
+            if (aflLadder.length === 0) {
+                container.innerHTML = '<p style="padding:20px;text-align:center;color:#7f8c8d;">AFL ladder loading...</p>';
+                return;
+            }
+            var html = '';
+            for (var i = 0; i < aflLadder.length; i++) {
+                var team = aflLadder[i];
+                var rowStyle = i < 8 ? 'style="border-left: 3px solid #27ae60;"' : '';
+                html += '<div class="table-row-ladder" ' + rowStyle + '>';
+                html += '<div class="table-cell-sm col-pos">' + team.pos + '</div>';
+                html += '<div class="table-cell-sm col-team-name">' + team.team + '</div>';
+                html += '<div class="table-cell-sm col-played">' + team.played + '</div>';
+                html += '<div class="table-cell-sm col-won">' + team.wins + '</div>';
+                html += '<div class="table-cell-sm col-won">' + team.losses + '</div>';
+                html += '<div class="table-cell-sm col-pts">' + team.points + '</div>';
+                html += '<div class="table-cell-sm col-diff">' + team.percentage + '</div>';
+                html += '</div>';
+            }
+            container.innerHTML = html;
+        }
+
         // ── PICKS DRAWER ──────────────────────────────────────────
         function openPicksDrawer(tipsterName) {
-            // Look up this person's picks from the full competition data
             var member = members.find(function(m) {
                 return m.name && m.name.toLowerCase() === tipsterName.toLowerCase();
             });
 
             document.getElementById('drawerName').textContent = tipsterName;
-
             var nrlContainer = document.getElementById('drawerNrlPicks');
             var aflContainer = document.getElementById('drawerAflPicks');
 
@@ -382,10 +472,7 @@
                 var nrlHtml = '';
                 for (var i = 0; i < member.nrlTeams.length; i++) {
                     if (member.nrlTeams[i]) {
-                        nrlHtml += '<div class="drawer-pick-item">';
-                        nrlHtml += '<span class="drawer-pick-num">' + (i + 1) + '</span>';
-                        nrlHtml += member.nrlTeams[i];
-                        nrlHtml += '</div>';
+                        nrlHtml += '<div class="drawer-pick-item"><span class="drawer-pick-num">' + (i + 1) + '</span>' + member.nrlTeams[i] + '</div>';
                     }
                 }
                 nrlContainer.innerHTML = nrlHtml || '<div class="drawer-no-picks">No picks found</div>';
@@ -397,10 +484,7 @@
                 var aflHtml = '';
                 for (var i = 0; i < member.aflTeams.length; i++) {
                     if (member.aflTeams[i]) {
-                        aflHtml += '<div class="drawer-pick-item">';
-                        aflHtml += '<span class="drawer-pick-num">' + (i + 1) + '</span>';
-                        aflHtml += member.aflTeams[i];
-                        aflHtml += '</div>';
+                        aflHtml += '<div class="drawer-pick-item"><span class="drawer-pick-num">' + (i + 1) + '</span>' + member.aflTeams[i] + '</div>';
                     }
                 }
                 aflContainer.innerHTML = aflHtml || '<div class="drawer-no-picks">No picks found</div>';
@@ -487,7 +571,6 @@
                 var changeVal = parseInt(f.change) || 0;
                 var changeClass = changeVal > 0 ? 'positive' : changeVal < 0 ? 'negative' : 'neutral';
                 var changeText = changeVal > 0 ? '+' + changeVal : changeVal < 0 ? changeVal : '-';
-                // Each row is tappable — calls openPicksDrawer with the tipster name
                 html += '<div class="table-row-compact ' + rowClass + '" onclick="openPicksDrawer(\'' + f.tipster.replace(/'/g, "\\'") + '\')">';
                 html += '<div class="table-cell-sm col-rank-f"><strong>' + f.rank + '</strong></div>';
                 html += '<div class="table-cell-sm col-lw-f">' + f.lw + '</div>';
@@ -765,7 +848,7 @@
             for (var i = 0; i < nrlLadder.length; i++) {
                 var team = nrlLadder[i];
                 var rowStyle = i < 8 ? 'style="border-left: 3px solid #27ae60;"' : '';
-                html += '<div class="table-row-compact" ' + rowStyle + ' onclick="">';
+                html += '<div class="table-row-ladder" ' + rowStyle + '>';
                 html += '<div class="table-cell-sm col-pos">' + team.pos + '</div>';
                 html += '<div class="table-cell-sm col-team-name">' + team.team + '</div>';
                 html += '<div class="table-cell-sm col-played">' + team.played + '</div>';
@@ -785,7 +868,7 @@
             for (var i = 0; i < aflLadder.length; i++) {
                 var team = aflLadder[i];
                 var rowStyle = i < 8 ? 'style="border-left: 3px solid #27ae60;"' : '';
-                html += '<div class="table-row-compact" ' + rowStyle + ' onclick="">';
+                html += '<div class="table-row-ladder" ' + rowStyle + '>';
                 html += '<div class="table-cell-sm col-pos">' + team.pos + '</div>';
                 html += '<div class="table-cell-sm col-team-name">' + team.team + '</div>';
                 html += '<div class="table-cell-sm col-played">' + team.played + '</div>';
