@@ -1,8 +1,8 @@
 Position,Team,Played,Win,Loss,Draw,%Won,Points,For,Against,Percentage,Movement,Streak
 1,Gold Coast Suns,3,3,0,0,1,12,384,201,1.9104,0,Won 3
 2,Western Bulldogs,3,3,0,0,1,12,339,247,1.3725,0,Won 3
-3,North Melbourne Kangaroos,4,3,1,0,0.75,12,384,333,1.1532,3,Won 2
-4,Fremantle Dockers,3,2,1,0,0.6667,8,321,223,1.4395,-1,Won 2
+3,Fremantle Dockers,4,3,1,0,0.75,12,399,299,1.3344,0,Won 3
+4,North Melbourne Kangaroos,4,3,1,0,0.75,12,384,333,1.1532,2,Won 2
 5,Sydney Swans,3,2,1,0,0.6667,8,318,228,1.3947,-1,Lost 1
 6,Hawthorn Hawks,3,2,1,0,0.6667,8,339,287,1.1812,-1,Won 2
 7,Brisbane Lions,4,2,2,0,0.5,8,398,360,1.1056,6,Won 2
@@ -11,7 +11,7 @@ Position,Team,Played,Win,Loss,Draw,%Won,Points,For,Against,Percentage,Movement,S
 10,West Coast Eagles,3,2,1,0,0.6667,8,275,315,0.873,-1,Won 2
 11,Geelong Cats,3,2,1,0,0.6667,8,247,285,0.8667,-1,Won 2
 12,Port Adelaide Power,3,1,2,0,0.3333,4,290,275,1.0545,-1,Lost 1
-13,Adelaide Crows,3,1,2,0,0.3333,4,241,241,1,-1,Lost 2
+13,Adelaide Crows,4,1,3,0,0.25,4,317,319,0.9937,-1,Lost 3
 14,St Kilda Saints,4,1,3,0,0.25,4,331,385,0.8597,0,Lost 1
 15,Carlton Blues,4,1,3,0,0.25,4,307,399,0.7694,1,Lost 2
 16,GWS Giants,4,1,3,0,0.25,4,303,394,0.769,-1,Lost 3
