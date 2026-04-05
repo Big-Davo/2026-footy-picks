@@ -1,13 +1,13 @@
 Position,Team,Played,Win,Loss,Draw,%Won,Points,For,Against,Percentage,Movement,Streak
-1,Gold Coast Suns,3,3,0,0,1,12,384,201,1.9104,0,Won 3
-2,Sydney Swans,4,3,1,0,0.75,12,481,263,1.8289,2,Won 1
+1,Sydney Swans,4,3,1,0,0.75,12,481,263,1.8289,3,Won 1
+2,Gold Coast Suns,4,3,1,0,0.75,12,473,310,1.5258,-1,Lost 1
 3,Western Bulldogs,3,3,0,0,1,12,339,247,1.3725,-1,Won 3
 4,Fremantle Dockers,4,3,1,0,0.75,12,399,299,1.3344,-1,Won 3
 5,North Melbourne Kangaroos,4,3,1,0,0.75,12,384,333,1.1532,1,Won 2
-6,Hawthorn Hawks,3,2,1,0,0.6667,8,339,287,1.1812,-1,Won 2
-7,Port Adelaide Power,4,2,2,0,0.5,8,380,323,1.1765,4,Won 1
-8,Brisbane Lions,4,2,2,0,0.5,8,398,360,1.1056,5,Won 2
-9,Melbourne Demons,3,2,1,0,0.6667,8,290,302,0.9603,-1,Won 1
+6,Melbourne Demons,4,3,1,0,0.75,12,399,391,1.0205,2,Won 2
+7,Hawthorn Hawks,3,2,1,0,0.6667,8,339,287,1.1812,-2,Won 2
+8,Port Adelaide Power,4,2,2,0,0.5,8,380,323,1.1765,3,Won 1
+9,Brisbane Lions,4,2,2,0,0.5,8,398,360,1.1056,4,Won 2
 10,Collingwood Magpies,4,2,2,0,0.5,8,309,332,0.9307,-3,Lost 1
 11,Geelong Cats,3,2,1,0,0.6667,8,247,285,0.8667,-1,Won 2
 12,West Coast Eagles,4,2,2,0,0.5,8,310,478,0.6485,-3,Lost 1
