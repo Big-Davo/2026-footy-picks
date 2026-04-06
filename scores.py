@@ -35,8 +35,6 @@ FRIENDS = [
     "Wcord2", "Dylan C", "RobynC"
 ]
 
-MONTHS_LOWER = set(m.lower() for m in calendar.month_name if m)
-
 # ============================================================
 # NRL TEAM NAME MAPPING
 # Wikipedia name -> competition full name
@@ -91,6 +89,17 @@ AFL_MAP = {
 }
 
 
+def is_round_heading(text):
+    """Returns True if heading text matches 'Round N' or 'Round N (...)' """
+    return bool(re.match(r"round\s+\d+", text.strip().lower()))
+
+
+def round_number_from_heading(text):
+    """Extracts the round number from a heading like 'Round 4 (Easter Round)'"""
+    m = re.search(r"round\s+(\d+)", text.strip().lower())
+    return int(m.group(1)) if m else None
+
+
 # ============================================================
 # PARSE ONE NRL TABLE
 # ============================================================
@@ -132,6 +141,7 @@ def parse_nrl_table(table, round_num, results):
 
 # ============================================================
 # FETCH NRL RESULTS FROM WIKIPEDIA
+# Headings are "Round 1", "Round 2 (Special Round)" etc
 # ============================================================
 def fetch_nrl_results():
     results = {}
@@ -155,52 +165,36 @@ def fetch_nrl_results():
         print("  ERROR: Could not find Wikipedia content div")
         return results
 
-    round_num = 0
+    headings = content.find_all(["h2", "h3"])
+    print(f"  Found {len(headings)} headings")
 
-    sections = content.find_all("section")
-    print(f"  Found {len(sections)} sections on Wikipedia page")
+    for heading in headings:
+        text = heading.get_text().strip()
 
-    if sections:
-        for section in sections:
-            heading = section.find(["h2", "h3"])
-            if not heading:
-                continue
-            text = heading.get_text().strip()
-            text_lower = text.lower()
-            if not any(m in text_lower for m in MONTHS_LOWER):
-                continue
-            round_num += 1
-            print(f"  Round {round_num}: '{text}'")
-            for table in section.find_all("table"):
+        # Only process headings that say "Round N"
+        if not is_round_heading(text):
+            continue
+
+        round_num = round_number_from_heading(text)
+        if round_num is None:
+            continue
+
+        print(f"  Processing: '{text}' -> Round {round_num}")
+
+        # Find tables — check parent section first, then siblings
+        parent = heading.parent
+        if parent and parent.name == "section":
+            for table in parent.find_all("table"):
                 parse_nrl_table(table, round_num, results)
-    else:
-        # Fallback — print ALL heading texts so we can see the format
-        headings = content.find_all(["h2", "h3"])
-        print(f"  No sections found — trying heading siblings approach")
-        print(f"  Found {len(headings)} headings — printing first 15:")
-        for h in headings[:15]:
-            print(f"    [{h.get_text().strip()[:80]}]")
-
-        for heading in headings:
-            text = heading.get_text().strip()
-            text_lower = text.lower()
-            if not any(m in text_lower for m in MONTHS_LOWER):
-                continue
-            round_num += 1
-            print(f"  Round {round_num}: '{text}'")
-            parent = heading.parent
-            if parent and parent.name == "section":
-                for table in parent.find_all("table"):
-                    parse_nrl_table(table, round_num, results)
-            else:
-                for sibling in heading.find_next_siblings():
-                    if sibling.name in ["h2", "h3"]:
-                        break
-                    if sibling.name == "table":
-                        parse_nrl_table(sibling, round_num, results)
-                    elif hasattr(sibling, "find_all"):
-                        for table in sibling.find_all("table"):
-                            parse_nrl_table(table, round_num, results)
+        else:
+            for sibling in heading.find_next_siblings():
+                if sibling.name in ["h2", "h3"]:
+                    break
+                if sibling.name == "table":
+                    parse_nrl_table(sibling, round_num, results)
+                elif hasattr(sibling, "find_all"):
+                    for table in sibling.find_all("table"):
+                        parse_nrl_table(table, round_num, results)
 
     return results
 
