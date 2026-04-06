@@ -14,7 +14,6 @@ import csv
 import io
 import base64
 import os
-import calendar
 from datetime import datetime
 from bs4 import BeautifulSoup
 
@@ -98,8 +97,49 @@ def round_number_from_heading(text):
 
 
 # ============================================================
+# PARSE ONE NRL TABLE
+# ============================================================
+def parse_nrl_table(table, round_num, results):
+    for row in table.find_all("tr"):
+        cells = row.find_all(["td", "th"])
+        if len(cells) < 3:
+            continue
+
+        home_raw  = cells[0].get_text(strip=True)
+        score_raw = cells[1].get_text(strip=True)
+        away_raw  = cells[2].get_text(strip=True)
+
+        # Score must be digits-dash-digits e.g. "28-18"
+        score_match = re.search(r"(\d+)\s*[\u2013\u2014\-]\s*(\d+)", score_raw)
+        if not score_match:
+            continue
+
+        home_score = int(score_match.group(1))
+        away_score = int(score_match.group(2))
+
+        if home_score == 0 and away_score == 0:
+            continue
+
+        home_team = NRL_MAP.get(home_raw, home_raw)
+        away_team = NRL_MAP.get(away_raw, away_raw)
+        margin    = abs(home_score - away_score)
+        rnd_str   = str(round_num)
+
+        if home_score > away_score:
+            results[f"{home_team}|{rnd_str}"] = margin
+            results[f"{away_team}|{rnd_str}"] = 0
+        elif away_score > home_score:
+            results[f"{away_team}|{rnd_str}"] = margin
+            results[f"{home_team}|{rnd_str}"] = 0
+        else:
+            results[f"{home_team}|{rnd_str}"] = 0
+            results[f"{away_team}|{rnd_str}"] = 0
+
+
+# ============================================================
 # FETCH NRL RESULTS FROM WIKIPEDIA
-# DEBUG VERSION — dumps HTML structure around Round 1
+# The h3 heading is wrapped in a div — we search siblings
+# of that parent div to find the wikitable for each round
 # ============================================================
 def fetch_nrl_results():
     results = {}
@@ -111,30 +151,55 @@ def fetch_nrl_results():
     try:
         resp = requests.get(NRL_WIKI_URL, headers=headers, timeout=30)
         resp.raise_for_status()
-        html = resp.text
-        soup = BeautifulSoup(html, "html.parser")
+        soup = BeautifulSoup(resp.text, "html.parser")
     except Exception as e:
         print(f"  ERROR fetching NRL Wikipedia page: {e}")
         return results
 
-    # Find the position of "Round_1" anchor in the raw HTML
-    # and print 2000 chars of HTML after it so we can see the structure
-    pos = html.find('id="Round_1"')
-    if pos == -1:
-        pos = html.find("Round 1")
-    if pos >= 0:
-        sample = html[pos:pos+2000]
-        # Strip most tags for readability but keep structure tags
-        sample = re.sub(r'<(?!/?(?:h[23]|table|tr|td|th|div|span|a)\b)[^>]+>', '', sample)
-        print(f"  HTML AROUND ROUND 1:\n{sample[:1500]}")
-    else:
-        print("  Could not find Round 1 in HTML")
+    # Find all round headings by their span id e.g. id="Round_1"
+    round_spans = soup.find_all("span", id=re.compile(r"^Round_\d+"))
+    print(f"  Found {len(round_spans)} round spans")
+
+    for span in round_spans:
+        span_id = span.get("id", "")
+        m = re.search(r"Round_(\d+)", span_id)
+        if not m:
+            continue
+        round_num = int(m.group(1))
+
+        # The span is inside an h3, which is inside a div
+        # The wikitable is a sibling of that wrapper div
+        heading = span.find_parent(["h2", "h3"])
+        if not heading:
+            continue
+
+        # Walk up to find the container div that wraps the heading
+        container = heading.parent
+
+        # Search siblings of the container for wikitables
+        # Stop when we hit the next round heading container
+        tables_found = 0
+        for sibling in container.find_next_siblings():
+            # Stop at next heading wrapper
+            if sibling.find(["h2", "h3"]):
+                break
+            if sibling.name == "table":
+                parse_nrl_table(sibling, round_num, results)
+                tables_found += 1
+            # Also check tables inside divs
+            for table in sibling.find_all("table"):
+                parse_nrl_table(table, round_num, results)
+                tables_found += 1
+
+        if round_num <= 5:
+            print(f"  Round {round_num}: {tables_found} tables processed")
 
     return results
 
 
 # ============================================================
 # FETCH AFL RESULTS FROM api.squiggle.com.au
+# Only includes games where complete = 100 (fully finished)
 # ============================================================
 def fetch_afl_results():
     results = {}
@@ -222,13 +287,142 @@ def github_put(filename, content, sha, message):
 
 
 # ============================================================
-# MAIN — debug only, no scoring this run
+# CALCULATE SCORES
+# ============================================================
+def calculate_scores(competition_csv, nrl_results, afl_results):
+    all_rounds = set()
+    for key in list(nrl_results.keys()) + list(afl_results.keys()):
+        rnd = key.split("|")[1]
+        try:
+            int(rnd)
+            all_rounds.add(rnd)
+        except ValueError:
+            pass
+
+    if not all_rounds:
+        print("  No completed rounds found — nothing to calculate")
+        return None, None
+
+    latest_round = str(max(int(r) for r in all_rounds))
+    print(f"  Completed rounds: {sorted(all_rounds, key=int)}")
+    print(f"  Latest round: {latest_round}")
+
+    reader = csv.reader(io.StringIO(competition_csv))
+    rows   = list(reader)
+    if not rows:
+        return None, None
+
+    header = rows[0]
+
+    def col(name):
+        try:
+            return header.index(name)
+        except ValueError:
+            return None
+
+    tipster_col = col("Tipster")
+    total_col   = col("Total Score")
+    prt_col     = col("PRT")
+    rd_col      = col("Rd score")
+    afl1_col    = col("AFL Team 1")
+    nrl1_col    = col("NRL Team 1")
+    rank_col    = col("Rank")
+    lw_col      = col("LW")
+    change_col  = col("+/-")
+
+    if None in (tipster_col, total_col, prt_col, rd_col, afl1_col, nrl1_col):
+        print("  ERROR: Could not find required columns in competition-data.csv")
+        print(f"  Headers: {header}")
+        return None, None
+
+    updated_rows = [header]
+
+    for row in rows[1:]:
+        if not row or len(row) <= tipster_col:
+            updated_rows.append(row)
+            continue
+        tipster = row[tipster_col].strip()
+        if not tipster:
+            updated_rows.append(row)
+            continue
+
+        afl_picks = [row[afl1_col + t * 2].strip() if afl1_col + t * 2 < len(row) else "" for t in range(5)]
+        nrl_picks = [row[nrl1_col + t * 2].strip() if nrl1_col + t * 2 < len(row) else "" for t in range(5)]
+
+        total_score = 0
+        rd_score    = 0
+
+        for rnd in all_rounds:
+            round_score = 0
+            for t, team in enumerate(afl_picks):
+                if team:
+                    pts = afl_results.get(f"{team}|{rnd}", None)
+                    if pts is not None:
+                        round_score += pts
+                        if rnd == latest_round:
+                            sc = afl1_col + t * 2 + 1
+                            if sc < len(row):
+                                row[sc] = str(pts)
+            for t, team in enumerate(nrl_picks):
+                if team:
+                    pts = nrl_results.get(f"{team}|{rnd}", None)
+                    if pts is not None:
+                        round_score += pts
+                        if rnd == latest_round:
+                            sc = nrl1_col + t * 2 + 1
+                            if sc < len(row):
+                                row[sc] = str(pts)
+            total_score += round_score
+            if rnd == latest_round:
+                rd_score = round_score
+
+        row[total_col] = str(total_score)
+        row[prt_col]   = str(total_score - rd_score)
+        row[rd_col]    = str(rd_score)
+        updated_rows.append(row)
+
+    data_rows = updated_rows[1:]
+    data_rows.sort(
+        key=lambda r: int(r[total_col]) if r and len(r) > total_col and r[total_col].lstrip("-").isdigit() else 0,
+        reverse=True
+    )
+
+    for i, row in enumerate(data_rows):
+        if not row:
+            continue
+        old_rank = row[rank_col] if rank_col is not None and len(row) > rank_col else str(i + 1)
+        if rank_col is not None and len(row) > rank_col:
+            row[rank_col] = str(i + 1)
+        if lw_col is not None and len(row) > lw_col:
+            row[lw_col] = old_rank
+        if change_col is not None and len(row) > change_col:
+            try:
+                change = int(old_rank) - (i + 1)
+                row[change_col] = f"+{change}" if change > 0 else str(change)
+            except ValueError:
+                row[change_col] = "-"
+
+    return [header] + data_rows, latest_round
+
+
+# ============================================================
+# GENERATE CSV STRING
+# ============================================================
+def rows_to_csv(rows):
+    output = io.StringIO()
+    writer = csv.writer(output)
+    writer.writerows(rows)
+    return output.getvalue()
+
+
+# ============================================================
+# MAIN
 # ============================================================
 def main():
     now = datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC")
     print(f"=== Footy Tipping Score Update — {now} ===")
 
-    print("\nFetching NRL results from Wikipedia (DEBUG MODE)...")
+    print("\nFetching NRL results from Wikipedia...")
     nrl_results = fetch_nrl_results()
     print(f"  {len(nrl_results)} NRL team/round results loaded")
 
@@ -236,9 +430,45 @@ def main():
     afl_results = fetch_afl_results()
     print(f"  {len(afl_results)} AFL team/round results loaded")
 
-    # SAFETY GUARD — always abort this debug run
-    print("\n  DEBUG MODE: not pushing any data this run")
-    print("  Existing competition-data.csv on GitHub is unchanged")
+    # SAFETY GUARD
+    if len(nrl_results) == 0:
+        print("\n  SAFETY GUARD: NRL results returned 0 — aborting push to protect existing data")
+        print("  The existing competition-data.csv on GitHub is unchanged")
+        return
+
+    print("\nReading competition-data.csv from GitHub...")
+    competition_csv, comp_sha = github_get("competition-data.csv")
+    print(f"  Read OK ({len(competition_csv)} bytes)")
+
+    print("\nCalculating scores...")
+    updated_rows, latest_round = calculate_scores(competition_csv, nrl_results, afl_results)
+
+    if updated_rows is None:
+        print("  Nothing to update — exiting")
+        return
+
+    print(f"  {len(updated_rows) - 1} tipsters processed")
+
+    updated_comp_csv = rows_to_csv(updated_rows)
+
+    tipster_col  = updated_rows[0].index("Tipster")
+    friends_rows = [updated_rows[0]] + [
+        r for r in updated_rows[1:]
+        if r and len(r) > tipster_col and r[tipster_col] in FRIENDS
+    ]
+    week_label  = f"2026 - Footy Tipping week {latest_round}"
+    friends_csv = week_label + "\n" + rows_to_csv(friends_rows)
+
+    print("\nPushing competition-data.csv...")
+    github_put("competition-data.csv", updated_comp_csv, comp_sha,
+               f"Auto-update scores — Round {latest_round} — {now}")
+
+    print("Pushing friends-data.csv...")
+    _, friends_sha = github_get("friends-data.csv")
+    github_put("friends-data.csv", friends_csv, friends_sha,
+               f"Auto-update friends — Round {latest_round} — {now}")
+
+    print(f"\n=== Done — Round {latest_round} scores published ===")
 
 
 if __name__ == "__main__":
