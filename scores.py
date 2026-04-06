@@ -40,36 +40,34 @@ MONTHS_LOWER = set(m.lower() for m in calendar.month_name if m)
 # ============================================================
 # NRL TEAM NAME MAPPING
 # Wikipedia name -> competition full name
-# Includes all known name variations
 # ============================================================
 NRL_MAP = {
-    "Newcastle Knights":              "Newcastle Knights",
-    "North Queensland Cowboys":       "North Queensland Cowboys",
-    "Canterbury-Bankstown Bulldogs":  "Canterbury Bulldogs",
+    "Newcastle Knights":               "Newcastle Knights",
+    "North Queensland Cowboys":        "North Queensland Cowboys",
+    "Canterbury-Bankstown Bulldogs":   "Canterbury Bulldogs",
     "Canterbury\u2013Bankstown Bulldogs": "Canterbury Bulldogs",
-    "St George Illawarra Dragons":    "St George Illawarra Dragons",
-    "St. George Illawarra Dragons":   "St George Illawarra Dragons",
-    "Melbourne Storm":                "Melbourne Storm",
-    "Parramatta Eels":                "Parramatta Eels",
-    "New Zealand Warriors":           "New Zealand Warriors",
-    "Sydney Roosters":                "Sydney Roosters",
-    "Brisbane Broncos":               "Brisbane Broncos",
-    "Penrith Panthers":               "Penrith Panthers",
-    "Cronulla-Sutherland Sharks":     "Cronulla Sharks",
-    "Cronulla\u2013Sutherland Sharks":"Cronulla Sharks",
-    "Gold Coast Titans":              "Gold Coast Titans",
-    "South Sydney Rabbitohs":         "South Sydney Rabbitohs",
-    "Canberra Raiders":               "Canberra Raiders",
-    "Manly-Warringah Sea Eagles":     "Manly Sea Eagles",
-    "Manly\u2013Warringah Sea Eagles":"Manly Sea Eagles",
-    "Manly Warringah Sea Eagles":     "Manly Sea Eagles",
-    "Dolphins":                       "Redcliffe Dolphins",
-    "Wests Tigers":                   "Wests Tigers",
+    "St George Illawarra Dragons":     "St George Illawarra Dragons",
+    "St. George Illawarra Dragons":    "St George Illawarra Dragons",
+    "Melbourne Storm":                 "Melbourne Storm",
+    "Parramatta Eels":                 "Parramatta Eels",
+    "New Zealand Warriors":            "New Zealand Warriors",
+    "Sydney Roosters":                 "Sydney Roosters",
+    "Brisbane Broncos":                "Brisbane Broncos",
+    "Penrith Panthers":                "Penrith Panthers",
+    "Cronulla-Sutherland Sharks":      "Cronulla Sharks",
+    "Cronulla\u2013Sutherland Sharks": "Cronulla Sharks",
+    "Gold Coast Titans":               "Gold Coast Titans",
+    "South Sydney Rabbitohs":          "South Sydney Rabbitohs",
+    "Canberra Raiders":                "Canberra Raiders",
+    "Manly-Warringah Sea Eagles":      "Manly Sea Eagles",
+    "Manly\u2013Warringah Sea Eagles": "Manly Sea Eagles",
+    "Manly Warringah Sea Eagles":      "Manly Sea Eagles",
+    "Dolphins":                        "Redcliffe Dolphins",
+    "Wests Tigers":                    "Wests Tigers",
 }
 
 # ============================================================
 # AFL TEAM NAME MAPPING
-# api.squiggle.com.au name -> competition full name
 # ============================================================
 AFL_MAP = {
     "Carlton":          "Carlton Blues",
@@ -106,14 +104,18 @@ def parse_nrl_table(table, round_num, results):
         score_raw = cells[1].get_text(strip=True)
         away_raw  = cells[2].get_text(strip=True)
 
-        # Score must contain digits and an en/em dash
-        # e.g. "28–18" or "15–14*"
-        score_match = re.search(r"(\d+)\s*[\u2013\u2014-]\s*(\d+)", score_raw)
+        # Score must contain digits and a dash (en/em/hyphen)
+        # e.g. "28-18" or "15-14*"
+        score_match = re.search(r"(\d+)\s*[\u2013\u2014\-]\s*(\d+)", score_raw)
         if not score_match:
             continue
 
         home_score = int(score_match.group(1))
         away_score = int(score_match.group(2))
+
+        # Skip if both scores are 0 (likely a header or empty row)
+        if home_score == 0 and away_score == 0:
+            continue
 
         home_team = NRL_MAP.get(home_raw, home_raw)
         away_team = NRL_MAP.get(away_raw, away_raw)
@@ -151,46 +153,35 @@ def fetch_nrl_results():
 
     content = soup.find("div", {"class": "mw-parser-output"})
     if not content:
-        # Try alternate content container
         content = soup.find("div", {"id": "mw-content-text"})
     if not content:
         print("  ERROR: Could not find Wikipedia content div")
         return results
 
-    round_num  = 0
-    in_round   = False
+    round_num = 0
 
-    # Find all h2 and h3 headings and process what follows each one
     headings = content.find_all(["h2", "h3"])
+    print(f"  Found {len(headings)} headings on Wikipedia page")
 
     for heading in headings:
-        # Get heading text
         headline = heading.find("span", {"class": "mw-headline"})
-        if headline:
-            text = headline.get_text().strip()
-        else:
-            text = heading.get_text().strip()
-
+        text = headline.get_text().strip() if headline else heading.get_text().strip()
         text_lower = text.lower()
 
-        # Check if this heading is a round (contains a month name)
+        # Only process sections with a month name (these are the round sections)
         is_round = any(m in text_lower for m in MONTHS_LOWER)
-
-        if is_round:
-            round_num += 1
-            in_round = True
-            print(f"  Round {round_num}: '{text}'")
-        else:
-            in_round = False
+        if not is_round:
             continue
 
-        # Find all tables that follow this heading until the next heading
+        round_num += 1
+        print(f"  Round {round_num}: '{text}'")
+
+        # Process all tables between this heading and the next
         for sibling in heading.find_next_siblings():
             if sibling.name in ["h2", "h3"]:
                 break
             if sibling.name == "table":
                 parse_nrl_table(sibling, round_num, results)
-            # Also check for tables nested inside divs/sections
             elif hasattr(sibling, "find_all"):
                 for table in sibling.find_all("table"):
                     parse_nrl_table(table, round_num, results)
@@ -200,6 +191,7 @@ def fetch_nrl_results():
 
 # ============================================================
 # FETCH AFL RESULTS FROM api.squiggle.com.au
+# Only includes games where complete = 100 (fully finished)
 # ============================================================
 def fetch_afl_results():
     results = {}
@@ -218,6 +210,11 @@ def fetch_afl_results():
 
     for game in games:
         try:
+            # CRITICAL: only process fully completed games
+            complete = game.get("complete", 0)
+            if complete != 100:
+                continue
+
             round_num  = str(game.get("round", ""))
             home_raw   = game.get("hteam", "")
             away_raw   = game.get("ateam", "")
@@ -226,6 +223,7 @@ def fetch_afl_results():
 
             if home_score is None or away_score is None:
                 continue
+            # Skip opening round (round 0 in squiggle)
             if round_num == "0":
                 continue
 
@@ -436,6 +434,15 @@ def main():
     print("Fetching AFL results from api.squiggle.com.au...")
     afl_results = fetch_afl_results()
     print(f"  {len(afl_results)} AFL team/round results loaded")
+
+    # ============================================================
+    # SAFETY GUARD — do not push if NRL data is missing
+    # This prevents overwriting good email data with bad scores
+    # ============================================================
+    if len(nrl_results) == 0:
+        print("\n  SAFETY GUARD: NRL results returned 0 — aborting push to protect existing data")
+        print("  The existing competition-data.csv on GitHub is unchanged")
+        return
 
     print("\nReading competition-data.csv from GitHub...")
     competition_csv, comp_sha = github_get("competition-data.csv")
