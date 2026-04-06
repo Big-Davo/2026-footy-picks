@@ -8,12 +8,7 @@ name: Update Tipping Scores
 
 on:
   schedule:
-    # Every hour Thu-Mon AEST (Wed-Sun UTC)
-    # AEST = UTC+10, so 6am-midnight AEST = 8pm-2pm UTC
-    - cron: '0 * * * *'   # every hour, every day
-                           # GitHub Actions filters by day below
-
-  # Allow manual trigger from GitHub website if needed
+    - cron: '0 * * * *'
   workflow_dispatch:
 
 jobs:
@@ -30,7 +25,7 @@ jobs:
           python-version: '3.12'
 
       - name: Install dependencies
-        run: pip install requests
+        run: pip install requests beautifulsoup4
 
       - name: Run score calculator
         env:
