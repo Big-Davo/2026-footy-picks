@@ -87,11 +87,8 @@ AFL_MAP = {
 }
 
 
-def is_round_heading(text):
-    return bool(re.match(r"round\s+\d+", text.strip().lower()))
-
-
-def round_number_from_heading(text):
+def round_number_from_text(text):
+    """Extract round number from heading text like 'Round 4' or 'Round 5 (Easter Round)'"""
     m = re.search(r"round\s+(\d+)", text.strip().lower())
     return int(m.group(1)) if m else None
 
@@ -100,6 +97,7 @@ def round_number_from_heading(text):
 # PARSE ONE NRL TABLE
 # ============================================================
 def parse_nrl_table(table, round_num, results):
+    count = 0
     for row in table.find_all("tr"):
         cells = row.find_all(["td", "th"])
         if len(cells) < 3:
@@ -134,12 +132,14 @@ def parse_nrl_table(table, round_num, results):
         else:
             results[f"{home_team}|{rnd_str}"] = 0
             results[f"{away_team}|{rnd_str}"] = 0
+        count += 1
+    return count
 
 
 # ============================================================
 # FETCH NRL RESULTS FROM WIKIPEDIA
-# The h3 heading is wrapped in a div — we search siblings
-# of that parent div to find the wikitable for each round
+# Finds all wikitables and works backwards to find the round
+# heading that precedes each table
 # ============================================================
 def fetch_nrl_results():
     results = {}
@@ -156,43 +156,28 @@ def fetch_nrl_results():
         print(f"  ERROR fetching NRL Wikipedia page: {e}")
         return results
 
-    # Find all round headings by their span id e.g. id="Round_1"
-    round_spans = soup.find_all("span", id=re.compile(r"^Round_\d+"))
-    print(f"  Found {len(round_spans)} round spans")
+    # Find ALL wikitables on the page
+    all_tables = soup.find_all("table", class_="wikitable")
+    print(f"  Found {len(all_tables)} wikitables on page")
 
-    for span in round_spans:
-        span_id = span.get("id", "")
-        m = re.search(r"Round_(\d+)", span_id)
-        if not m:
-            continue
-        round_num = int(m.group(1))
+    rounds_processed = set()
 
-        # The span is inside an h3, which is inside a div
-        # The wikitable is a sibling of that wrapper div
-        heading = span.find_parent(["h2", "h3"])
+    for table in all_tables:
+        # Find the nearest preceding h2 or h3 heading
+        heading = table.find_previous(["h2", "h3"])
         if not heading:
             continue
 
-        # Walk up to find the container div that wraps the heading
-        container = heading.parent
+        heading_text = heading.get_text().strip()
+        round_num = round_number_from_text(heading_text)
 
-        # Search siblings of the container for wikitables
-        # Stop when we hit the next round heading container
-        tables_found = 0
-        for sibling in container.find_next_siblings():
-            # Stop at next heading wrapper
-            if sibling.find(["h2", "h3"]):
-                break
-            if sibling.name == "table":
-                parse_nrl_table(sibling, round_num, results)
-                tables_found += 1
-            # Also check tables inside divs
-            for table in sibling.find_all("table"):
-                parse_nrl_table(table, round_num, results)
-                tables_found += 1
+        if round_num is None:
+            continue
 
-        if round_num <= 5:
-            print(f"  Round {round_num}: {tables_found} tables processed")
+        count = parse_nrl_table(table, round_num, results)
+        if count > 0 and round_num not in rounds_processed:
+            print(f"  Round {round_num}: {count} matches parsed")
+            rounds_processed.add(round_num)
 
     return results
 
