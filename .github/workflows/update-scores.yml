@@ -1,0 +1,38 @@
+# ============================================================
+# Footy Tipping — Hourly Score Update
+# Runs every hour Thursday to Monday (peak footy days)
+# and every 6 hours Tuesday and Wednesday (off-peak)
+# ============================================================
+
+name: Update Tipping Scores
+
+on:
+  schedule:
+    # Every hour Thu-Mon AEST (Wed-Sun UTC)
+    # AEST = UTC+10, so 6am-midnight AEST = 8pm-2pm UTC
+    - cron: '0 * * * *'   # every hour, every day
+                           # GitHub Actions filters by day below
+
+  # Allow manual trigger from GitHub website if needed
+  workflow_dispatch:
+
+jobs:
+  update-scores:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Run score calculator
+        env:
+          GITHUB_TOKEN: ${{ secrets.SCORING_TOKEN }}
+        run: python scores.py
