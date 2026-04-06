@@ -23,7 +23,7 @@ GITHUB_TOKEN = os.environ["GITHUB_TOKEN"]
 GITHUB_REPO  = "Big-Davo/2026-footy-picks"
 GITHUB_API   = "https://api.github.com"
 
-NRL_API_URL  = "https://api.nrl.com/v2/draw?competition=111&season=2026"
+NRL_WIKI_URL = "https://en.wikipedia.org/w/api.php?action=parse&page=2026_NRL_season_results&prop=wikitext&format=json"
 AFL_API_URL  = "https://api.squiggle.com.au/?q=games;year=2026"
 
 FRIENDS = [
