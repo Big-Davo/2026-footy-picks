@@ -160,31 +160,48 @@ def fetch_nrl_results():
 
     round_num = 0
 
-    headings = content.find_all(["h2", "h3"])
-    print(f"  Found {len(headings)} headings on Wikipedia page")
+    # Modern Wikipedia uses <section> tags wrapping each h2 + its content
+    sections = content.find_all("section")
+    print(f"  Found {len(sections)} sections on Wikipedia page")
 
-    for heading in headings:
-        headline = heading.find("span", {"class": "mw-headline"})
-        text = headline.get_text().strip() if headline else heading.get_text().strip()
-        text_lower = text.lower()
-
-        # Only process sections with a month name (these are the round sections)
-        is_round = any(m in text_lower for m in MONTHS_LOWER)
-        if not is_round:
-            continue
-
-        round_num += 1
-        print(f"  Round {round_num}: '{text}'")
-
-        # Process all tables between this heading and the next
-        for sibling in heading.find_next_siblings():
-            if sibling.name in ["h2", "h3"]:
-                break
-            if sibling.name == "table":
-                parse_nrl_table(sibling, round_num, results)
-            elif hasattr(sibling, "find_all"):
-                for table in sibling.find_all("table"):
+    if sections:
+        for section in sections:
+            heading = section.find(["h2", "h3"])
+            if not heading:
+                continue
+            text = heading.get_text().strip()
+            text_lower = text.lower()
+            if not any(m in text_lower for m in MONTHS_LOWER):
+                continue
+            round_num += 1
+            print(f"  Round {round_num}: '{text}'")
+            for table in section.find_all("table"):
+                parse_nrl_table(table, round_num, results)
+    else:
+        # Fallback for older Wikipedia HTML structure
+        print("  No sections found — trying heading siblings approach")
+        headings = content.find_all(["h2", "h3"])
+        print(f"  Found {len(headings)} headings")
+        for heading in headings:
+            text = heading.get_text().strip()
+            if not any(m in text.lower() for m in MONTHS_LOWER):
+                continue
+            round_num += 1
+            print(f"  Round {round_num}: '{text}'")
+            # Check parent section first
+            parent = heading.parent
+            if parent and parent.name == "section":
+                for table in parent.find_all("table"):
                     parse_nrl_table(table, round_num, results)
+            else:
+                for sibling in heading.find_next_siblings():
+                    if sibling.name in ["h2", "h3"]:
+                        break
+                    if sibling.name == "table":
+                        parse_nrl_table(sibling, round_num, results)
+                    elif hasattr(sibling, "find_all"):
+                        for table in sibling.find_all("table"):
+                            parse_nrl_table(table, round_num, results)
 
     return results
 
