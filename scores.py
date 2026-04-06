@@ -104,8 +104,6 @@ def parse_nrl_table(table, round_num, results):
         score_raw = cells[1].get_text(strip=True)
         away_raw  = cells[2].get_text(strip=True)
 
-        # Score must contain digits and a dash (en/em/hyphen)
-        # e.g. "28-18" or "15-14*"
         score_match = re.search(r"(\d+)\s*[\u2013\u2014\-]\s*(\d+)", score_raw)
         if not score_match:
             continue
@@ -113,7 +111,6 @@ def parse_nrl_table(table, round_num, results):
         home_score = int(score_match.group(1))
         away_score = int(score_match.group(2))
 
-        # Skip if both scores are 0 (likely a header or empty row)
         if home_score == 0 and away_score == 0:
             continue
 
@@ -160,7 +157,6 @@ def fetch_nrl_results():
 
     round_num = 0
 
-    # Modern Wikipedia uses <section> tags wrapping each h2 + its content
     sections = content.find_all("section")
     print(f"  Found {len(sections)} sections on Wikipedia page")
 
@@ -178,17 +174,20 @@ def fetch_nrl_results():
             for table in section.find_all("table"):
                 parse_nrl_table(table, round_num, results)
     else:
-        # Fallback for older Wikipedia HTML structure
-        print("  No sections found — trying heading siblings approach")
+        # Fallback — print ALL heading texts so we can see the format
         headings = content.find_all(["h2", "h3"])
-        print(f"  Found {len(headings)} headings")
+        print(f"  No sections found — trying heading siblings approach")
+        print(f"  Found {len(headings)} headings — printing first 15:")
+        for h in headings[:15]:
+            print(f"    [{h.get_text().strip()[:80]}]")
+
         for heading in headings:
             text = heading.get_text().strip()
-            if not any(m in text.lower() for m in MONTHS_LOWER):
+            text_lower = text.lower()
+            if not any(m in text_lower for m in MONTHS_LOWER):
                 continue
             round_num += 1
             print(f"  Round {round_num}: '{text}'")
-            # Check parent section first
             parent = heading.parent
             if parent and parent.name == "section":
                 for table in parent.find_all("table"):
@@ -227,7 +226,6 @@ def fetch_afl_results():
 
     for game in games:
         try:
-            # CRITICAL: only process fully completed games
             complete = game.get("complete", 0)
             if complete != 100:
                 continue
@@ -240,7 +238,6 @@ def fetch_afl_results():
 
             if home_score is None or away_score is None:
                 continue
-            # Skip opening round (round 0 in squiggle)
             if round_num == "0":
                 continue
 
@@ -401,14 +398,12 @@ def calculate_scores(competition_csv, nrl_results, afl_results):
         row[rd_col]    = str(rd_score)
         updated_rows.append(row)
 
-    # Sort by total score descending
     data_rows = updated_rows[1:]
     data_rows.sort(
         key=lambda r: int(r[total_col]) if r and len(r) > total_col and r[total_col].lstrip("-").isdigit() else 0,
         reverse=True
     )
 
-    # Update rank columns
     for i, row in enumerate(data_rows):
         if not row:
             continue
@@ -452,10 +447,7 @@ def main():
     afl_results = fetch_afl_results()
     print(f"  {len(afl_results)} AFL team/round results loaded")
 
-    # ============================================================
     # SAFETY GUARD — do not push if NRL data is missing
-    # This prevents overwriting good email data with bad scores
-    # ============================================================
     if len(nrl_results) == 0:
         print("\n  SAFETY GUARD: NRL results returned 0 — aborting push to protect existing data")
         print("  The existing competition-data.csv on GitHub is unchanged")
