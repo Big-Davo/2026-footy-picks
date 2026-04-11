@@ -1,8 +1,8 @@
 Position,Team,Played,Win,Loss,Draw,%Won,Points,For,Against,Percentage,Movement,Streak
-1,Western Bulldogs,4,4,0,0,1,16,438,312,1.4038,0,Won 4
-2,Fremantle Dockers,5,4,1,0,0.8,16,444,338,1.3136,2,Won 4
-3,Sydney Swans,4,3,1,0,0.75,12,481,263,1.8289,-1,Won 1
-4,Gold Coast Suns,4,3,1,0,0.75,12,473,310,1.5258,-1,Lost 1
+1,Sydney Swans,5,4,1,0,0.8,16,581,331,1.7553,1,Won 2
+2,Western Bulldogs,4,4,0,0,1,16,438,312,1.4038,-1,Won 4
+3,Fremantle Dockers,5,4,1,0,0.8,16,444,338,1.3136,1,Won 4
+4,Gold Coast Suns,5,3,2,0,0.6,12,541,410,1.3195,-1,Lost 2
 5,Brisbane Lions,5,3,2,0,0.6,12,490,426,1.1502,4,Won 3
 6,Hawthorn Hawks,4,3,1,0,0.75,12,431,378,1.1402,0,Won 3
 7,North Melbourne Kangaroos,5,3,2,0,0.6,12,450,425,1.0588,-2,Lost 1
