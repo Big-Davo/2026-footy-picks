@@ -50,12 +50,13 @@
         .col-team-s { flex: 1; min-width: 70px; text-align: left; padding-left: 4px; }
         .col-score-s { flex: 0 0 52px; }
         .col-arrow-s { flex: 0 0 20px; }
-        .col-pos { flex: 0 0 30px; }
-        .col-team-name { flex: 1; min-width: 100px; text-align: left; padding-left: 5px; font-size: 11px; }
-        .col-played { flex: 0 0 26px; }
-        .col-won { flex: 0 0 26px; }
-        .col-pts { flex: 0 0 26px; }
-        .col-diff { flex: 0 0 40px; }
+        .col-pos { flex: 0 0 28px; }
+        .col-team-name { flex: 1; min-width: 80px; text-align: left; padding-left: 5px; font-size: 11px; }
+        .col-played { flex: 0 0 22px; }
+        .col-won { flex: 0 0 22px; }
+        .col-pts { flex: 0 0 22px; }
+        .col-diff { flex: 0 0 30px; }
+        .col-tips { flex: 0 0 36px; }
         .table-container { max-height: 400px; overflow-y: auto; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); background: white; }
         .table-container-friends { border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); background: white; }
         .table-header { position: sticky; top: 0; z-index: 10; display: flex; background-color: #34495e; padding: 8px 6px; border-radius: 8px 8px 0 0; }
@@ -234,6 +235,7 @@
                         <div class="table-header-text-sm col-won">L</div>
                         <div class="table-header-text-sm col-pts">Pts</div>
                         <div class="table-header-text-sm col-diff">+/-</div>
+                        <div class="table-header-text-sm col-tips">Tips</div>
                     </div>
                     <div id="nrlLadderTable"></div>
                 </div>
@@ -251,6 +253,7 @@
                         <div class="table-header-text-sm col-won">L</div>
                         <div class="table-header-text-sm col-pts">Pts</div>
                         <div class="table-header-text-sm col-diff">%</div>
+                        <div class="table-header-text-sm col-tips">Tips</div>
                     </div>
                     <div id="aflLadderTable"></div>
                 </div>
@@ -716,12 +719,23 @@
             }
         }
 
+        // NRL ladder short names → PPW for Tips column
+        var NRL_LADDER_PPW = {
+            "Broncos": 5, "Panthers": 6, "Storm": 7, "Roosters": 7,
+            "Bulldogs": 9, "Raiders": 10, "Sharks": 10, "Rabbitohs": 11,
+            "Dolphins": 11, "Eels": 12, "Warriors": 13, "Sea Eagles": 14,
+            "Cowboys": 15, "Wests Tigers": 16, "Titans": 19, "Knights": 19,
+            "Dragons": 19
+        };
+
         function renderNRLLadder() {
             var c = document.getElementById('nrlLadderTable');
             if (nrlLadder.length===0){c.innerHTML='<p style="padding:20px;text-align:center;color:#7f8c8d;">NRL ladder loading...</p>';return;}
             var html = '';
             for (var i = 0; i < nrlLadder.length; i++) {
                 var t = nrlLadder[i], rs = i<8?'style="border-left:3px solid #27ae60;"':'';
+                var ppw = NRL_LADDER_PPW[t.team] || 0;
+                var tips = (parseInt(t.wins) || 0) * ppw;
                 html += '<div class="table-row-ladder" '+rs+'>';
                 html += '<div class="table-cell-sm col-pos">'+t.pos+'</div>';
                 html += '<div class="table-cell-sm col-team-name">'+t.team+'</div>';
@@ -729,7 +743,9 @@
                 html += '<div class="table-cell-sm col-won">'+t.wins+'</div>';
                 html += '<div class="table-cell-sm col-won">'+t.lost+'</div>';
                 html += '<div class="table-cell-sm col-pts">'+t.points+'</div>';
-                html += '<div class="table-cell-sm col-diff">'+t.diff+'</div></div>';
+                html += '<div class="table-cell-sm col-diff">'+t.diff+'</div>';
+                html += '<div class="table-cell-sm col-tips" style="font-weight:bold;color:#2980b9;">'+tips+'</div>';
+                html += '</div>';
             }
             c.innerHTML = html;
         }
@@ -740,9 +756,10 @@
             var html = '';
             for (var i = 0; i < aflLadder.length; i++) {
                 var t = aflLadder[i], rs = i<8?'style="border-left:3px solid #27ae60;"':'';
-                // FIX: convert decimal to % display
                 var pct = parseFloat(t.percentage);
                 var pctDisplay = isNaN(pct) ? t.percentage : (pct * 100).toFixed(1) + '%';
+                var ppw = AFL_PPW[t.team] || 0;
+                var tips = (parseInt(t.wins) || 0) * ppw;
                 html += '<div class="table-row-ladder" '+rs+'>';
                 html += '<div class="table-cell-sm col-pos">'+t.pos+'</div>';
                 html += '<div class="table-cell-sm col-team-name">'+t.team+'</div>';
@@ -750,7 +767,9 @@
                 html += '<div class="table-cell-sm col-won">'+t.wins+'</div>';
                 html += '<div class="table-cell-sm col-won">'+t.losses+'</div>';
                 html += '<div class="table-cell-sm col-pts">'+t.points+'</div>';
-                html += '<div class="table-cell-sm col-diff">'+pctDisplay+'</div></div>';
+                html += '<div class="table-cell-sm col-diff">'+pctDisplay+'</div>';
+                html += '<div class="table-cell-sm col-tips" style="font-weight:bold;color:#2980b9;">'+tips+'</div>';
+                html += '</div>';
             }
             c.innerHTML = html;
         }
