@@ -255,16 +255,9 @@ def compute_scores(rows, nrl_results, afl_results):
         row[7] = str(rd_score)
         scored.append(row)
 
-    # Sort by total descending and update ranks
-    scored.sort(key=lambda r: int(r[5]) if str(r[5]).lstrip("-").isdigit() else 0, reverse=True)
-    for i, row in enumerate(scored, start=1):
-        try:
-            change = int(row[0]) - i if row[0] and row[0] != "-" else 0
-        except (ValueError, TypeError):
-            change = 0
-        row[0] = str(i)
-        row[2] = str(change)
-
+    # NOTE: Rank (col 0), LW (col 1), and +/- (col 2) are intentionally NOT updated here.
+    # Those are only set by the official weekly email via VBA Master_Run.
+    # scores.py only updates scores — Total, PRT, Rd, and individual team scores.
     return [header] + scored
 
 
