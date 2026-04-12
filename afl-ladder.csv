@@ -10,10 +10,10 @@ Position,Team,Played,Win,Loss,Draw,%Won,Points,For,Against,Percentage,Movement,S
 9,Melbourne Demons,5,3,2,0,0.6,12,467,504,0.9266,-2,Lost 1
 10,Port Adelaide Power,4,2,2,0,0.5,8,380,323,1.1765,-2,Won 1
 11,Adelaide Crows,5,2,3,0,0.4,8,431,405,1.0642,2,Won 1
-12,Collingwood Magpies,5,2,3,0,0.4,8,348,377,0.9231,-2,Lost 2
-13,West Coast Eagles,5,2,3,0,0.4,8,386,600,0.6433,-1,Lost 2
-14,St Kilda Saints,4,1,3,0,0.25,4,331,385,0.8597,0,Lost 1
-15,GWS Giants,4,1,3,0,0.25,4,303,394,0.769,1,Lost 3
+12,GWS Giants,5,2,3,0,0.4,8,434,469,0.9254,4,Won 1
+13,Collingwood Magpies,5,2,3,0,0.4,8,348,377,0.9231,-3,Lost 2
+14,West Coast Eagles,5,2,3,0,0.4,8,386,600,0.6433,-2,Lost 2
+15,St Kilda Saints,4,1,3,0,0.25,4,331,385,0.8597,-1,Lost 1
 16,Carlton Blues,5,1,4,0,0.2,4,393,513,0.7661,-1,Lost 3
 17,Essendon Bombers,5,1,4,0,0.2,4,400,526,0.7605,0,Won 1
-18,Richmond Tigers,4,0,4,0,0,0,222,396,0.5606,0,Lost 4
+18,Richmond Tigers,5,0,5,0,0,0,297,527,0.5636,0,Lost 5
