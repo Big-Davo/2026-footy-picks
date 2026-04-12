@@ -6,12 +6,12 @@ Position,Team,Played,Win,Loss,Draw,%Won,Points,For,Against,Percentage,Movement,S
 5,Gold Coast Suns,5,3,2,0,0.6,12,541,410,1.3195,-2,Lost 2
 6,Brisbane Lions,5,3,2,0,0.6,12,490,426,1.1502,3,Won 3
 7,North Melbourne Kangaroos,5,3,2,0,0.6,12,450,425,1.0588,-2,Lost 1
-8,Melbourne Demons,5,3,2,0,0.6,12,467,504,0.9266,-1,Lost 1
-9,Port Adelaide Power,4,2,2,0,0.5,8,380,323,1.1765,-1,Won 1
-10,Adelaide Crows,5,2,3,0,0.4,8,431,405,1.0642,3,Won 1
-11,Collingwood Magpies,5,2,3,0,0.4,8,348,377,0.9231,-1,Lost 2
-12,Geelong Cats,4,2,2,0,0.5,8,338,377,0.8966,-1,Lost 1
-13,West Coast Eagles,4,2,2,0,0.5,8,310,478,0.6485,-1,Lost 1
+8,Geelong Cats,5,3,2,0,0.6,12,460,453,1.0155,3,Won 1
+9,Melbourne Demons,5,3,2,0,0.6,12,467,504,0.9266,-2,Lost 1
+10,Port Adelaide Power,4,2,2,0,0.5,8,380,323,1.1765,-2,Won 1
+11,Adelaide Crows,5,2,3,0,0.4,8,431,405,1.0642,2,Won 1
+12,Collingwood Magpies,5,2,3,0,0.4,8,348,377,0.9231,-2,Lost 2
+13,West Coast Eagles,5,2,3,0,0.4,8,386,600,0.6433,-1,Lost 2
 14,St Kilda Saints,4,1,3,0,0.25,4,331,385,0.8597,0,Lost 1
 15,GWS Giants,4,1,3,0,0.25,4,303,394,0.769,1,Lost 3
 16,Carlton Blues,5,1,4,0,0.2,4,393,513,0.7661,-1,Lost 3
