@@ -350,14 +350,22 @@ def compute_scores(rows, nrl_results, afl_results, lw_rankings):
     # Sort by total descending to establish current rankings
     scored.sort(key=lambda r: int(r[5]) if str(r[5]).lstrip("-").isdigit() else 0, reverse=True)
 
-    # Assign Rank, LW, and +/- for every tipster
+    # Assign Rank, LW, and +/- for every tipster.
+    # If lw_rankings is empty (no snapshot exists yet), we leave LW and +/-
+    # completely untouched — preserving whatever VBA wrote from the last official
+    # email. We still update Rank because the re-sort above may have changed
+    # positions as scores.py's calculations differ slightly from the email snapshot.
+    # Once a proper snapshot exists, all three columns are fully managed here.
+    have_snapshot = bool(lw_rankings)
     for rank, row in enumerate(scored, start=1):
-        tipster  = row[3]
-        lw       = lw_rankings.get(tipster)    # None if no snapshot exists yet
-        row[0]   = str(rank)                   # current Rank
-        row[1]   = str(lw) if lw else "-"      # LW from snapshot
-        # +/-: positive means moved UP (smaller rank number = better position)
-        row[2]   = str(lw - rank) if lw else "0"
+        tipster = row[3]
+        row[0]  = str(rank)     # always update Rank (reflects current sort order)
+        if have_snapshot:
+            lw      = lw_rankings.get(tipster)
+            row[1]  = str(lw) if lw else "-"
+            # positive +/- means moved UP (lower rank number = better position)
+            row[2]  = str(lw - rank) if lw else "0"
+        # else: leave row[1] (LW) and row[2] (+/-) exactly as they came from the CSV
 
     return [header] + scored
 
