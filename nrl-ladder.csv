@@ -1,8 +1,8 @@
 Pos,Team,Pos_1,Column1,played,points,wins,drawn,lost,byes,for,against,diff.,home,away,form,Next
 1,,1,Panthers,7,12,6,0,1,0,229,94,135,3 - 0,3 - 1,4 - 1,Knights
-2,,2,Wests Tigers,7,12,5,0,2,1,209,127,82,3 - 1,2 - 1,4 - 1,Sharks
-3,,3,Roosters,7,12,5,0,2,1,215,178,37,2 - 1,3 - 1,4 - 0,Broncos
-4,,4,Warriors,7,10,5,0,2,0,222,138,84,3 - 1,2 - 1,3 - 2,Dolphins
+2,,2,Warriors,8,12,6,0,2,0,242,156,86,4 - 1,2 - 1,3 - 2,Eels
+3,,3,Wests Tigers,7,12,5,0,2,1,209,127,82,3 - 1,2 - 1,4 - 1,Sharks
+4,,4,Roosters,7,12,5,0,2,1,215,178,37,2 - 1,3 - 1,4 - 0,Broncos
 5,,5,Rabbitohs,6,10,4,0,2,1,174,144,30,3 - 1,1 - 1,3 - 1,Storm
 6,,6,Broncos,8,10,5,0,3,0,186,171,15,2 - 3,3 - 0,4 - 1,Roosters
 7,,7,Cowboys,8,10,5,0,3,0,211,215,-4,3 - 1,2 - 2,4 - 1,Bulldogs
@@ -10,8 +10,8 @@ Pos,Team,Pos_1,Column1,played,points,wins,drawn,lost,byes,for,against,diff.,home
 9,,9,Knights,7,8,4,0,3,0,178,180,-2,2 - 1,2 - 2,2 - 3,Panthers
 10,,10,Sharks,7,8,3,0,4,1,192,198,-6,2 - 2,1 - 2,2 - 2,Wests Tigers
 11,,11,Bulldogs,7,8,3,0,4,1,133,166,-33,2 - 1,1 - 3,1 - 4,Cowboys
-12,,12,Dolphins,6,6,2,0,4,1,138,165,-27,1 - 3,1 - 1,1 - 3,Warriors
-13,,13,Titans,7,6,2,0,5,1,146,176,-30,1 - 1,1 - 4,2 - 3,BYE
+12,,12,Dolphins,7,6,2,0,5,1,156,185,-29,1 - 3,1 - 2,0 - 4,Storm
+13,,13,Titans,7,6,2,0,5,1,146,176,-30,1 - 1,1 - 4,2 - 2,BYE
 14,,14,Raiders,8,6,3,0,5,0,155,237,-82,1 - 2,2 - 3,2 - 3,Titans
 15,,15,Eels,7,6,3,0,4,0,162,246,-84,2 - 2,1 - 2,2 - 3,Sea Eagles
 16,,16,Storm,7,4,2,0,5,0,182,184,-2,1 - 2,1 - 3,0 - 5,Rabbitohs
