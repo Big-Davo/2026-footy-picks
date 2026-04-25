@@ -1,7 +1,7 @@
 Position,Team,Played,Win,Loss,Draw,%Won,Points,For,Against,Percentage,Movement,Streak
 1,Sydney Swans,7,6,1,0,0.8571,24,814,457,1.7812,0,Won 4
-2,Hawthorn Hawks,7,6,1,0,0.8571,24,736,591,1.2453,1,Won 6
-3,Fremantle Dockers,6,5,1,0,0.8333,20,541,379,1.4274,-1,Won 5
+2,Fremantle Dockers,7,6,1,0,0.8571,24,644,468,1.3761,0,Won 6
+3,Hawthorn Hawks,7,6,1,0,0.8571,24,736,591,1.2453,0,Won 6
 4,Melbourne Demons,7,5,2,0,0.7143,20,697,678,1.028,4,Won 2
 5,North Melbourne Kangaroos,6,4,2,0,0.6667,16,580,480,1.2083,0,Won 1
 6,Gold Coast Suns,7,4,3,0,0.5714,16,723,632,1.144,-2,Lost 1
@@ -14,6 +14,6 @@ Position,Team,Played,Win,Loss,Draw,%Won,Points,For,Against,Percentage,Movement,S
 13,St Kilda Saints,6,2,4,0,0.3333,8,514,555,0.9261,0,Lost 1
 14,GWS Giants,6,2,4,0,0.3333,8,500,576,0.8681,0,Lost 1
 15,West Coast Eagles,6,2,4,0,0.3333,8,427,697,0.6126,0,Lost 3
-16,Carlton Blues,6,1,5,0,0.1667,4,476,601,0.792,0,Lost 4
+16,Carlton Blues,7,1,6,0,0.1429,4,565,704,0.8026,0,Lost 5
 17,Essendon Bombers,7,1,6,0,0.1429,4,570,782,0.7289,0,Lost 2
 18,Richmond Tigers,7,0,7,0,0,0,424,783,0.5415,0,Lost 7
