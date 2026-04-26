@@ -10,10 +10,10 @@ Position,Team,Played,Win,Loss,Draw,%Won,Points,For,Against,Percentage,Movement,S
 9,Western Bulldogs,7,4,3,0,0.5714,16,618,673,0.9183,-2,Lost 3
 10,Port Adelaide Power,7,3,4,0,0.4286,12,628,558,1.1254,2,Won 1
 11,Brisbane Lions,6,3,3,0,0.5,12,592,530,1.117,-2,Lost 1
-12,Adelaide Crows,6,3,3,0,0.5,12,534,507,1.0533,-2,Won 2
-13,St Kilda Saints,6,2,4,0,0.3333,8,514,555,0.9261,0,Lost 1
+12,St Kilda Saints,7,3,4,0,0.4286,12,657,597,1.1005,1,Won 1
+13,Adelaide Crows,6,3,3,0,0.5,12,534,507,1.0533,-3,Won 2
 14,GWS Giants,6,2,4,0,0.3333,8,500,576,0.8681,0,Lost 1
-15,West Coast Eagles,6,2,4,0,0.3333,8,427,697,0.6126,0,Lost 3
+15,West Coast Eagles,7,2,5,0,0.2857,8,469,840,0.5583,0,Lost 4
 16,Carlton Blues,7,1,6,0,0.1429,4,565,704,0.8026,0,Lost 5
 17,Essendon Bombers,7,1,6,0,0.1429,4,570,782,0.7289,0,Lost 2
 18,Richmond Tigers,7,0,7,0,0,0,424,783,0.5415,0,Lost 7
