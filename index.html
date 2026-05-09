@@ -372,6 +372,10 @@
             "Cowboys":15,"Wests Tigers":16,"Titans":19,"Knights":19,"Dragons":19
         };
 
+        function logoImg(map, name) {
+            var f = map[name];
+            return f ? '<img src="' + f + '" class="ladder-logo" onerror="this.style.display=\'none\'">' : '';
+        }
         var NRL_LOGO = {
             "Broncos":"nrl-broncos.png","Panthers":"nrl-panthers.png",
             "Storm":"nrl-storm.png","Roosters":"nrl-roosters.png",
@@ -618,7 +622,7 @@
                 var rs = borderStyle ? 'style="'+borderStyle+'"' : '';
                 return '<div class="table-row-ladder'+rowClass+'" '+rs+'>'+
                     '<div class="table-cell-sm col-pos">'+t.pos+'</div>'+
-                    '<div class="table-cell-sm col-team-name">'+(NRL_LOGO[t.team]?'<img src="'+NRL_LOGO[t.team]+'" class="ladder-logo" onerror="this.style.display=\'none\'">':\'\')+t.team+'</div>'+
+                    '<div class="table-cell-sm col-team-name">'+logoImg(NRL_LOGO,t.team)+t.team+'</div>'+
                     '<div class="table-cell-sm col-played">'+t.played+'</div>'+
                     '<div class="table-cell-sm col-won">'+t.wins+'</div>'+
                     '<div class="table-cell-sm col-won">'+t.lost+'</div>'+
@@ -645,7 +649,7 @@
                 var rs = borderStyle ? 'style="'+borderStyle+'"' : '';
                 return '<div class="table-row-ladder'+rowClass+'" '+rs+'>'+
                     '<div class="table-cell-sm col-pos">'+t.pos+'</div>'+
-                    '<div class="table-cell-sm col-team-name">'+(AFL_LOGO[t.team]?'<img src="'+AFL_LOGO[t.team]+'" class="ladder-logo" onerror="this.style.display=\'none\'">':\'\')+t.team+'</div>'+
+                    '<div class="table-cell-sm col-team-name">'+logoImg(AFL_LOGO,t.team)+t.team+'</div>'+
                     '<div class="table-cell-sm col-played">'+t.played+'</div>'+
                     '<div class="table-cell-sm col-won">'+t.wins+'</div>'+
                     '<div class="table-cell-sm col-won">'+t.losses+'</div>'+
