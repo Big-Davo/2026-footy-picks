@@ -59,7 +59,8 @@
 
         /* Ladder columns — slightly tighter to fit Tips column */
         .col-pos { flex: 0 0 28px; }
-        .col-team-name { flex: 1; min-width: 80px; text-align: left; padding-left: 5px; font-size: 11px; }
+        .col-team-name { flex: 1; min-width: 80px; text-align: left; padding-left: 3px; font-size: 11px; display: flex; align-items: center; gap: 4px; }
+        .ladder-logo { width: 22px; height: 22px; object-fit: contain; flex-shrink: 0; }
         .col-played { flex: 0 0 22px; }
         .col-won { flex: 0 0 22px; }
         .col-pts { flex: 0 0 22px; }
@@ -371,6 +372,37 @@
             "Cowboys":15,"Wests Tigers":16,"Titans":19,"Knights":19,"Dragons":19
         };
 
+        var NRL_LOGO = {
+            "Broncos":"nrl-broncos.png","Panthers":"nrl-panthers.png",
+            "Storm":"nrl-storm.png","Roosters":"nrl-roosters.png",
+            "Bulldogs":"nrl-bulldogs.png","Raiders":"nrl-raiders.png",
+            "Sharks":"nrl-sharks.png","Rabbitohs":"nrl-rabbitohs.png",
+            "Dolphins":"nrl-dolphins.png","Eels":"nrl-eels.png",
+            "Warriors":"nrl-warriors.png","Sea Eagles":"nrl-sea-eagles.png",
+            "Cowboys":"nrl-cowboys.png","Wests Tigers":"nrl-wests-tigers.png",
+            "Titans":"nrl-titans.png","Knights":"nrl-knights.png",
+            "Dragons":"nrl-dragons.png"
+        };
+        var AFL_LOGO = {
+            "Adelaide Crows":"afl-adelaide-crows.png",
+            "Brisbane Lions":"afl-brisbane-lions.png",
+            "Carlton Blues":"afl-carlton-blues.png",
+            "Collingwood Magpies":"afl-collingwood-magpies.png",
+            "Essendon Bombers":"afl-essendon-bombers.png",
+            "Fremantle Dockers":"afl-fremantle-dockers.png",
+            "Geelong Cats":"afl-geelong-cats.png",
+            "Gold Coast Suns":"afl-gold-coast-suns.png",
+            "GWS Giants":"afl-gws-giants.png",
+            "Hawthorn Hawks":"afl-hawthorn-hawks.png",
+            "Melbourne Demons":"afl-melbourne-demons.png",
+            "North Melbourne Kangaroos":"afl-north-melbourne-kangaroos.png",
+            "Port Adelaide Power":"afl-port-adelaide-power.png",
+            "Richmond Tigers":"afl-richmond-tigers.png",
+            "St Kilda Saints":"afl-st-kilda-saints.png",
+            "Sydney Swans":"afl-sydney-swans.png",
+            "West Coast Eagles":"afl-west-coast-eagles.png",
+            "Western Bulldogs":"afl-western-bulldogs.png"
+        };
         document.addEventListener('DOMContentLoaded', function() {
             loadDataFromCSV();
             loadFriendsData();
@@ -586,7 +618,7 @@
                 var rs = borderStyle ? 'style="'+borderStyle+'"' : '';
                 return '<div class="table-row-ladder'+rowClass+'" '+rs+'>'+
                     '<div class="table-cell-sm col-pos">'+t.pos+'</div>'+
-                    '<div class="table-cell-sm col-team-name">'+t.team+'</div>'+
+                    '<div class="table-cell-sm col-team-name">'+(NRL_LOGO[t.team]?'<img src="'+NRL_LOGO[t.team]+'" class="ladder-logo" onerror="this.style.display=\'none\'">':\'\')+t.team+'</div>'+
                     '<div class="table-cell-sm col-played">'+t.played+'</div>'+
                     '<div class="table-cell-sm col-won">'+t.wins+'</div>'+
                     '<div class="table-cell-sm col-won">'+t.lost+'</div>'+
@@ -613,7 +645,7 @@
                 var rs = borderStyle ? 'style="'+borderStyle+'"' : '';
                 return '<div class="table-row-ladder'+rowClass+'" '+rs+'>'+
                     '<div class="table-cell-sm col-pos">'+t.pos+'</div>'+
-                    '<div class="table-cell-sm col-team-name">'+t.team+'</div>'+
+                    '<div class="table-cell-sm col-team-name">'+(AFL_LOGO[t.team]?'<img src="'+AFL_LOGO[t.team]+'" class="ladder-logo" onerror="this.style.display=\'none\'">':\'\')+t.team+'</div>'+
                     '<div class="table-cell-sm col-played">'+t.played+'</div>'+
                     '<div class="table-cell-sm col-won">'+t.wins+'</div>'+
                     '<div class="table-cell-sm col-won">'+t.losses+'</div>'+
