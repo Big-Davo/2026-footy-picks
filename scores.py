@@ -5,78 +5,92 @@ scores.py - PPW-based NRL/AFL tipping scorer for GitHub Actions.
 Scoring formula (confirmed from competition Working sheet):
   - Each NRL/AFL team has a fixed PPW (Points Per Win) set at season start.
   - Best teams = small PPW; worst teams = large PPW.
-  - Win  → tipster earns that team's PPW value for that round.
-  - Loss / Bye → tipster earns 0.
+  - Win  -> tipster earns that team's PPW value for that round.
+  - Loss / Bye -> tipster earns 0.
 
 Week alignment:
   Competition Week N = NRL Round N + AFL Round (N-1)
   AFL Opening Round = round index 0 in Squiggle = competition Week 1 AFL component.
 
 Rank / LW / +/- logic:
-  - Rank:  computed each run by sorting all tipsters by current total, descending.
-  - LW:    loaded from rankings-snapshot.json — the saved rankings from the end of
-           the PREVIOUS competition round. This only changes when the NRL round number
-           advances, so LW stays stable throughout a round even as scores update.
-  - +/-:   LW minus Rank (positive = moved up, negative = dropped).
-  - The snapshot is updated automatically whenever a new NRL round is detected.
+  - Rank: computed each run by sorting all tipsters by current total descending.
+  - LW:   loaded from rankings-snapshot.json — the saved rankings from the end of
+          the PREVIOUS competition round. Stable throughout a round; only changes
+          when the NRL round number advances.
+  - +/-:  LW minus Rank (positive = moved up, negative = dropped).
+  - If no snapshot exists yet, LW and +/- are left as-is from the last VBA push.
+
+Ladder colouring:
+  - round-results.json is pushed each run, showing each NRL/AFL team's status
+    in the current round: "won" / "lost" / "pending" (not yet played or bye).
+  - The web app reads this file to colour ladder rows green / red / grey.
 """
 
 import csv, io, json, os, re, base64
 import requests
 from bs4 import BeautifulSoup
 
-# ── PPW VALUES ─────────────────────────────────────────────────────────────────
+# ── PPW VALUES (from competition Working sheet) ────────────────────────────────
 
 AFL_PPW = {
-    "Adelaide Crows": 9,   "Brisbane Lions": 5,        "Carlton Blues": 16,
-    "Collingwood Magpies": 12, "Essendon Bombers": 21, "Fremantle Dockers": 11,
-    "Geelong Cats": 7,     "Gold Coast Suns": 6,        "GWS Giants": 10,
-    "Hawthorn Hawks": 8,   "Melbourne Demons": 20,      "North Melbourne Kangaroos": 22,
-    "Port Adelaide Power": 18, "Richmond Tigers": 24,  "St Kilda Saints": 14,
-    "Sydney Swans": 8,     "West Coast Eagles": 24,     "Western Bulldogs": 10,
+    "Adelaide Crows": 9,        "Brisbane Lions": 5,         "Carlton Blues": 16,
+    "Collingwood Magpies": 12,  "Essendon Bombers": 21,      "Fremantle Dockers": 11,
+    "Geelong Cats": 7,          "Gold Coast Suns": 6,        "GWS Giants": 10,
+    "Hawthorn Hawks": 8,        "Melbourne Demons": 20,      "North Melbourne Kangaroos": 22,
+    "Port Adelaide Power": 18,  "Richmond Tigers": 24,       "St Kilda Saints": 14,
+    "Sydney Swans": 8,          "West Coast Eagles": 24,     "Western Bulldogs": 10,
 }
 
 NRL_PPW = {
-    "Brisbane Broncos": 5,  "Canberra Raiders": 10,    "Canterbury Bulldogs": 9,
-    "Cronulla Sharks": 10,  "Gold Coast Titans": 19,   "Manly Sea Eagles": 14,
-    "Melbourne Storm": 7,   "Newcastle Knights": 19,   "New Zealand Warriors": 13,
-    "North Queensland Cowboys": 15, "Parramatta Eels": 12, "Penrith Panthers": 6,
-    "Redcliffe Dolphins": 11, "South Sydney Rabbitohs": 11,
+    "Brisbane Broncos": 5,      "Canberra Raiders": 10,      "Canterbury Bulldogs": 9,
+    "Cronulla Sharks": 10,      "Gold Coast Titans": 19,     "Manly Sea Eagles": 14,
+    "Melbourne Storm": 7,       "Newcastle Knights": 19,     "New Zealand Warriors": 13,
+    "North Queensland Cowboys": 15, "Parramatta Eels": 12,   "Penrith Panthers": 6,
+    "Redcliffe Dolphins": 11,   "South Sydney Rabbitohs": 11,
     "St George Illawarra Dragons": 19, "Sydney Roosters": 7, "Wests Tigers": 16,
 }
 
-# Wikipedia team name → competition name
+# Wikipedia team name -> competition name
 NRL_NAME_MAP = {
-    "Cronulla-Sutherland Sharks": "Cronulla Sharks",
+    "Cronulla-Sutherland Sharks":  "Cronulla Sharks",
     "Canterbury-Bankstown Bulldogs": "Canterbury Bulldogs",
-    "Dolphins": "Redcliffe Dolphins",
+    "Dolphins":                    "Redcliffe Dolphins",
     "St. George Illawarra Dragons": "St George Illawarra Dragons",
-    "Manly Warringah Sea Eagles": "Manly Sea Eagles",
-    "Brisbane Broncos": "Brisbane Broncos",
-    "Canberra Raiders": "Canberra Raiders",
-    "Gold Coast Titans": "Gold Coast Titans",
-    "Melbourne Storm": "Melbourne Storm",
-    "Newcastle Knights": "Newcastle Knights",
-    "New Zealand Warriors": "New Zealand Warriors",
-    "North Queensland Cowboys": "North Queensland Cowboys",
-    "Parramatta Eels": "Parramatta Eels",
-    "Penrith Panthers": "Penrith Panthers",
-    "South Sydney Rabbitohs": "South Sydney Rabbitohs",
-    "Sydney Roosters": "Sydney Roosters",
-    "Wests Tigers": "Wests Tigers",
+    "Manly Warringah Sea Eagles":  "Manly Sea Eagles",
+    "Brisbane Broncos":            "Brisbane Broncos",
+    "Canberra Raiders":            "Canberra Raiders",
+    "Gold Coast Titans":           "Gold Coast Titans",
+    "Melbourne Storm":             "Melbourne Storm",
+    "Newcastle Knights":           "Newcastle Knights",
+    "New Zealand Warriors":        "New Zealand Warriors",
+    "North Queensland Cowboys":    "North Queensland Cowboys",
+    "Parramatta Eels":             "Parramatta Eels",
+    "Penrith Panthers":            "Penrith Panthers",
+    "South Sydney Rabbitohs":      "South Sydney Rabbitohs",
+    "Sydney Roosters":             "Sydney Roosters",
+    "Wests Tigers":                "Wests Tigers",
 }
 
-# Squiggle API team name → competition name
+# Squiggle API name -> competition name
 AFL_NAME_MAP = {
-    "Adelaide": "Adelaide Crows",           "Brisbane Lions": "Brisbane Lions",
-    "Carlton": "Carlton Blues",             "Collingwood": "Collingwood Magpies",
-    "Essendon": "Essendon Bombers",         "Fremantle": "Fremantle Dockers",
-    "Geelong": "Geelong Cats",              "Gold Coast": "Gold Coast Suns",
-    "Greater Western Sydney": "GWS Giants", "Hawthorn": "Hawthorn Hawks",
-    "Melbourne": "Melbourne Demons",        "North Melbourne": "North Melbourne Kangaroos",
-    "Port Adelaide": "Port Adelaide Power", "Richmond": "Richmond Tigers",
-    "St Kilda": "St Kilda Saints",          "Sydney": "Sydney Swans",
-    "West Coast": "West Coast Eagles",      "Western Bulldogs": "Western Bulldogs",
+    "Adelaide":              "Adelaide Crows",
+    "Brisbane Lions":        "Brisbane Lions",
+    "Carlton":               "Carlton Blues",
+    "Collingwood":           "Collingwood Magpies",
+    "Essendon":              "Essendon Bombers",
+    "Fremantle":             "Fremantle Dockers",
+    "Geelong":               "Geelong Cats",
+    "Gold Coast":            "Gold Coast Suns",
+    "Greater Western Sydney": "GWS Giants",
+    "Hawthorn":              "Hawthorn Hawks",
+    "Melbourne":             "Melbourne Demons",
+    "North Melbourne":       "North Melbourne Kangaroos",
+    "Port Adelaide":         "Port Adelaide Power",
+    "Richmond":              "Richmond Tigers",
+    "St Kilda":              "St Kilda Saints",
+    "Sydney":                "Sydney Swans",
+    "West Coast":            "West Coast Eagles",
+    "Western Bulldogs":      "Western Bulldogs",
 }
 
 GITHUB_TOKEN = os.environ.get("GITHUB_TOKEN", "")
@@ -103,10 +117,9 @@ def normalize_nrl(name):
 
 def get_nrl_results():
     """
-    Fetches the 2026 NRL results page from Wikipedia.
-    Each wikitable = one competition round (in order, table 1 = Round 1 etc).
-    Only rows with a completed score (digits-digits) are counted.
-    Returns: {round_num: set_of_winner_names}
+    Fetches completed NRL results from the 2026 season results Wikipedia page.
+    Each wikitable = one competition round (table 1 = Round 1, etc).
+    Returns: {round_num: {"won": set_of_winners, "lost": set_of_losers}}
     """
     url     = "https://en.wikipedia.org/wiki/2026_NRL_season_results"
     headers = {"User-Agent": "Mozilla/5.0 (compatible; FootyTipping/1.0)"}
@@ -117,35 +130,44 @@ def get_nrl_results():
         print(f"  ERROR fetching NRL Wikipedia: {e}")
         return {}
 
-    soup      = BeautifulSoup(resp.text, "html.parser")
-    tables    = soup.find_all("table", class_="wikitable")
-    score_re  = re.compile(r"^(\d+)\s*[–—\-]\s*(\d+)\*?$")
-    results   = {}
+    soup     = BeautifulSoup(resp.text, "html.parser")
+    tables   = soup.find_all("table", class_="wikitable")
+    score_re = re.compile(r"^(\d+)\s*[-\u2013\u2014]\s*(\d+)\*?$")
+    results  = {}
 
     for round_num, table in enumerate(tables, start=1):
         winners = set()
+        losers  = set()
         for row in table.find_all("tr"):
             cells = row.find_all("td")
             if len(cells) < 3:
                 continue
-            # Score always in second data cell (index 1); normalise dashes
-            raw = cells[1].get_text(strip=True)
-            raw = raw.replace("\u2013", "-").replace("\u2014", "-").replace("\u00a0", "")
+            # Score is always in the second data cell (index 1)
+            raw = cells[1].get_text(strip=True).replace("\u00a0", "")
             m   = score_re.match(raw)
             if not m:
                 continue
-            home_score, away_score = int(m.group(1)), int(m.group(2))
-            home   = normalize_nrl(cells[0].get_text(strip=True))
-            away   = normalize_nrl(cells[2].get_text(strip=True))
-            winner = home if home_score > away_score else (away if away_score > home_score else None)
-            if winner and winner in NRL_PPW:
+            home_score = int(m.group(1))
+            away_score = int(m.group(2))
+            home = normalize_nrl(cells[0].get_text(strip=True))
+            away = normalize_nrl(cells[2].get_text(strip=True))
+            if home_score > away_score:
+                winner, loser = home, away
+            elif away_score > home_score:
+                winner, loser = away, home
+            else:
+                continue   # drawn (shouldn't happen in NRL)
+            if winner in NRL_PPW:
                 winners.add(winner)
-        if winners:
-            results[round_num] = winners
+            if loser in NRL_PPW:
+                losers.add(loser)
 
-    print(f"  NRL: rounds with results → {sorted(results.keys())}")
-    for r, wins in sorted(results.items()):
-        print(f"    Round {r}: {sorted(wins)}")
+        if winners or losers:
+            results[round_num] = {"won": winners, "lost": losers}
+
+    print(f"  NRL: rounds with results -> {sorted(results.keys())}")
+    for r, d in sorted(results.items()):
+        print(f"    Round {r}: {len(d['won'])} won, {len(d['lost'])} lost")
     return results
 
 
@@ -159,8 +181,7 @@ def get_afl_results():
     """
     Fetches all completed AFL games for 2026 from the Squiggle API.
     round=0 = AFL Opening Round = competition Week 1 AFL component.
-    round=N = AFL Round N       = competition Week N+1 AFL component.
-    Returns: {round_num: set_of_winner_names}
+    Returns: {round_num: {"won": set_of_winners, "lost": set_of_losers}}
     """
     url = "https://api.squiggle.com.au/?q=games;year=2026;complete=100"
     try:
@@ -179,22 +200,30 @@ def get_afl_results():
         if round_num is None:
             continue
         round_num = int(round_num)
+
         hteam  = normalize_afl(game.get("hteam", ""))
         ateam  = normalize_afl(game.get("ateam", ""))
         hscore = game.get("hscore") or 0
         ascore = game.get("ascore") or 0
-        if hscore > ascore:
-            winner = hteam
-        elif ascore > hscore:
-            winner = ateam
-        else:
-            continue
-        if winner in AFL_PPW:
-            results.setdefault(round_num, set()).add(winner)
 
-    print(f"  AFL: rounds with results → {sorted(results.keys())}")
-    for r, wins in sorted(results.items()):
-        print(f"    AFL {'OR' if r == 0 else f'R{r}'}: {sorted(wins)}")
+        if hscore > ascore:
+            winner, loser = hteam, ateam
+        elif ascore > hscore:
+            winner, loser = ateam, hteam
+        else:
+            continue   # drawn
+
+        if round_num not in results:
+            results[round_num] = {"won": set(), "lost": set()}
+        if winner in AFL_PPW:
+            results[round_num]["won"].add(winner)
+        if loser in AFL_PPW:
+            results[round_num]["lost"].add(loser)
+
+    print(f"  AFL: rounds with results -> {sorted(results.keys())}")
+    for r, d in sorted(results.items()):
+        label = "OR" if r == 0 else f"R{r}"
+        print(f"    AFL {label}: {len(d['won'])} won, {len(d['lost'])} lost")
     return results
 
 
@@ -202,11 +231,11 @@ def get_afl_results():
 
 def compute_tipster_totals(rows, nrl_results, afl_results, nrl_up_to):
     """
-    Computes the TOTAL score for every tipster up to a specific NRL round.
-    Used for building the LW snapshot — does not modify rows.
+    Computes the total PPW score for every tipster up to a specific NRL round.
+    Used for building the LW snapshot. Does not modify rows.
     Returns: {tipster_name: total_score}
     """
-    afl_up_to = nrl_up_to - 1   # AFL round aligned to this competition week
+    afl_up_to = nrl_up_to - 1
     totals    = {}
 
     for row in rows[1:]:
@@ -218,7 +247,7 @@ def compute_tipster_totals(rows, nrl_results, afl_results, nrl_up_to):
         afl_total = sum(
             AFL_PPW[team] * sum(
                 1 for r in range(0, afl_up_to + 1)
-                if r in afl_results and team in afl_results[r]
+                if r in afl_results and team in afl_results[r]["won"]
             )
             for tc in AFL_TEAM_COLS
             for team in [(row[tc] or "").strip()]
@@ -227,7 +256,7 @@ def compute_tipster_totals(rows, nrl_results, afl_results, nrl_up_to):
         nrl_total = sum(
             NRL_PPW[team] * sum(
                 1 for r in range(1, nrl_up_to + 1)
-                if r in nrl_results and team in nrl_results[r]
+                if r in nrl_results and team in nrl_results[r]["won"]
             )
             for tc in NRL_TEAM_COLS
             for team in [(row[tc] or "").strip()]
@@ -241,13 +270,9 @@ def compute_tipster_totals(rows, nrl_results, afl_results, nrl_up_to):
 def build_rankings(totals):
     """
     Given {tipster: total}, returns {tipster: rank} sorted by score descending.
-    Tipsters with equal scores receive the same rank.
     """
     sorted_scores = sorted(totals.items(), key=lambda x: x[1], reverse=True)
-    rankings      = {}
-    for i, (name, score) in enumerate(sorted_scores, start=1):
-        rankings[name] = i
-    return rankings
+    return {name: i for i, (name, _) in enumerate(sorted_scores, start=1)}
 
 
 # ── SNAPSHOT MANAGEMENT ────────────────────────────────────────────────────────
@@ -255,13 +280,12 @@ def build_rankings(totals):
 def get_rankings_snapshot():
     """
     Loads rankings-snapshot.json from GitHub.
-    The snapshot stores the rankings at the END of the last completed round,
-    so they can be used as LW (Last Week) throughout the following round.
+    Stores the end-of-round rankings so they can be used as LW throughout
+    the following round.
     Returns (snapshot_dict, sha_or_None).
     """
     content, sha = get_github_file("rankings-snapshot.json")
     if content is None:
-        # File doesn't exist yet — first ever run
         print("  No snapshot found — will create on first round transition.")
         return {"lw_round": 0, "rankings": {}}, None
     try:
@@ -272,28 +296,73 @@ def get_rankings_snapshot():
 
 
 def save_rankings_snapshot(snapshot, sha):
-    """
-    Saves rankings-snapshot.json to GitHub.
-    Works for both creating a new file (sha=None) and updating an existing one.
-    """
+    """Saves rankings-snapshot.json to GitHub (creates if new, updates if exists)."""
     content = json.dumps(snapshot, separators=(",", ":"))
     push_github_file("rankings-snapshot.json", content, sha,
                      f"Update rankings snapshot — LW round {snapshot['lw_round']}")
+
+
+# ── ROUND RESULTS FOR LADDER COLOURING ───────────────────────────────────────
+
+def build_round_results(nrl_results, afl_results):
+    """
+    Builds round-results.json content showing each team's status in the
+    current round for ladder row colouring in the web app:
+      "won"     -> green row
+      "lost"    -> red row
+      "pending" -> grey row (not yet played, or on a bye)
+    """
+    nrl_current = max(nrl_results.keys()) if nrl_results else 0
+    # For AFL colouring we use the most recent AFL round available (not the
+    # competition-week-aligned round), so tipsters can see live status.
+    afl_current = max(afl_results.keys()) if afl_results else -1
+
+    # NRL status
+    nrl_status = {}
+    if nrl_current > 0 and nrl_current in nrl_results:
+        won  = nrl_results[nrl_current]["won"]
+        lost = nrl_results[nrl_current]["lost"]
+        for team in NRL_PPW:
+            if   team in won:  nrl_status[team] = "won"
+            elif team in lost: nrl_status[team] = "lost"
+            else:              nrl_status[team] = "pending"
+
+    # AFL status
+    afl_status = {}
+    if afl_current >= 0 and afl_current in afl_results:
+        won  = afl_results[afl_current]["won"]
+        lost = afl_results[afl_current]["lost"]
+        for team in AFL_PPW:
+            if   team in won:  afl_status[team] = "won"
+            elif team in lost: afl_status[team] = "lost"
+            else:              afl_status[team] = "pending"
+
+    return {
+        "nrl_round": nrl_current,
+        "afl_round": afl_current,
+        "nrl": nrl_status,
+        "afl": afl_status,
+    }
 
 
 # ── FULL SCORE COMPUTATION ────────────────────────────────────────────────────
 
 def compute_scores(rows, nrl_results, afl_results, lw_rankings):
     """
-    Computes and writes all seven leaderboard columns for every tipster:
+    Computes and writes all seven leaderboard columns for every tipster.
+
+    Columns written:
       col 0: Rank        — position after sorting by current total
       col 1: LW          — rank from lw_rankings snapshot (previous round)
       col 2: +/-         — LW minus Rank (positive = moved up)
       col 5: TotalScore  — cumulative PPW score across all completed rounds
-      col 6: PRT         — previous round total (total minus this round's Rd)
+      col 6: PRT         — total minus current round score
       col 7: RdScore     — points earned in the current (latest) round only
       cols 9,11,13,15,17 — individual AFL team cumulative scores
       cols 19,21,23,25,27 — individual NRL team cumulative scores
+
+    If lw_rankings is empty (no snapshot yet), LW and +/- are left untouched
+    from whatever VBA wrote, preserving correct values from the last email.
     """
     nrl_current = max(nrl_results.keys())
     afl_current = nrl_current - 1   # AFL round aligned to this competition week
@@ -315,13 +384,14 @@ def compute_scores(rows, nrl_results, afl_results, lw_rankings):
             if not team or team not in AFL_PPW:
                 continue
             ppw  = AFL_PPW[team]
-            wins = sum(1 for r in range(0, afl_current + 1)
-                       if r in afl_results and team in afl_results[r])
-            cum  = wins * ppw
-            row[sc]    = str(cum)
+            wins = sum(
+                1 for r in range(0, afl_current + 1)
+                if r in afl_results and team in afl_results[r]["won"]
+            )
+            cum       = wins * ppw
+            row[sc]   = str(cum)
             afl_total += cum
-            # Does this team win in the CURRENT round? That contributes to Rd score
-            if afl_current in afl_results and team in afl_results[afl_current]:
+            if afl_current in afl_results and team in afl_results[afl_current]["won"]:
                 afl_rd += ppw
 
         # NRL: cumulative score for each of the 5 picked teams
@@ -330,12 +400,14 @@ def compute_scores(rows, nrl_results, afl_results, lw_rankings):
             if not team or team not in NRL_PPW:
                 continue
             ppw  = NRL_PPW[team]
-            wins = sum(1 for r in range(1, nrl_current + 1)
-                       if r in nrl_results and team in nrl_results[r])
-            cum  = wins * ppw
-            row[sc]    = str(cum)
+            wins = sum(
+                1 for r in range(1, nrl_current + 1)
+                if r in nrl_results and team in nrl_results[r]["won"]
+            )
+            cum       = wins * ppw
+            row[sc]   = str(cum)
             nrl_total += cum
-            if nrl_current in nrl_results and team in nrl_results[nrl_current]:
+            if nrl_current in nrl_results and team in nrl_results[nrl_current]["won"]:
                 nrl_rd += ppw
 
         total    = afl_total + nrl_total
@@ -351,21 +423,17 @@ def compute_scores(rows, nrl_results, afl_results, lw_rankings):
     scored.sort(key=lambda r: int(r[5]) if str(r[5]).lstrip("-").isdigit() else 0, reverse=True)
 
     # Assign Rank, LW, and +/- for every tipster.
-    # If lw_rankings is empty (no snapshot exists yet), we leave LW and +/-
-    # completely untouched — preserving whatever VBA wrote from the last official
-    # email. We still update Rank because the re-sort above may have changed
-    # positions as scores.py's calculations differ slightly from the email snapshot.
-    # Once a proper snapshot exists, all three columns are fully managed here.
+    # If no snapshot exists yet, leave LW and +/- untouched (preserve VBA values).
     have_snapshot = bool(lw_rankings)
     for rank, row in enumerate(scored, start=1):
         tipster = row[3]
-        row[0]  = str(rank)     # always update Rank (reflects current sort order)
+        row[0]  = str(rank)   # always update Rank
         if have_snapshot:
-            lw      = lw_rankings.get(tipster)
-            row[1]  = str(lw) if lw else "-"
-            # positive +/- means moved UP (lower rank number = better position)
-            row[2]  = str(lw - rank) if lw else "0"
-        # else: leave row[1] (LW) and row[2] (+/-) exactly as they came from the CSV
+            lw     = lw_rankings.get(tipster)
+            row[1] = str(lw) if lw else "-"
+            # positive = moved up (lower rank number = better position)
+            row[2] = str(lw - rank) if lw else "0"
+        # else: leave row[1] (LW) and row[2] (+/-) exactly as from the CSV
 
     return [header] + scored
 
@@ -390,16 +458,16 @@ def get_github_file(filename):
 def push_github_file(filename, content, sha, message):
     """
     Creates or updates a file on GitHub.
-    If sha is None the file will be created; if sha is provided it will be updated.
+    sha=None -> creates a new file.
+    sha=value -> updates an existing file.
     """
     url     = f"https://api.github.com/repos/{GITHUB_REPO}/contents/{filename}"
     payload = {
         "message": message,
         "content": base64.b64encode(content.encode("utf-8")).decode("ascii"),
     }
-    # sha is required for updates; omit it entirely for new file creation
     if sha:
-        payload["sha"] = sha
+        payload["sha"] = sha   # required for updates; omit for new file creation
 
     resp = requests.put(url, json=payload, headers={
         "Authorization": f"token {GITHUB_TOKEN}",
@@ -407,7 +475,7 @@ def push_github_file(filename, content, sha, message):
         "User-Agent":    "FootyTipping/1.0",
     })
     if resp.status_code in (200, 201):
-        print(f"  Pushed {filename} ✓")
+        print(f"  Pushed {filename} OK")
     else:
         print(f"  ERROR pushing {filename}: {resp.status_code} {resp.text[:300]}")
 
@@ -423,7 +491,7 @@ def rows_to_csv(rows):
 def main():
     print("=== Footy Tipping Scorer (PPW — Full Auto) ===")
 
-    # Step 1: Fetch game results
+    # [1] Fetch game results
     print("\n[1] Fetching NRL results...")
     nrl_results = get_nrl_results()
 
@@ -436,14 +504,14 @@ def main():
 
     current_nrl_round = max(nrl_results.keys())
 
-    # Step 2: Load the LW rankings snapshot
+    # [2] Load LW rankings snapshot
     print("\n[3] Loading rankings snapshot...")
     snapshot, snapshot_sha = get_rankings_snapshot()
     lw_round    = snapshot.get("lw_round", 0)
     lw_rankings = snapshot.get("rankings", {})
-    print(f"  Snapshot is for LW round {lw_round} ({len(lw_rankings)} tipsters stored)")
+    print(f"  Snapshot: LW round {lw_round} ({len(lw_rankings)} tipsters)")
 
-    # Step 3: Load competition data
+    # [3] Load competition data
     print("\n[4] Loading competition-data.csv from GitHub...")
     comp_csv, comp_sha = get_github_file("competition-data.csv")
     if not comp_csv:
@@ -452,10 +520,10 @@ def main():
     rows = list(csv.reader(io.StringIO(comp_csv)))
     print(f"  Loaded {len(rows)-1} tipsters.")
 
-    # Step 4: Check if the NRL round has advanced since the last snapshot.
-    # If current_nrl_round > lw_round + 1, we've moved into a new round and
-    # need to capture the PREVIOUS round's final rankings as the new LW snapshot.
-    # Example: lw_round=5, current=7 → capture round 6 final rankings as LW.
+    # [4] Check if the NRL round has advanced — update LW snapshot if so.
+    # Condition: current_nrl_round > lw_round + 1
+    #   - lw_round=6, current=7: 7>7? No  -> mid-round, LW stays stable (correct)
+    #   - lw_round=6, current=8: 8>7? Yes -> round 8 started, save round 7 as LW
     if current_nrl_round > lw_round + 1:
         snapshot_round = current_nrl_round - 1
         print(f"\n[5] New round detected — saving LW snapshot for round {snapshot_round}...")
@@ -463,49 +531,67 @@ def main():
         lw_rankings  = build_rankings(prev_totals)
         new_snapshot = {"lw_round": snapshot_round, "rankings": lw_rankings}
         save_rankings_snapshot(new_snapshot, snapshot_sha)
-        snapshot_sha = None   # SHA is now stale after the push — reset so next save creates fresh
-        print(f"  Snapshot saved ({len(lw_rankings)} tipsters, LW round = {snapshot_round})")
+        snapshot_sha = None   # SHA stale after push
+        print(f"  Saved: {len(lw_rankings)} tipsters at LW round {snapshot_round}")
     else:
-        print(f"\n[5] Still in round {current_nrl_round} — LW snapshot unchanged (round {lw_round})")
+        print(f"\n[5] Still in round {current_nrl_round} — LW snapshot unchanged "
+              f"(round {lw_round})")
 
-    # Step 5: Compute full scores including Rank, LW, +/-
+    # [5] Compute full scores including Rank, LW, +/-
     print("\n[6] Computing PPW scores and rankings...")
     updated = compute_scores(rows, nrl_results, afl_results, lw_rankings)
 
-    # Step 6: Build friends subset with smart week label
+    # [6] Build friends subset with smart week label
     print("\n[7] Building friends subset...")
     friends_raw, friends_sha = get_github_file("friends-data.csv")
     week_label = ""
     if friends_raw:
         first_line = friends_raw.strip().split("\n")[0]
-        if not first_line.lower().startswith("rank"):   # first line is the week label
+        if not first_line.lower().startswith("rank"):
             week_label = first_line
 
-    # Build a display label that shows when scores.py is running ahead of the
-    # last official email. Examples:
-    #   Official email data only:    "2026 - Footy Tipping week 6"
-    #   scores.py ahead by 1 round:  "2026 - Footy Tipping week 6 \u2192 7 \u21bb"
-    # When VBA processes the next email it resets the label cleanly to "week 7".
-    vba_week_match = re.search(r'week\s*(\d+)', week_label, re.IGNORECASE)
+    # Show transition indicator when scores.py is ahead of the last official email.
+    # e.g. "2026 - Footy Tipping week 6 -> 7 (live)" when NRL is in round 7
+    # but the last official email was for week 6.
+    vba_week_match = re.search(r"week\s*(\d+)", week_label, re.IGNORECASE)
     vba_week       = int(vba_week_match.group(1)) if vba_week_match else 0
     if vba_week and current_nrl_round > vba_week:
-        # scores.py has data beyond the last official email -- show transition indicator
-        display_label = f"2026 - Footy Tipping week {vba_week} \u2192 {current_nrl_round} \u21bb"
+        display_label = (f"2026 - Footy Tipping week {vba_week} "
+                         f"\u2192 {current_nrl_round} \u21bb")
         print(f"  Week label: '{display_label}' (live update in progress)")
     else:
-        # Still on same week as last official email -- keep label unchanged
         display_label = week_label
         print(f"  Week label: '{display_label}' (matches official email)")
 
-    friends_rows    = [updated[0]] + [r for r in updated[1:] if len(r) > 3 and r[3] in FRIENDS]
+    friends_rows    = [updated[0]] + [
+        r for r in updated[1:] if len(r) > 3 and r[3] in FRIENDS
+    ]
     friends_content = (display_label + "\n" if display_label else "") + rows_to_csv(friends_rows)
 
-    # Step 7: Push everything to GitHub
-    print("\n[8] Pushing to GitHub...")
+    # [7] Build round-results.json for ladder colouring
+    print("\n[8] Building round results for ladder colouring...")
+    round_results    = build_round_results(nrl_results, afl_results)
+    rr_content, rr_sha = get_github_file("round-results.json")
+    rr_json          = json.dumps(round_results, separators=(",", ":"))
+    nrl_s = round_results["nrl"]
+    afl_s = round_results["afl"]
+    print(f"  NRL R{round_results['nrl_round']}: "
+          f"{sum(v=='won' for v in nrl_s.values())} won / "
+          f"{sum(v=='lost' for v in nrl_s.values())} lost / "
+          f"{sum(v=='pending' for v in nrl_s.values())} pending")
+    print(f"  AFL R{round_results['afl_round']}: "
+          f"{sum(v=='won' for v in afl_s.values())} won / "
+          f"{sum(v=='lost' for v in afl_s.values())} lost / "
+          f"{sum(v=='pending' for v in afl_s.values())} pending")
+
+    # [8] Push everything to GitHub
+    print("\n[9] Pushing to GitHub...")
     push_github_file("competition-data.csv", rows_to_csv(updated), comp_sha,
                      f"Auto-score update (PPW, NRL R{current_nrl_round})")
-    push_github_file("friends-data.csv",     friends_content,       friends_sha,
+    push_github_file("friends-data.csv",     friends_content,      friends_sha,
                      f"Auto-score update (PPW, NRL R{current_nrl_round})")
+    push_github_file("round-results.json",   rr_json,              rr_sha,
+                     f"Update round results (NRL R{current_nrl_round})")
 
     print("\n=== Done ===")
 
