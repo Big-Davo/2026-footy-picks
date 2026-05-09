@@ -142,6 +142,10 @@
         .drawer-close-btn:active { background: #dde1e4; }
         .tap-hint { font-size: 9px; color: rgba(0,0,0,0.35); text-align: center; margin-bottom: 4px; letter-spacing: 0.3px; }
 
+        /* Ladder row colours for current-round results */
+        .ladder-won     { background-color: #d4edda !important; }
+        .ladder-lost    { background-color: #f8d7da !important; }
+        .ladder-pending { background-color: #e9ecef !important; }
         @media (max-width: 480px) { .title { font-size: 18px; } .table-cell { font-size: 12px; } .nav-button { font-size: 10px; padding: 8px 3px; } }
     </style>
 </head>
@@ -333,6 +337,7 @@
         var nrlTeams   = [];
         var aflTeams   = [];
         var nrlLadder  = [];
+        var roundResults = null;
         var aflLadder  = [];
 
         var friendNames = [
@@ -371,6 +376,7 @@
             loadFriendsData();
             loadNRLLadder();
             loadAFLLadder();
+            loadRoundResults();
             checkExistingLogin();
         });
 
@@ -513,6 +519,31 @@
         function loadNRLLadder(){ fetch('nrl-ladder.csv').then(function(r){return r.text();}).then(parseNRLLadder).catch(function(e){console.error(e);}); }
         function loadAFLLadder(){ fetch('afl-ladder.csv').then(function(r){return r.text();}).then(parseAFLLadder).catch(function(e){console.error(e);}); }
 
+        function loadRoundResults() {
+            fetch('round-results.json?t=' + Date.now())
+                .then(function(r) { if (!r.ok) throw new Error('not found'); return r.json(); })
+                .then(function(data) {
+                    roundResults = data;
+                    // Re-render ladders now that we have round results
+                    renderNRLLadder();
+                    renderAFLLadder();
+                })
+                .catch(function(e) { console.log('Round results not available yet:', e); });
+        }
+
+        // Map short NRL ladder names to full competition names for round-results lookup
+        var NRL_SHORT_TO_FULL = {
+            "Broncos": "Brisbane Broncos",       "Panthers": "Penrith Panthers",
+            "Storm": "Melbourne Storm",           "Roosters": "Sydney Roosters",
+            "Bulldogs": "Canterbury Bulldogs",    "Raiders": "Canberra Raiders",
+            "Sharks": "Cronulla Sharks",          "Rabbitohs": "South Sydney Rabbitohs",
+            "Dolphins": "Redcliffe Dolphins",     "Eels": "Parramatta Eels",
+            "Warriors": "New Zealand Warriors",   "Sea Eagles": "Manly Sea Eagles",
+            "Cowboys": "North Queensland Cowboys","Wests Tigers": "Wests Tigers",
+            "Titans": "Gold Coast Titans",        "Knights": "Newcastle Knights",
+            "Dragons": "St George Illawarra Dragons"
+        };
+
         function parseNRLLadder(csv) {
             try {
                 var lines=csv.trim().split('\n'); if(lines.length<2) return;
@@ -543,9 +574,17 @@
             var c=document.getElementById('nrlLadderTable');
             if(!nrlLadder.length){c.innerHTML='<p style="padding:20px;text-align:center;color:#7f8c8d;">Loading...</p>';return;}
             c.innerHTML = nrlLadder.map(function(t,i){
-                var rs=i<8?'style="border-left:3px solid #27ae60;"':'';
+                var borderStyle=i<8?'border-left:3px solid #27ae60;':'';
                 var tips=(parseInt(t.wins)||0)*(NRL_LADDER_PPW[t.team]||0);
-                return '<div class="table-row-ladder" '+rs+'>'+
+                // Determine row colour from current-round result
+                var rowClass='';
+                if (roundResults && roundResults.nrl) {
+                    var fullName = NRL_SHORT_TO_FULL[t.team] || t.team;
+                    var status   = roundResults.nrl[fullName] || 'pending';
+                    rowClass = status==='won' ? ' ladder-won' : status==='lost' ? ' ladder-lost' : ' ladder-pending';
+                }
+                var rs = borderStyle ? 'style="'+borderStyle+'"' : '';
+                return '<div class="table-row-ladder'+rowClass+'" '+rs+'>'+
                     '<div class="table-cell-sm col-pos">'+t.pos+'</div>'+
                     '<div class="table-cell-sm col-team-name">'+t.team+'</div>'+
                     '<div class="table-cell-sm col-played">'+t.played+'</div>'+
@@ -562,10 +601,17 @@
             var c=document.getElementById('aflLadderTable');
             if(!aflLadder.length){c.innerHTML='<p style="padding:20px;text-align:center;color:#7f8c8d;">Loading...</p>';return;}
             c.innerHTML = aflLadder.map(function(t,i){
-                var rs=i<8?'style="border-left:3px solid #27ae60;"':'';
+                var borderStyle=i<8?'border-left:3px solid #27ae60;':'';
                 var pct=parseFloat(t.percentage), pctD=isNaN(pct)?t.percentage:(pct*100).toFixed(1)+'%';
                 var tips=(parseInt(t.wins)||0)*(AFL_PPW[t.team]||0);
-                return '<div class="table-row-ladder" '+rs+'>'+
+                // Determine row colour from current-round result
+                var rowClass='';
+                if (roundResults && roundResults.afl) {
+                    var status = roundResults.afl[t.team] || 'pending';
+                    rowClass = status==='won' ? ' ladder-won' : status==='lost' ? ' ladder-lost' : ' ladder-pending';
+                }
+                var rs = borderStyle ? 'style="'+borderStyle+'"' : '';
+                return '<div class="table-row-ladder'+rowClass+'" '+rs+'>'+
                     '<div class="table-cell-sm col-pos">'+t.pos+'</div>'+
                     '<div class="table-cell-sm col-team-name">'+t.team+'</div>'+
                     '<div class="table-cell-sm col-played">'+t.played+'</div>'+
