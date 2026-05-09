@@ -11,9 +11,9 @@ Position,Team,Played,Win,Loss,Draw,%Won,Points,For,Against,Percentage,Movement,S
 10,St Kilda Saints,8,4,4,0,0.5,16,765,666,1.1486,-1,Won 2
 11,North Melbourne Kangaroos,9,4,5,0,0.4444,16,861,825,1.0436,-1,Lost 3
 12,Adelaide Crows,8,4,4,0,0.5,16,685,709,0.9661,-1,Won 1
-13,Port Adelaide Power,9,3,6,0,0.3333,12,775,708,1.0946,0,Lost 2
-14,GWS Giants,8,3,5,0,0.375,12,668,757,0.8824,0,Lost 1
+13,GWS Giants,9,4,5,0,0.4444,16,771,846,0.9113,1,Won 1
+14,Port Adelaide Power,9,3,6,0,0.3333,12,775,708,1.0946,-1,Lost 2
 15,West Coast Eagles,8,2,6,0,0.25,8,557,939,0.5932,0,Lost 5
 16,Carlton Blues,9,1,8,0,0.1111,4,723,912,0.7928,0,Lost 7
-17,Essendon Bombers,8,1,7,0,0.125,4,649,925,0.7016,0,Lost 3
+17,Essendon Bombers,9,1,8,0,0.1111,4,738,1028,0.7179,0,Lost 4
 18,Richmond Tigers,8,1,7,0,0.125,4,523,871,0.6005,0,Won 1
