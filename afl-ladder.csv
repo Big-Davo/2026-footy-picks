@@ -7,13 +7,13 @@ Position,Team,Played,Win,Loss,Draw,%Won,Points,For,Against,Percentage,Movement,S
 6,Hawthorn Hawks,10,6,3,1,0.65,26,983,892,1.102,-3,Lost 2
 7,Brisbane Lions,10,6,4,0,0.6,24,1038,890,1.1663,-3,Lost 1
 8,Adelaide Crows,10,6,4,0,0.6,24,916,835,1.097,0,Won 3
-9,Western Bulldogs,9,5,4,0,0.5556,20,794,859,0.9243,0,Won 1
+9,Western Bulldogs,10,5,5,0,0.5,20,856,933,0.9175,0,Lost 1
 10,Collingwood Magpies,10,4,5,1,0.45,18,809,816,0.9914,0,Lost 2
 11,St Kilda Saints,9,4,5,0,0.4444,16,825,755,1.0927,0,Lost 1
 12,North Melbourne Kangaroos,10,4,6,0,0.4,16,926,958,0.9666,0,Lost 4
 13,GWS Giants,9,4,5,0,0.4444,16,771,846,0.9113,0,Won 1
 14,Port Adelaide Power,10,3,7,0,0.3,12,848,806,1.0521,0,Lost 3
-15,West Coast Eagles,9,2,7,0,0.2222,8,624,1038,0.6012,0,Lost 6
-16,Carlton Blues,9,1,8,0,0.1111,4,723,912,0.7928,0,Lost 7
+15,Carlton Blues,10,2,8,0,0.2,8,797,974,0.8183,1,Won 1
+16,West Coast Eagles,9,2,7,0,0.2222,8,624,1038,0.6012,-1,Lost 6
 17,Essendon Bombers,9,1,8,0,0.1111,4,738,1028,0.7179,0,Lost 4
 18,Richmond Tigers,9,1,8,0,0.1111,4,584,969,0.6027,0,Lost 1
