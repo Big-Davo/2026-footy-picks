@@ -3,10 +3,10 @@ Position,Team,Played,Win,Loss,Draw,%Won,Points,For,Against,Percentage,Movement,S
 2,Fremantle Dockers,9,8,1,0,0.8889,32,846,643,1.3157,0,Won 8
 3,Geelong Cats,10,7,3,0,0.7,28,1030,834,1.235,2,Won 3
 4,Gold Coast Suns,10,7,3,0,0.7,28,993,828,1.1993,2,Won 3
-5,Hawthorn Hawks,9,6,2,1,0.7222,26,902,772,1.1684,-2,Lost 1
-6,Brisbane Lions,10,6,4,0,0.6,24,1038,890,1.1663,-2,Lost 1
-7,Adelaide Crows,10,6,4,0,0.6,24,916,835,1.097,1,Won 3
-8,Melbourne Demons,9,6,3,0,0.6667,24,910,876,1.0388,-1,Won 1
+5,Melbourne Demons,10,7,3,0,0.7,28,1030,957,1.0763,2,Won 2
+6,Hawthorn Hawks,10,6,3,1,0.65,26,983,892,1.102,-3,Lost 2
+7,Brisbane Lions,10,6,4,0,0.6,24,1038,890,1.1663,-3,Lost 1
+8,Adelaide Crows,10,6,4,0,0.6,24,916,835,1.097,0,Won 3
 9,Western Bulldogs,9,5,4,0,0.5556,20,794,859,0.9243,0,Won 1
 10,Collingwood Magpies,10,4,5,1,0.45,18,809,816,0.9914,0,Lost 2
 11,St Kilda Saints,9,4,5,0,0.4444,16,825,755,1.0927,0,Lost 1
