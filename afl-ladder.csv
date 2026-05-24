@@ -4,14 +4,14 @@ Position,Team,Played,Win,Loss,Draw,%Won,Points,For,Against,Percentage,Movement,S
 3,Geelong Cats,11,8,3,0,0.7273,32,1137,914,1.244,0,Won 4
 4,Hawthorn Hawks,11,7,3,1,0.6818,30,1058,958,1.1044,2,Won 1
 5,Gold Coast Suns,11,7,4,0,0.6364,28,1098,939,1.1693,-1,Lost 1
-6,Melbourne Demons,10,7,3,0,0.7,28,1030,957,1.0763,-1,Won 2
-7,Brisbane Lions,10,6,4,0,0.6,24,1038,890,1.1663,0,Lost 1
-8,Adelaide Crows,11,6,5,0,0.5455,24,982,910,1.0791,0,Lost 1
-9,Collingwood Magpies,11,5,5,1,0.5,22,901,898,1.0033,2,Won 1
-10,St Kilda Saints,11,5,6,0,0.4545,20,1008,932,1.0815,-1,Lost 1
-11,North Melbourne Kangaroos,11,5,6,0,0.4545,20,1037,1063,0.9755,1,Won 1
-12,Western Bulldogs,10,5,5,0,0.5,20,856,933,0.9175,-2,Lost 1
-13,GWS Giants,10,4,6,0,0.4,16,842,934,0.9015,0,Lost 1
+6,Melbourne Demons,11,7,4,0,0.6364,28,1120,1050,1.0667,-1,Lost 1
+7,Adelaide Crows,11,6,5,0,0.5455,24,982,910,1.0791,1,Lost 1
+8,Brisbane Lions,11,6,5,0,0.5455,24,1126,1056,1.0663,-1,Lost 2
+9,Western Bulldogs,11,6,5,0,0.5455,24,949,1023,0.9277,1,Won 1
+10,Collingwood Magpies,11,5,5,1,0.5,22,901,898,1.0033,1,Won 1
+11,St Kilda Saints,11,5,6,0,0.4545,20,1008,932,1.0815,-2,Lost 1
+12,GWS Giants,11,5,6,0,0.4545,20,1008,1022,0.9863,1,Won 1
+13,North Melbourne Kangaroos,11,5,6,0,0.4545,20,1037,1063,0.9755,-1,Won 1
 14,Port Adelaide Power,11,3,8,0,0.2727,12,906,898,1.0089,0,Lost 4
 15,Carlton Blues,11,3,8,0,0.2727,12,889,1032,0.8614,1,Won 2
 16,West Coast Eagles,11,3,8,0,0.2727,12,794,1201,0.6611,-1,Lost 1
