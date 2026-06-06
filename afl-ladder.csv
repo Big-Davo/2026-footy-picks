@@ -12,8 +12,8 @@ Position,Team,Played,Win,Loss,Draw,%Won,Points,For,Against,Percentage,Movement,S
 11,Collingwood Magpies,12,5,6,1,0.4583,22,994,995,0.999,0,Lost 1
 12,St Kilda Saints,12,5,7,0,0.4167,20,1075,1051,1.0228,0,Lost 2
 13,North Melbourne Kangaroos,12,5,7,0,0.4167,20,1068,1218,0.8768,0,Lost 1
-14,Carlton Blues,12,4,8,0,0.3333,16,977,1116,0.8754,0,Won 3
-15,West Coast Eagles,12,4,8,0,0.3333,16,879,1256,0.6998,0,Won 1
-16,Port Adelaide Power,11,3,8,0,0.2727,12,906,898,1.0089,0,Lost 4
+14,Port Adelaide Power,12,4,8,0,0.3333,16,983,969,1.0144,2,Won 1
+15,Carlton Blues,12,4,8,0,0.3333,16,977,1116,0.8754,-1,Won 3
+16,West Coast Eagles,13,4,9,0,0.3077,16,950,1333,0.7127,-1,Lost 1
 17,Richmond Tigers,12,2,10,0,0.1667,8,787,1304,0.6035,0,Lost 1
 18,Essendon Bombers,12,1,11,0,0.0833,4,910,1291,0.7049,0,Lost 7
