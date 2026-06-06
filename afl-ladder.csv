@@ -4,10 +4,10 @@ Position,Team,Played,Win,Loss,Draw,%Won,Points,For,Against,Percentage,Movement,S
 3,Hawthorn Hawks,13,8,4,1,0.6538,34,1248,1102,1.1325,0,Lost 1
 4,Geelong Cats,13,8,5,0,0.6154,32,1295,1077,1.2024,0,Lost 2
 5,Western Bulldogs,13,8,5,0,0.6154,32,1123,1187,0.9461,2,Won 3
-6,Gold Coast Suns,11,7,4,0,0.6364,28,1098,939,1.1693,-1,Lost 1
+6,Gold Coast Suns,12,7,5,0,0.5833,28,1173,1045,1.1225,-1,Lost 2
 7,Adelaide Crows,12,7,5,0,0.5833,28,1057,984,1.0742,1,Won 1
-8,Melbourne Demons,12,7,5,0,0.5833,28,1190,1169,1.018,-2,Lost 2
-9,Brisbane Lions,12,6,6,0,0.5,24,1204,1159,1.0388,0,Lost 3
+8,Brisbane Lions,13,7,6,0,0.5385,28,1310,1234,1.0616,1,Won 1
+9,Melbourne Demons,12,7,5,0,0.5833,28,1190,1169,1.018,-3,Lost 2
 10,GWS Giants,12,6,6,0,0.5,24,1127,1092,1.0321,0,Won 2
 11,Collingwood Magpies,12,5,6,1,0.4583,22,994,995,0.999,0,Lost 1
 12,St Kilda Saints,12,5,7,0,0.4167,20,1075,1051,1.0228,0,Lost 2
