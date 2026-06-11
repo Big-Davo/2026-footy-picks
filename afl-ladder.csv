@@ -3,17 +3,17 @@ Position,Team,Played,Win,Loss,Draw,%Won,Points,For,Against,Percentage,Movement,S
 2,Sydney Swans,13,11,2,0,0.8462,44,1485,1008,1.4732,0,Won 2
 3,Hawthorn Hawks,13,8,4,1,0.6538,34,1248,1102,1.1325,0,Lost 1
 4,Geelong Cats,13,8,5,0,0.6154,32,1295,1077,1.2024,0,Lost 2
-5,Melbourne Demons,13,8,5,0,0.6154,32,1273,1244,1.0233,1,Won 1
-6,Western Bulldogs,13,8,5,0,0.6154,32,1123,1187,0.9461,1,Won 3
-7,Gold Coast Suns,12,7,5,0,0.5833,28,1173,1045,1.1225,-2,Lost 2
-8,Adelaide Crows,12,7,5,0,0.5833,28,1057,984,1.0742,0,Won 1
+5,Adelaide Crows,13,8,5,0,0.6154,32,1178,1048,1.124,3,Won 2
+6,Melbourne Demons,13,8,5,0,0.6154,32,1273,1244,1.0233,-1,Won 1
+7,Western Bulldogs,14,8,6,0,0.5714,32,1187,1308,0.9075,-1,Lost 1
+8,Gold Coast Suns,12,7,5,0,0.5833,28,1173,1045,1.1225,-1,Lost 2
 9,Brisbane Lions,13,7,6,0,0.5385,28,1310,1234,1.0616,0,Won 1
 10,GWS Giants,12,6,6,0,0.5,24,1127,1092,1.0321,0,Won 2
 11,Collingwood Magpies,13,5,7,1,0.4231,22,1069,1078,0.9917,0,Lost 2
 12,St Kilda Saints,13,5,8,0,0.3846,20,1177,1155,1.019,0,Lost 3
-13,Carlton Blues,13,5,8,0,0.3846,20,1049,1183,0.8867,1,Won 4
-14,North Melbourne Kangaroos,12,5,7,0,0.4167,20,1068,1218,0.8768,-1,Lost 1
-15,Port Adelaide Power,12,4,8,0,0.3333,16,983,969,1.0144,1,Won 1
-16,West Coast Eagles,13,4,9,0,0.3077,16,950,1333,0.7127,-1,Lost 1
+13,Carlton Blues,13,5,8,0,0.3846,20,1049,1183,0.8867,0,Won 4
+14,North Melbourne Kangaroos,12,5,7,0,0.4167,20,1068,1218,0.8768,0,Lost 1
+15,Port Adelaide Power,12,4,8,0,0.3333,16,983,969,1.0144,0,Won 1
+16,West Coast Eagles,13,4,9,0,0.3077,16,950,1333,0.7127,0,Lost 1
 17,Richmond Tigers,12,2,10,0,0.1667,8,787,1304,0.6035,0,Lost 1
 18,Essendon Bombers,13,1,12,0,0.0769,4,977,1363,0.7168,0,Lost 8
