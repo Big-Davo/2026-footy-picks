@@ -1,19 +1,19 @@
 Position,Team,Played,Win,Loss,Draw,%Won,Points,For,Against,Percentage,Movement,Streak
 1,Fremantle Dockers,13,12,1,0,0.9231,48,1312,887,1.4791,0,Won 12
-2,Sydney Swans,13,11,2,0,0.8462,44,1485,1008,1.4732,0,Won 2
+2,Sydney Swans,14,12,2,0,0.8571,48,1578,1098,1.4372,0,Won 3
 3,Geelong Cats,14,9,5,0,0.6429,36,1400,1137,1.2313,1,Won 1
 4,Melbourne Demons,14,9,5,0,0.6429,36,1368,1294,1.0572,1,Won 2
 5,Hawthorn Hawks,13,8,4,1,0.6538,34,1248,1102,1.1325,-2,Lost 1
 6,Adelaide Crows,13,8,5,0,0.6154,32,1178,1048,1.124,2,Won 2
-7,Western Bulldogs,14,8,6,0,0.5714,32,1187,1308,0.9075,-1,Lost 1
-8,Gold Coast Suns,13,7,6,0,0.5385,28,1233,1150,1.0722,-1,Lost 3
-9,Brisbane Lions,13,7,6,0,0.5385,28,1310,1234,1.0616,0,Won 1
-10,GWS Giants,12,6,6,0,0.5,24,1127,1092,1.0321,0,Won 2
-11,Collingwood Magpies,13,5,7,1,0.4231,22,1069,1078,0.9917,0,Lost 2
-12,St Kilda Saints,13,5,8,0,0.3846,20,1177,1155,1.019,0,Lost 3
-13,Carlton Blues,13,5,8,0,0.3846,20,1049,1183,0.8867,0,Won 4
-14,North Melbourne Kangaroos,12,5,7,0,0.4167,20,1068,1218,0.8768,0,Lost 1
-15,Port Adelaide Power,12,4,8,0,0.3333,16,983,969,1.0144,0,Won 1
-16,West Coast Eagles,13,4,9,0,0.3077,16,950,1333,0.7127,0,Lost 1
-17,Richmond Tigers,12,2,10,0,0.1667,8,787,1304,0.6035,0,Lost 1
+7,Brisbane Lions,14,8,6,0,0.5714,32,1425,1314,1.0845,2,Won 2
+8,Western Bulldogs,14,8,6,0,0.5714,32,1187,1308,0.9075,-2,Lost 1
+9,Gold Coast Suns,13,7,6,0,0.5385,28,1233,1150,1.0722,-2,Lost 3
+10,St Kilda Saints,14,6,8,0,0.4286,24,1273,1243,1.0241,2,Won 1
+11,GWS Giants,13,6,7,0,0.4615,24,1215,1188,1.0227,-1,Lost 1
+12,North Melbourne Kangaroos,13,6,7,0,0.4615,24,1142,1291,0.8846,2,Won 1
+13,Collingwood Magpies,13,5,7,1,0.4231,22,1069,1078,0.9917,-2,Lost 2
+14,Carlton Blues,13,5,8,0,0.3846,20,1049,1183,0.8867,-1,Won 4
+15,Port Adelaide Power,13,4,9,0,0.3077,16,1073,1062,1.0104,0,Lost 1
+16,West Coast Eagles,14,4,10,0,0.2857,16,1023,1407,0.7271,0,Lost 2
+17,Richmond Tigers,13,2,11,0,0.1538,8,867,1419,0.611,0,Lost 2
 18,Essendon Bombers,14,1,13,0,0.0714,4,1027,1458,0.7044,0,Lost 9
