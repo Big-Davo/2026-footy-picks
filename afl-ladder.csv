@@ -1,19 +1,19 @@
 Position,Team,Played,Win,Loss,Draw,%Won,Points,For,Against,Percentage,Movement,Streak
-1,Fremantle Dockers,16,14,2,0,0.875,56,1579,1115,1.4161,0,Lost 1
-2,Sydney Swans,16,13,3,0,0.8125,52,1751,1279,1.369,0,Won 1
-3,Hawthorn Hawks,16,10,5,1,0.6562,42,1547,1406,1.1003,0,Lost 1
-4,Brisbane Lions,16,10,6,0,0.625,40,1674,1498,1.1175,1,Won 4
-5,Adelaide Crows,16,10,6,0,0.625,40,1427,1281,1.114,1,Won 1
-6,Melbourne Demons,16,10,6,0,0.625,40,1555,1463,1.0629,1,Won 1
-7,Geelong Cats,16,9,7,0,0.5625,36,1591,1359,1.1707,-3,Lost 2
-8,Western Bulldogs,16,9,7,0,0.5625,36,1325,1459,0.9082,0,Lost 1
-9,Collingwood Magpies,16,8,7,1,0.5312,34,1357,1300,1.0438,1,Won 3
-10,Carlton Blues,16,8,8,0,0.5,32,1328,1384,0.9595,2,Won 7
-11,North Melbourne Kangaroos,16,8,8,0,0.5,32,1346,1477,0.9113,-2,Lost 1
-12,St Kilda Saints,16,7,9,0,0.4375,28,1451,1376,1.0545,1,Won 1
-13,GWS Giants,16,7,9,0,0.4375,28,1471,1460,1.0075,1,Won 1
-14,Gold Coast Suns,16,7,9,0,0.4375,28,1457,1447,1.0069,-3,Lost 6
-15,Port Adelaide Power,16,6,10,0,0.375,24,1295,1263,1.0253,0,Won 2
-16,West Coast Eagles,16,4,12,0,0.25,16,1161,1623,0.7153,0,Lost 4
-17,Richmond Tigers,16,2,14,0,0.125,8,1059,1672,0.6334,0,Lost 5
-18,Essendon Bombers,16,1,15,0,0.0625,4,1142,1654,0.6904,0,Lost 11
+1,Fremantle Dockers,17,15,2,0,0.8824,60,1690,1188,1.4226,0,Won 1
+2,Sydney Swans,17,13,4,0,0.7647,52,1824,1390,1.3122,0,Lost 1
+3,Hawthorn Hawks,17,11,5,1,0.6765,46,1650,1445,1.1419,0,Won 1
+4,Brisbane Lions,17,11,6,0,0.6471,44,1823,1557,1.1708,0,Won 5
+5,Adelaide Crows,17,11,6,0,0.6471,44,1555,1330,1.1692,0,Won 2
+6,Melbourne Demons,17,11,6,0,0.6471,44,1666,1528,1.0903,0,Won 2
+7,Western Bulldogs,17,10,7,0,0.5882,40,1411,1529,0.9228,1,Won 1
+8,Collingwood Magpies,17,9,7,1,0.5588,38,1446,1385,1.044,1,Won 4
+9,Geelong Cats,17,9,8,0,0.5294,36,1664,1445,1.1516,-2,Lost 3
+10,St Kilda Saints,17,8,9,0,0.4706,32,1538,1449,1.0614,2,Won 2
+11,GWS Giants,17,8,9,0,0.4706,32,1557,1533,1.0157,2,Won 2
+12,Carlton Blues,17,8,9,0,0.4706,32,1367,1487,0.9193,-2,Lost 1
+13,North Melbourne Kangaroos,17,8,9,0,0.4706,32,1431,1566,0.9138,-2,Lost 2
+14,Gold Coast Suns,17,7,10,0,0.4118,28,1506,1575,0.9562,0,Lost 7
+15,Port Adelaide Power,17,6,11,0,0.3529,24,1368,1350,1.0133,0,Lost 1
+16,West Coast Eagles,17,4,13,0,0.2353,16,1231,1709,0.7203,0,Lost 5
+17,Richmond Tigers,17,2,15,0,0.1176,8,1124,1783,0.6304,0,Lost 6
+18,Essendon Bombers,17,1,16,0,0.0588,4,1201,1803,0.6661,0,Lost 12
