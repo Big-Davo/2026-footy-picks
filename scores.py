@@ -93,6 +93,20 @@ AFL_NAME_MAP = {
     "Western Bulldogs":      "Western Bulldogs",
 }
 
+# Competition name -> short name used in nrl-ladder.csv (matches index.html's
+# NRL_SHORT_TO_FULL / NRL_LADDER_PPW maps, so the web app needs zero changes)
+NRL_SHORT_NAME = {
+    "Brisbane Broncos": "Broncos",              "Penrith Panthers": "Panthers",
+    "Melbourne Storm": "Storm",                 "Sydney Roosters": "Roosters",
+    "Canterbury Bulldogs": "Bulldogs",          "Canberra Raiders": "Raiders",
+    "Cronulla Sharks": "Sharks",                "South Sydney Rabbitohs": "Rabbitohs",
+    "Redcliffe Dolphins": "Dolphins",           "Parramatta Eels": "Eels",
+    "New Zealand Warriors": "Warriors",         "Manly Sea Eagles": "Sea Eagles",
+    "North Queensland Cowboys": "Cowboys",      "Wests Tigers": "Wests Tigers",
+    "Gold Coast Titans": "Titans",              "Newcastle Knights": "Knights",
+    "St George Illawarra Dragons": "Dragons",
+}
+
 GITHUB_TOKEN = os.environ.get("GITHUB_TOKEN", "")
 GITHUB_REPO  = "Big-Davo/2026-footy-picks"
 
@@ -115,11 +129,12 @@ def normalize_nrl(name):
     return NRL_NAME_MAP.get(name.strip(), name.strip())
 
 
-def get_nrl_results():
+def get_nrl_games():
     """
-    Fetches completed NRL results from the 2026 season results Wikipedia page.
-    Each wikitable = one competition round (table 1 = Round 1, etc).
-    Returns: {round_num: {"won": set_of_winners, "lost": set_of_losers}}
+    Fetches completed NRL results (with scores) from the 2026 season results
+    Wikipedia page. Each wikitable = one competition round (table 1 = Round 1).
+    Returns: list of {"round": int, "home": str, "away": str,
+                       "home_score": int, "away_score": int}
     """
     url     = "https://en.wikipedia.org/wiki/2026_NRL_season_results"
     headers = {"User-Agent": "Mozilla/5.0 (compatible; FootyTipping/1.0)"}
@@ -128,16 +143,14 @@ def get_nrl_results():
         resp.raise_for_status()
     except Exception as e:
         print(f"  ERROR fetching NRL Wikipedia: {e}")
-        return {}
+        return []
 
     soup     = BeautifulSoup(resp.text, "html.parser")
     tables   = soup.find_all("table", class_="wikitable")
     score_re = re.compile(r"^(\d+)\s*[-\u2013\u2014]\s*(\d+)\*?$")
-    results  = {}
+    games    = []
 
     for round_num, table in enumerate(tables, start=1):
-        winners = set()
-        losers  = set()
         for row in table.find_all("tr"):
             cells = row.find_all("td")
             if len(cells) < 3:
@@ -147,28 +160,39 @@ def get_nrl_results():
             m   = score_re.match(raw)
             if not m:
                 continue
-            home_score = int(m.group(1))
-            away_score = int(m.group(2))
             home = normalize_nrl(cells[0].get_text(strip=True))
             away = normalize_nrl(cells[2].get_text(strip=True))
-            if home_score > away_score:
-                winner, loser = home, away
-            elif away_score > home_score:
-                winner, loser = away, home
-            else:
-                continue   # drawn (shouldn't happen in NRL)
-            if winner in NRL_PPW:
-                winners.add(winner)
-            if loser in NRL_PPW:
-                losers.add(loser)
+            if home not in NRL_PPW or away not in NRL_PPW:
+                continue
+            games.append({
+                "round": round_num, "home": home, "away": away,
+                "home_score": int(m.group(1)), "away_score": int(m.group(2)),
+            })
 
-        if winners or losers:
-            results[round_num] = {"won": winners, "lost": losers}
+    return games
+
+
+def build_nrl_results(games):
+    """Turns a game list into {round_num: {"won": set, "lost": set}} for scoring."""
+    results = {}
+    for g in games:
+        r = g["round"]
+        if g["home_score"] == g["away_score"]:
+            continue   # drawn (shouldn't happen in NRL)
+        winner, loser = (g["home"], g["away"]) if g["home_score"] > g["away_score"] \
+                        else (g["away"], g["home"])
+        results.setdefault(r, {"won": set(), "lost": set()})
+        results[r]["won"].add(winner)
+        results[r]["lost"].add(loser)
 
     print(f"  NRL: rounds with results -> {sorted(results.keys())}")
     for r, d in sorted(results.items()):
         print(f"    Round {r}: {len(d['won'])} won, {len(d['lost'])} lost")
     return results
+
+
+def get_nrl_results():
+    return build_nrl_results(get_nrl_games())
 
 
 # ── AFL RESULTS FROM SQUIGGLE ─────────────────────────────────────────────────
@@ -177,11 +201,12 @@ def normalize_afl(name):
     return AFL_NAME_MAP.get(name.strip(), name.strip())
 
 
-def get_afl_results():
+def get_afl_games():
     """
-    Fetches all completed AFL games for 2026 from the Squiggle API.
+    Fetches all completed AFL games for 2026 from the Squiggle API, with scores.
     round=0 = AFL Opening Round = competition Week 1 AFL component.
-    Returns: {round_num: {"won": set_of_winners, "lost": set_of_losers}}
+    Returns: list of {"round": int, "home": str, "away": str,
+                       "home_score": int, "away_score": int}
     """
     url = "https://api.squiggle.com.au/?q=games;year=2026;complete=100"
     try:
@@ -190,41 +215,50 @@ def get_afl_results():
         data = resp.json()
     except Exception as e:
         print(f"  ERROR fetching AFL Squiggle: {e}")
-        return {}
+        return []
 
-    results = {}
+    games = []
     for game in data.get("games", []):
         if game.get("complete", 0) != 100:
             continue
         round_num = game.get("round")
         if round_num is None:
             continue
-        round_num = int(round_num)
+        hteam = normalize_afl(game.get("hteam", ""))
+        ateam = normalize_afl(game.get("ateam", ""))
+        if hteam not in AFL_PPW or ateam not in AFL_PPW:
+            continue
+        games.append({
+            "round": int(round_num),
+            "home": hteam, "away": ateam,
+            "home_score": game.get("hscore") or 0,
+            "away_score": game.get("ascore") or 0,
+        })
+    return games
 
-        hteam  = normalize_afl(game.get("hteam", ""))
-        ateam  = normalize_afl(game.get("ateam", ""))
-        hscore = game.get("hscore") or 0
-        ascore = game.get("ascore") or 0
 
-        if hscore > ascore:
-            winner, loser = hteam, ateam
-        elif ascore > hscore:
-            winner, loser = ateam, hteam
-        else:
+def build_afl_results(games):
+    """Turns a game list into {round_num: {"won": set, "lost": set}} for scoring."""
+    results = {}
+    for g in games:
+        r = g["round"]
+        if g["home_score"] == g["away_score"]:
             continue   # drawn
-
-        if round_num not in results:
-            results[round_num] = {"won": set(), "lost": set()}
-        if winner in AFL_PPW:
-            results[round_num]["won"].add(winner)
-        if loser in AFL_PPW:
-            results[round_num]["lost"].add(loser)
+        winner, loser = (g["home"], g["away"]) if g["home_score"] > g["away_score"] \
+                        else (g["away"], g["home"])
+        results.setdefault(r, {"won": set(), "lost": set()})
+        results[r]["won"].add(winner)
+        results[r]["lost"].add(loser)
 
     print(f"  AFL: rounds with results -> {sorted(results.keys())}")
     for r, d in sorted(results.items()):
         label = "OR" if r == 0 else f"R{r}"
         print(f"    AFL {label}: {len(d['won'])} won, {len(d['lost'])} lost")
     return results
+
+
+def get_afl_results():
+    return build_afl_results(get_afl_games())
 
 
 # ── SCORE HELPERS ─────────────────────────────────────────────────────────────
@@ -343,6 +377,94 @@ def build_round_results(nrl_results, afl_results):
         "nrl": nrl_status,
         "afl": afl_status,
     }
+
+
+# ── LADDER COMPUTATION (replaces the old nrl.com / footywire.com scrape) ──────
+
+def _ladder_stats(games, teams):
+    """
+    Shared aggregation: {team: {played, win, draw, loss, for, against}} plus
+    the highest round number seen (used to estimate byes).
+    """
+    stats = {t: {"played": 0, "win": 0, "draw": 0, "loss": 0, "for": 0, "against": 0}
+              for t in teams}
+    max_round = 0
+    for g in games:
+        max_round = max(max_round, g["round"])
+        for team, gf, ga in ((g["home"], g["home_score"], g["away_score"]),
+                              (g["away"], g["away_score"], g["home_score"])):
+            if team not in stats:
+                continue
+            s = stats[team]
+            s["played"]  += 1
+            s["for"]     += gf
+            s["against"] += ga
+            if gf > ga:   s["win"]  += 1
+            elif gf < ga: s["loss"] += 1
+            else:         s["draw"] += 1
+    return stats, max_round
+
+
+def build_nrl_ladder_csv(nrl_games):
+    """
+    Builds nrl-ladder.csv content, matching the column layout index.html
+    already expects: Pos,Team,Pos_1,Column1,played,points,wins,drawn,lost,
+    byes,for,against,diff.,home,away,form,Next
+    """
+    stats, max_round = _ladder_stats(nrl_games, NRL_PPW.keys())
+
+    rows = []
+    for team, s in stats.items():
+        byes   = max(0, max_round - s["played"])
+        points = s["win"] * 2 + s["draw"] * 1
+        diff   = s["for"] - s["against"]
+        rows.append({
+            "team": NRL_SHORT_NAME.get(team, team), "played": s["played"],
+            "points": points, "wins": s["win"], "drawn": s["draw"],
+            "lost": s["loss"], "byes": byes, "for": s["for"],
+            "against": s["against"], "diff": diff,
+        })
+
+    rows.sort(key=lambda r: (r["points"], r["diff"], r["for"]), reverse=True)
+
+    lines = ["Pos,Team,Pos_1,Column1,played,points,wins,drawn,lost,byes,for,against,diff.,home,away,form,Next"]
+    for i, r in enumerate(rows, start=1):
+        lines.append(",".join(str(x) for x in [
+            i, "", i, r["team"], r["played"], r["points"], r["wins"], r["drawn"],
+            r["lost"], r["byes"], r["for"], r["against"], r["diff"], "", "", "", "",
+        ]))
+    return "\n".join(lines) + "\n"
+
+
+def build_afl_ladder_csv(afl_games):
+    """
+    Builds afl-ladder.csv content, matching the column layout index.html
+    already expects: Position,Team,Played,Win,Loss,Draw,%Won,Points,For,
+    Against,Percentage,Movement,Streak
+    """
+    stats, max_round = _ladder_stats(afl_games, AFL_PPW.keys())
+
+    rows = []
+    for team, s in stats.items():
+        points  = s["win"] * 4 + s["draw"] * 2
+        pct_won = round(s["win"] / s["played"], 4) if s["played"] else 0
+        percentage = round((s["for"] / s["against"]) * 100, 4) if s["against"] else 0
+        rows.append({
+            "team": team, "played": s["played"], "win": s["win"],
+            "loss": s["loss"], "draw": s["draw"], "pct_won": pct_won,
+            "points": points, "for": s["for"], "against": s["against"],
+            "percentage": percentage,
+        })
+
+    rows.sort(key=lambda r: (r["points"], r["percentage"]), reverse=True)
+
+    lines = ["Position,Team,Played,Win,Loss,Draw,%Won,Points,For,Against,Percentage,Movement,Streak"]
+    for i, r in enumerate(rows, start=1):
+        lines.append(",".join(str(x) for x in [
+            i, r["team"], r["played"], r["win"], r["loss"], r["draw"],
+            r["pct_won"], r["points"], r["for"], r["against"], r["percentage"], 0, "",
+        ]))
+    return "\n".join(lines) + "\n"
 
 
 # ── FULL SCORE COMPUTATION ────────────────────────────────────────────────────
@@ -493,10 +615,12 @@ def main():
 
     # [1] Fetch game results
     print("\n[1] Fetching NRL results...")
-    nrl_results = get_nrl_results()
+    nrl_games   = get_nrl_games()
+    nrl_results = build_nrl_results(nrl_games)
 
     print("\n[2] Fetching AFL results...")
-    afl_results = get_afl_results()
+    afl_games   = get_afl_games()
+    afl_results = build_afl_results(afl_games)
 
     if not nrl_results:
         print("\nNo NRL results found — aborting.")
@@ -584,14 +708,25 @@ def main():
           f"{sum(v=='lost' for v in afl_s.values())} lost / "
           f"{sum(v=='pending' for v in afl_s.values())} pending")
 
-    # [8] Push everything to GitHub
-    print("\n[9] Pushing to GitHub...")
+    # [9] Build the NRL/AFL ladders (replaces the old nrl.com/footywire scrape)
+    print("\n[9] Building NRL/AFL ladders...")
+    nrl_ladder_csv = build_nrl_ladder_csv(nrl_games)
+    afl_ladder_csv = build_afl_ladder_csv(afl_games)
+    _, nrl_ladder_sha = get_github_file("nrl-ladder.csv")
+    _, afl_ladder_sha = get_github_file("afl-ladder.csv")
+
+    # [10] Push everything to GitHub
+    print("\n[10] Pushing to GitHub...")
     push_github_file("competition-data.csv", rows_to_csv(updated), comp_sha,
                      f"Auto-score update (PPW, NRL R{current_nrl_round})")
     push_github_file("friends-data.csv",     friends_content,      friends_sha,
                      f"Auto-score update (PPW, NRL R{current_nrl_round})")
     push_github_file("round-results.json",   rr_json,              rr_sha,
                      f"Update round results (NRL R{current_nrl_round})")
+    push_github_file("nrl-ladder.csv",       nrl_ladder_csv,        nrl_ladder_sha,
+                     f"Update nrl-ladder.csv (NRL R{current_nrl_round})")
+    push_github_file("afl-ladder.csv",       afl_ladder_csv,        afl_ladder_sha,
+                     f"Update afl-ladder.csv (NRL R{current_nrl_round})")
 
     print("\n=== Done ===")
 
