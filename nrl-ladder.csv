@@ -1,5 +1,5 @@
 Pos,Team,Pos_1,Column1,played,points,wins,drawn,lost,byes,for,against,diff.,home,away,form,Next
-1,,1,Panthers,18,28,14,0,4,4,539,255,284,,,,
+1,,1,Panthers,19,30,15,0,4,3,581,273,308,,,,
 2,,2,Roosters,19,28,14,0,5,3,531,376,155,,,,
 3,,3,Warriors,19,26,13,0,6,3,538,312,226,,,,
 4,,4,Sharks,18,24,12,0,6,4,536,375,161,,,,
@@ -9,7 +9,7 @@ Pos,Team,Pos_1,Column1,played,points,wins,drawn,lost,byes,for,against,diff.,home
 8,,8,Rabbitohs,18,20,10,0,8,4,510,432,78,,,,
 9,,9,Bulldogs,19,20,10,0,9,3,378,422,-44,,,,
 10,,10,Sea Eagles,19,18,9,0,10,3,485,395,90,,,,
-11,,11,Raiders,19,18,9,0,10,3,435,470,-35,,,,
+11,,11,Raiders,20,18,9,0,11,2,453,512,-59,,,,
 12,,12,Storm,20,16,8,0,12,2,468,494,-26,,,,
 13,,13,Wests Tigers,19,14,7,0,12,3,365,573,-208,,,,
 14,,14,Titans,19,12,6,0,13,3,379,501,-122,,,,
