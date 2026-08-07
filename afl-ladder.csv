@@ -1,9 +1,9 @@
 Position,Team,Played,Win,Loss,Draw,%Won,Points,For,Against,Percentage,Movement,Streak
 1,Fremantle Dockers,20,18,2,0,0.9,72,1983,1346,147.3254,0,
 2,Sydney Swans,20,15,5,0,0.75,60,2141,1653,129.5221,0,
-3,Hawthorn Hawks,20,14,5,1,0.7,58,2003,1619,123.7183,0,
-4,Adelaide Crows,20,13,7,0,0.65,52,1861,1582,117.6359,0,
-5,Brisbane Lions,20,13,7,0,0.65,52,2120,1847,114.7807,0,
+3,Hawthorn Hawks,21,14,6,1,0.6667,58,2061,1744,118.1766,0,
+4,Brisbane Lions,21,14,7,0,0.6667,56,2245,1905,117.8478,0,
+5,Adelaide Crows,20,13,7,0,0.65,52,1861,1582,117.6359,0,
 6,Melbourne Demons,20,13,7,0,0.65,52,1969,1826,107.8313,0,
 7,Geelong Cats,20,12,8,0,0.6,48,1980,1689,117.2291,0,
 8,Western Bulldogs,21,12,9,0,0.5714,48,1711,1823,93.8563,0,
