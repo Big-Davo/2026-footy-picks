@@ -1,6 +1,6 @@
 Position,Team,Played,Win,Loss,Draw,%Won,Points,For,Against,Percentage,Movement,Streak
 1,Fremantle Dockers,22,19,3,0,0.8636,76,2204,1547,142.4693,0,
-2,Sydney Swans,21,16,5,0,0.7619,64,2308,1723,133.9524,0,
+2,Sydney Swans,22,17,5,0,0.7727,68,2420,1799,134.5192,0,
 3,Brisbane Lions,22,15,7,0,0.6818,60,2340,1958,119.5097,0,
 4,Hawthorn Hawks,22,14,6,2,0.6364,60,2153,1836,117.2658,0,
 5,Melbourne Demons,22,15,7,0,0.6818,60,2214,1991,111.2004,0,
@@ -16,4 +16,4 @@ Position,Team,Played,Win,Loss,Draw,%Won,Points,For,Against,Percentage,Movement,S
 15,Port Adelaide Power,22,6,16,0,0.2727,24,1699,1953,86.9944,0,
 16,West Coast Eagles,22,4,18,0,0.1818,16,1570,2226,70.5301,0,
 17,Richmond Tigers,22,3,19,0,0.1364,12,1407,2240,62.8125,0,
-18,Essendon Bombers,21,2,19,0,0.0952,8,1430,2261,63.2464,0,
+18,Essendon Bombers,22,2,20,0,0.0909,8,1506,2373,63.464,0,
